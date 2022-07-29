@@ -1,11 +1,11 @@
 function_ts_marriage <- function() {
   
 data_pop <- read.csv("../data_raw/Data_Zurich.csv") %>%
-  select(Year,PopCity) %>%
+  dplyr::select(Year,PopCity) %>%
   distinct(Year, .keep_all = TRUE)
 
 data_zh <- read_excel("../data_raw/Daten_Bulletins.xlsx", sheet=1) %>%
-  select(Wochenende, Eheschliessungen, Lebendgeburten_gr,Totgeburten_gr) %>%
+  dplyr::select(Wochenende, Eheschliessungen, Lebendgeburten_gr,Totgeburten_gr) %>%
   mutate(Wochenende = ymd(Wochenende),
          KW = isoweek(Wochenende),
          Woche= Wochenende,
@@ -24,7 +24,7 @@ data_marriage_ts <- data_zh %>%
   dplyr::select(Ehe)%>%
   ts(frequency = 52, start =1910)
 
-bp_marriage_ts <- breakpoints(data_w_ts ~ 1)
+bp_marriage_ts <- breakpoints(data_marriage_ts ~ 1)
 
 plot_ts_marriage <- data_marriage_ts %>%
   decompose(type = "additive") %>%

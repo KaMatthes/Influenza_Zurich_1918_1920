@@ -31,6 +31,8 @@ library(RColorBrewer)
 library(scales)
 library(ggsci)
 library(cowplot)
+library(tsoutliers)
+library(strucchange)
 
 # Plot parameter
 
