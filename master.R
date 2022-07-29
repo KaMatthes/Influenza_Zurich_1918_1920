@@ -40,6 +40,13 @@ legend_size <- 16
 axis_legend_size <- 15
 title_size <- 15
 
+
+size_axis <-12
+size_axis_title <- 12
+
+
+
+
 col_pal <- pal_jco()(8)
 
 lims1 <- as.POSIXct(ymd("1909-07-31"))    
@@ -67,7 +74,16 @@ datlim13 <- as.POSIXct(ymd("1925-01-31"))
 datlim14 <- as.POSIXct(ymd("1925-05-16"))
 
 
+datlim15 <- as.POSIXct(ymd("1914-07-28"))
+datlim16 <- as.POSIXct(ymd("1918-11-11"))
+
+
 # load scripts
-source(paste0("R/Plot_Incidence.R")) 
+source("R/Plot_Incidence.R") 
+source("R/Plot_Geburten.R")
+source("R/TS_Marriages.R")
+source("R/TS_Birth.R")
+source("R/TS_Marriage_Birth.R")
+source("R/TS_stillborn.R")
 
 render(paste0("R/City_Zuerich.Rmd"), output_file = paste0("../output/",today(),"_Report_City_Zurich.html"))

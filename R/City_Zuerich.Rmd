@@ -11,10 +11,51 @@ editor_options:
   chunk_output_type: console
 ---
 
+The orange area is the period of World War 1, the grey areas are the periods of pandemics, the red dashed lines represent breakpoints and the dotted lines the corresponding 95% CI.
+
+# Data 1910-1925
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-```{r, echo=FALSE, warning=FALSE, fig.height =20 , fig.width = 25,message=FALSE}
+```{r, echo=FALSE, warning=FALSE, fig.height =15 , fig.width = 15,message=FALSE}
 function_plot_zurich()
+```
+
+
+Births per marriage were calculated with the number of births 39 weeks after the marriage. Am not quite sure if this makes sense. But a direct comparison makes even less sense to me. Because first fewer marriages and then fewer births (9 months later at the earliest).
+
+```{r, echo=FALSE, warning=FALSE, fig.height =18 , fig.width = 18,message=FALSE}
+function_plot_birth()
+```
+
+
+# Time Series Analysis
+
+
+## Marriages
+The number of marriages per 100'000 inhabitans goes down directly after the beginning of the 1st World War and up again after the end in 1919. The number increases even further than before the 1st World War.
+
+```{r, echo=FALSE, warning=FALSE, fig.height =10 , fig.width = 10,message=FALSE}
+function_ts_marriage()
+```
+
+## Birth
+The birth rate per 100'000 inhabitants goes down exactly 38 weeks after the decline in marriages! And 25 weeks after the marriages go up again. But the birth rate is not rising as high as before the 1st World War.
+
+```{r, echo=FALSE, warning=FALSE, fig.height =10 , fig.width = 10,message=FALSE}
+function_ts_birth()
+```
+
+## Birth per Marriage
+The number of births per marriages decreased.
+
+```{r, echo=FALSE, warning=FALSE, fig.height =10 , fig.width = 10,message=FALSE}
+function_ts_marriage_birth()
+```
+
+## Stillborn
+
+```{r, echo=FALSE, warning=FALSE, fig.height =10 , fig.width = 10,message=FALSE}
+function_ts_stillborn()
 ```

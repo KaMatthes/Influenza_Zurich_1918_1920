@@ -22,6 +22,14 @@ dataZH_b     <- dataZH %>%
 
 
 FigureInc <- ggplot() +
+  annotate("rect",xmin=datlim15,xmax=datlim16,ymin=-Inf,ymax=Inf,alpha=0.1,fill="orange") +
+  annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim9,xmax=datlim10,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim11,xmax=datlim12,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim13,xmax=datlim14,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   geom_line(data=dataZH_b ,aes(y=InfluenzaInc,x= as.POSIXct(Woche),colour="City of Zurich"), lwd=lwd_size )+
   geom_line(data=dataZH_b,aes(y=InfluenzaCantonInc,x=as.POSIXct(Woche),colour="Canton Zurich"), lwd=lwd_size ) +
   scale_x_datetime( breaks = date_breaks("6 month"), 
@@ -33,13 +41,6 @@ FigureInc <- ggplot() +
   xlab("Month/Year")+
   ylab("per 1,000 inhab.")+
   ggtitle("Influenza cases") +
-  annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim9,xmax=datlim10,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim11,xmax=datlim12,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim13,xmax=datlim14,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   theme_bw()+
   #theme_light(base_size = 16)+
   theme(axis.text.y = element_text(size=text_size),
@@ -57,6 +58,14 @@ FigureInc <- ggplot() +
 
 
 FigureDeath <- ggplot() +
+  annotate("rect",xmin=datlim15,xmax=datlim16,ymin=-Inf,ymax=Inf,alpha=0.1,fill="orange") +
+  annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim9,xmax=datlim10,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim11,xmax=datlim12,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim13,xmax=datlim14,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   geom_line(data=dataZH_b ,aes(y=DeathsInc,x= as.POSIXct(Woche),col="Death"), lwd=lwd_size )+
   scale_x_datetime( breaks = date_breaks("6 month"), 
                     labels = label_date_short(),
@@ -67,13 +76,6 @@ FigureDeath <- ggplot() +
   xlab("Month/Year")+
   ylab("per 1,000 inhab.")+
   ggtitle("Number of death") +
-  annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim9,xmax=datlim10,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim11,xmax=datlim12,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim13,xmax=datlim14,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   theme_bw()+
   #theme_light(base_size = 16)+
   theme(axis.text.y = element_text(size=text_size),
@@ -88,6 +90,14 @@ FigureDeath <- ggplot() +
     title =element_text(size=title_size))
 
 FigureHospital <- ggplot() +
+  annotate("rect",xmin=datlim15,xmax=datlim16,ymin=-Inf,ymax=Inf,alpha=0.1,fill="orange") +
+  annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim9,xmax=datlim10,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim11,xmax=datlim12,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim13,xmax=datlim14,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   # geom_line(data=dataZH_b ,aes(y=HospInfInc,x= as.POSIXct(Woche),colour="Total minus other infections"), lwd=lwd_size )+
   geom_line(data=dataZH_b,aes(y=AndereInc,x=as.POSIXct(Woche),colour="Infections incl. influenza"), lwd=lwd_size ) +
   geom_line(data=dataZH_b,aes(y= HospInc,x=as.POSIXct(Woche),colour="Total"), lwd=lwd_size ) +
@@ -100,20 +110,13 @@ FigureHospital <- ggplot() +
   xlab("Month/Year")+
   ylab("per 1,000 inhab.")+
   ggtitle("Hospitalisations") +
-  annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim9,xmax=datlim10,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim11,xmax=datlim12,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim13,xmax=datlim14,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   theme_bw()+
   #theme_light(base_size = 16)+
   theme(axis.text.y = element_text(size=text_size),
         axis.text.x = element_text(size=16),
     panel.grid.major.x = element_blank(),
     panel.grid.minor.x = element_blank(),
-    legend.position = c(.1, .8),
+    legend.position = c(.2, .8),
     legend.text=element_text(size=legend_size),
     axis.title.x  = element_blank(),
     axis.title.y  = element_text(size=axis_legend_size), 
