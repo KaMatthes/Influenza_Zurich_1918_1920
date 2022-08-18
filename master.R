@@ -1,4 +1,4 @@
-.libPaths(c("H:/Documents/R/win-library/4.1", "C:/Program Files/R/R-4.1.2/library"))
+.libPaths(c("H:/Documents/R/win-library/4.1", "C:/Program Files/R/R-4.2.1/library"))
 
 library(plyr)
 library(readxl)
@@ -33,6 +33,12 @@ library(ggsci)
 library(cowplot)
 library(tsoutliers)
 library(strucchange)
+library(conflicted)
+
+
+conflict_prefer("rename", "dplyr")
+conflict_prefer("mutate", "dplyr")
+conflict_prefer("select", "dplyr")
 
 # Plot parameter
 
