@@ -1,6 +1,5 @@
 .libPaths(c("H:/Documents/R/win-library/4.1", "C:/Program Files/R/R-4.2.1/library"))
 
-library(plyr)
 library(readxl)
 library(openxlsx)
 library(lubridate)
@@ -39,6 +38,9 @@ library(conflicted)
 conflict_prefer("rename", "dplyr")
 conflict_prefer("mutate", "dplyr")
 conflict_prefer("select", "dplyr")
+conflict_prefer("filter", "dplyr")
+conflict_prefer("arrange", "dplyr")
+
 
 # Plot parameter
 
@@ -89,6 +91,7 @@ datlim16 <- as.POSIXct(ymd("1918-11-11"))
 # load scripts
 source("R/Plot_Incidence.R") 
 source("R/Plot_Geburten.R")
+source("R/Plot_Swiss_Re.R")
 source("R/TS_Marriages.R")
 source("R/TS_Birth.R")
 source("R/TS_Marriage_Birth.R")

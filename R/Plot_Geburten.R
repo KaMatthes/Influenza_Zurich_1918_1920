@@ -128,7 +128,7 @@ FigureStillborn <- ggplot() +
     legend.position = c(.06, .95),
     legend.text=element_text(size=legend_size),
     # legend.key.size = unit(2, 'cm'),
-    axis.text.x = element_blank(),
+    # axis.text.x = element_blank(),
     axis.title.x  = element_blank(),
     axis.title.y  = element_text(size=axis_legend_size),
     title =element_text(size=title_size),

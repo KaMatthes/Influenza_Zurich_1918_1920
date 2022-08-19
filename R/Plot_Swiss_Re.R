@@ -1,4 +1,6 @@
-swiss_re <-  read_excel("data_raw/Daten_Swiss_Re.xlsx") %>%
+function_plot_swiss_re <- function() {
+
+swiss_re <-  read_excel("../data_raw/Daten_Swiss_Re.xlsx") %>%
   rename(Datum =`...1`,
          Kassa_Wert_Ar_M = `Kassa & Wertschriften`,
          Kassa_Wert_Ar_W = `...3`,
@@ -115,7 +117,7 @@ Figure_Illness_t <- ggplot() +
                     limits =c(min(lims1), max(lims2)),
                     expand = c(0,0)) +
   scale_color_manual(name = "",
-                     values = c(col_pal[4],  col_pal[1]))+
+                     values = c(col_pal[8],col_pal[2]))+
   xlab("Month/Year")+
   ylab("Percentages")+
   ggtitle("Total") +
@@ -128,7 +130,7 @@ Figure_Illness_t <- ggplot() +
         legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
-        # axis.text.x = element_blank(),
+        axis.text.x = element_blank(),
         axis.title.x  = element_blank(),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
@@ -150,7 +152,7 @@ Figure_Illness_w <- ggplot() +
                     limits =c(min(lims1), max(lims2)),
                     expand = c(0,0)) +
   scale_color_manual(name = "",
-                     values = c(col_pal[4],  col_pal[1]))+
+                     values = c(col_pal[8],col_pal[2]))+
   xlab("Month/Year")+
   ylab("Percentages")+
   ggtitle("Women") +
@@ -163,7 +165,7 @@ Figure_Illness_w <- ggplot() +
         legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
-        # axis.text.x = element_blank(),
+        axis.text.x = element_blank(),
         axis.title.x  = element_blank(),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
@@ -185,7 +187,7 @@ Figure_Illness_m <- ggplot() +
                     limits =c(min(lims1), max(lims2)),
                     expand = c(0,0)) +
   scale_color_manual(name = "",
-                     values = c(col_pal[4],  col_pal[1]))+
+                     values = c(col_pal[8],col_pal[2]))+
   xlab("Month/Year")+
   ylab("Percentages")+
   ggtitle("Men") +
@@ -199,6 +201,15 @@ Figure_Illness_m <- ggplot() +
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
         # axis.text.x = element_blank(),
-        axis.title.x  = element_blank(),
+        # axis.title.x  = element_blank(),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
+
+plot_swiss_re <- cowplot::plot_grid(Figure_Illness_t ,Figure_Illness_w,Figure_Illness_m, 
+                                  ncol=1, nrow=3, align="hv",
+                                  rel_heights = c(1,1,1))
+
+
+return(plot_swiss_re)
+
+}

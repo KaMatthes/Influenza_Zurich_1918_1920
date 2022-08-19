@@ -29,6 +29,12 @@ Births per marriage were calculated with the number of births 39 weeks after the
 function_plot_birth()
 ```
 
+The absence is displayed in relation to the number of working days. Absence because of other reasons = Absence total - Illness.
+The peaks in "absences for other reasons" reflect the August vacation season. However, 1918 the peak is in July and not in August and much higher than in the following years.
+
+```{r, echo=FALSE, warning=FALSE, fig.height =18 , fig.width = 18,message=FALSE}
+function_plot_swiss_re()
+```
 
 # Time Series Analysis
 
