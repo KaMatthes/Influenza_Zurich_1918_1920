@@ -29,8 +29,17 @@ Births per marriage were calculated with the number of births 39 weeks after the
 function_plot_birth()
 ```
 
+# Data Swiss-re 1918-1930
 The absence is displayed in relation to the number of working days. Absence because of other reasons = Absence total - Illness.
-The peaks in "absences for other reasons" reflect the August vacation season. However, 1918 the peak is in July and not in August and much higher than in the following years.
+<br />
+<br />
+The peaks in "absences for other reasons" reflect the August vacation season. "Absences for other reasons" in August 1918 high for women, as in the following years. For men, highest in July, but also increased the months before -> reason: military absence. But why highest in July?
+<br />
+<br />
+From 1926, seasonal absenteeism increases in summer -> change in labor protection law? Absences due to illness also increase among women from 1926 onward. A high level of absenteeism among women can be seen particularly in the winter of 1927(Reasons? Since it is not that high for men).
+<br />
+<br />
+In the influenza winter of 1928/1929, an increase in absences due to illness can be seen in both sexes. 
 
 ```{r, echo=FALSE, warning=FALSE, fig.height =18 , fig.width = 18,message=FALSE}
 function_plot_swiss_re()

@@ -62,6 +62,11 @@ col_pal <- pal_jco()(8)
 lims1 <- as.POSIXct(ymd("1909-07-31"))    
 lims2 <- as.POSIXct(ymd("1925-12-31"))    
 
+
+lims_swiss_re1 <- as.POSIXct(ymd("1909-07-31"))    
+lims_swiss_re2 <- as.POSIXct(ymd("1930-12-31"))    
+
+
 datlim1 <- as.POSIXct(ymd("1918-07-06"))
 datlim2 <- as.POSIXct(ymd("1918-08-17"))
 

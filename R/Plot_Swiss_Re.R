@@ -67,25 +67,50 @@ swiss_re <-  read_excel("../data_raw/Daten_Swiss_Re.xlsx") %>%
          Leben_K_M = `...74`,
          Leben_K_W = `...75`,
          Leben_Ab_M = `...76`,
-         Leben_Ab_W = `...77`) %>%
-  select(-`...8`,-`...15`,-`...22`,-`...29`,-`...36`,-`...43`,-`...50`,-`...57`,-`...64`, -`...71`) %>%
+         Leben_Ab_W = `...77`,
+         Leben_Kauf_Ar_M = `Leben, Kaufm.`,
+         Leben_Kauf_Ar_W = `...80`,
+         Leben_Kauf_K_M = `...81`,
+         Leben_Kauf_K_W = `...82`,
+         Leben_Kauf_Ab_M = `...83`,
+         Leben_Kauf_Ab_W = `...84`,
+         Leben_Math_Ar_M = `Leben, Math`,
+         Leben_Math_Ar_W = `...87`,
+         Leben_Math_K_M = `...88`,
+         Leben_Math_K_W = `...89`,
+         Leben_Math_Ab_M = `...90`,
+         Leben_Math_Ab_W = `...91`,
+         Revisionsbureau_Ar_M = `Revisionsbureau`,
+         Revisionsbureau_Ar_W = `...94`,
+         Revisionsbureau_K_M = `...95`,
+         Revisionsbureau_K_W = `...96`,
+         Revisionsbureau_Ab_M = `...97`,
+         Revisionsbureau_Ab_W = `...98`) %>%
+  select(-`...8`,-`...15`,-`...22`,-`...29`,-`...36`,-`...43`,-`...50`,-`...57`,-`...64`, -`...71`,
+         -`...78`,  -`...85`,  -`...92`) %>%
   slice(-1) %>%
   mutate_if(is.character, as.numeric) %>%
   replace(is.na(.), 0) %>%
   mutate(Arbeit_M = Kassa_Wert_Ar_M + Kassa_Ar_M + Wertschriften_Ar_M + Cont_Ar_M + Cont_Trans_Ar_M +
-           Trans_Ar_M + Buchhaltung_Ar_M + Transport_Ar_M + Sekretariat_Ar_M+ Unfall_Ar_M + Leben_Ar_W,
+           Trans_Ar_M + Buchhaltung_Ar_M + Transport_Ar_M + Sekretariat_Ar_M+ Unfall_Ar_M + Leben_Ar_M +
+           Leben_Kauf_Ar_M + Leben_Math_Ar_M +     Revisionsbureau_Ar_M  ,
          Arbeit_W = Kassa_Wert_Ar_W + Kassa_Ar_W + Wertschriften_Ar_W + Cont_Ar_W + Cont_Trans_Ar_W +
-           Trans_Ar_W + Buchhaltung_Ar_W + Transport_Ar_W + Sekretariat_Ar_W+ Unfall_Ar_W + Leben_Ar_W,
+           Trans_Ar_W + Buchhaltung_Ar_W + Transport_Ar_W + Sekretariat_Ar_W+ Unfall_Ar_W + Leben_Ar_W+
+           Leben_Kauf_Ar_W + Leben_Math_Ar_W +     Revisionsbureau_Ar_W  ,
          Arbeit_t = Arbeit_M + Arbeit_W,
          Krankheit_M = Kassa_Wert_K_M + Kassa_K_M + Wertschriften_K_M + Cont_K_M + Cont_K_M +
-           Trans_K_M + Buchhaltung_K_M + Transport_K_M + Sekretariat_K_M + Unfall_K_M + Leben_K_M,
+           Trans_K_M + Buchhaltung_K_M + Transport_K_M + Sekretariat_K_M + Unfall_K_M + Leben_K_M +
+           Leben_Kauf_K_M  +  Leben_Math_K_M + Revisionsbureau_K_M,
          Krankheit_W = Kassa_Wert_K_W + Kassa_K_W + Wertschriften_K_W + Cont_K_W + Cont_K_W +
-           Trans_K_W + Buchhaltung_K_W + Transport_K_W + Sekretariat_K_W+ Unfall_K_W + Leben_K_W,
+           Trans_K_W + Buchhaltung_K_W + Transport_K_W + Sekretariat_K_W+ Unfall_K_W + Leben_K_W+
+           Leben_Kauf_K_W  +  Leben_Math_K_W + Revisionsbureau_K_W,
          Krankheit_t = Krankheit_M + Krankheit_W,
          Absenz_M = Kassa_Wert_Ab_M + Kassa_Ab_M + Wertschriften_Ab_M + Cont_Ab_M + Cont_Ab_M +
-           Trans_Ab_M + Buchhaltung_Ab_M + Transport_Ab_M + Sekretariat_Ab_M + Unfall_Ab_M + Leben_Ab_M,
-         Absenz_W = Kassa_Wert_Ab_W + Kassa_Ab_W + Wertschriften_Ab_W + Cont_Ab_W + Cont_Ab_M +
-           Trans_Ab_M + Buchhaltung_Ab_M + Transport_Ab_M + Sekretariat_Ab_M + Unfall_Ab_M + Leben_Ab_M,
+           Trans_Ab_M + Buchhaltung_Ab_M + Transport_Ab_M + Sekretariat_Ab_M + Unfall_Ab_M + Leben_Ab_M +
+           Leben_Kauf_Ab_M + Leben_Math_Ab_M +  Revisionsbureau_Ab_M,
+         Absenz_W = Kassa_Wert_Ab_W + Kassa_Ab_W + Wertschriften_Ab_W + Cont_Ab_W + Cont_Ab_W +
+           Trans_Ab_W + Buchhaltung_Ab_W + Transport_Ab_W + Sekretariat_Ab_W + Unfall_Ab_W + Leben_Ab_W +
+           Leben_Kauf_Ab_W + Leben_Math_Ab_W +  Revisionsbureau_Ab_M,
          Absenz_t = Absenz_M + Absenz_W,
          Absenz_wo_Kr_M = Absenz_M - Krankheit_M,
          Absenz_wo_Kr_W = Absenz_W - Krankheit_W,
@@ -114,7 +139,7 @@ Figure_Illness_t <- ggplot() +
   geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_t,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
   scale_x_datetime( breaks = date_breaks("6 month"), 
                     labels = label_date_short(),
-                    limits =c(min(lims1), max(lims2)),
+                    limits =c(min(lims_swiss_re1), max(lims_swiss_re2)),
                     expand = c(0,0)) +
   scale_color_manual(name = "",
                      values = c(col_pal[8],col_pal[2]))+
@@ -149,7 +174,7 @@ Figure_Illness_w <- ggplot() +
   geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_W,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
   scale_x_datetime( breaks = date_breaks("6 month"), 
                     labels = label_date_short(),
-                    limits =c(min(lims1), max(lims2)),
+                    limits =c(min(lims_swiss_re1), max(lims_swiss_re2)),
                     expand = c(0,0)) +
   scale_color_manual(name = "",
                      values = c(col_pal[8],col_pal[2]))+
@@ -184,7 +209,7 @@ Figure_Illness_m <- ggplot() +
   geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_M,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
   scale_x_datetime( breaks = date_breaks("6 month"), 
                     labels = label_date_short(),
-                    limits =c(min(lims1), max(lims2)),
+                    limits =c(min(lims_swiss_re1), max(lims_swiss_re2)),
                     expand = c(0,0)) +
   scale_color_manual(name = "",
                      values = c(col_pal[8],col_pal[2]))+
