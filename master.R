@@ -40,6 +40,7 @@ conflict_prefer("mutate", "dplyr")
 conflict_prefer("select", "dplyr")
 conflict_prefer("filter", "dplyr")
 conflict_prefer("arrange", "dplyr")
+conflict_prefer("group_by", "dplyr")
 
 
 # Plot parameter
@@ -174,11 +175,12 @@ datlim48 <- as.POSIXct(ymd("1959-05-30"))
 # 
 
 
-
-
+# create data
+# source("R/data_weekly.R")
 
 
 # load scripts
+
 source("R/Plot_weekly.R") 
 # source("R/Plot_Geburten.R")
 # source("R/Plot_Swiss_Re.R")

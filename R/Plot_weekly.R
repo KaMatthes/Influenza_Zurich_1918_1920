@@ -1,41 +1,6 @@
-function_plot_weekly <- function() {
-  
+function_plot_Reportingly <- function() {
 
-dataZH <- read_excel("../data_raw/Master_Zuerich.xlsx", sheet="WeeksMaster2") 
-datapop <-  read_excel("../data_raw/Master_Zuerich.xlsx", sheet="Population") 
-
-
-dataZH_b  <- dataZH %>%
-  mutate(Week= ymd(EndReportingPeriod),
-         iso_cw = isoweek(Week),
-         Year = year(Week),
-         Cw_year= paste0(Year,"/W",iso_cw )) %>%
-  left_join(datapop) %>%
-  mutate(DeathsInc = CityDeathsTotal/CityZurich*1000,
-         InfluenzaInc= CityCases/CityZurich*1000,
-         # InfluenzaInc= ifelse(is.na(InfluenzaInc), 0,InfluenzaInc),
-         HospInc = Total_Aufnahmen/CityZurich*1000,
-         AndereInc = Andere_Infekt/CityZurich*1000,
-         InfluenzaCantonInc = CantonCases/CantonZH*1000,
-         # InfluenzaCantonInc= ifelse(is.na(InfluenzaCantonInc), 0,InfluenzaCantonInc),
-         HospInf = Total_Aufnahmen - Andere_Infekt,
-         HospInfInc =  HospInf/CityZurich*1000 ) 
-
-
-dat.temp <- read.table("../data_raw/order_108443_data.txt",header=TRUE,sep=";")
-
-dat.temp <- dat.temp %>%
-  mutate(datum = ymd(time),
-         Year = year(datum),
-         iso_cw =  isoweek(datum),
-         Cw_year= paste0(Year,"/W",iso_cw )) %>%
-  group_by(Cw_year) %>%
-  summarise(mean_maxium = mean(tre200dx ),
-            mean_minimum = mean(tre200dn),
-            mean_mean = mean(tre200d0))
-
-dataZH_b  <- dataZH_b %>%
-  full_join(dat.temp)
+  load("data/dataZH.RData")
 
 FigureInc <- ggplot() +
   annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
@@ -61,8 +26,8 @@ FigureInc <- ggplot() +
   annotate("rect",xmin=datlim43,xmax=datlim44,ymin=-Inf,ymax=Inf,alpha=0.4,fill="orange") +
   annotate("rect",xmin=datlim45,xmax=datlim46,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=datlim47,xmax=datlim48,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  geom_line(data=dataZH_b ,aes(y=InfluenzaInc,x= as.POSIXct(Week),colour="City of Zurich"), lwd=lwd_size )+
-  geom_line(data=dataZH_b,aes(y=InfluenzaCantonInc,x=as.POSIXct(Week),colour="Canton Zurich"), lwd=lwd_size ) +
+  geom_line(data=dataZH ,aes(y=InfluenzaInc,x= as.POSIXct(Reporting),colour="City of Zurich"), lwd=lwd_size )+
+  geom_line(data=dataZH,aes(y=InfluenzaCantonInc,x=as.POSIXct(Reporting),colour="Canton Zurich"), lwd=lwd_size ) +
   scale_x_datetime( breaks = date_breaks("12 month"), 
                     labels = label_date_short(),
                     limits =c(min(lims3), max(lims4)),
@@ -113,7 +78,7 @@ FigureDeath <- ggplot() +
   annotate("rect",xmin=datlim43,xmax=datlim44,ymin=-Inf,ymax=Inf,alpha=0.4,fill="orange") +
   annotate("rect",xmin=datlim45,xmax=datlim46,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=datlim47,xmax=datlim48,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  geom_line(data=dataZH_b ,aes(y=DeathsInc,x= as.POSIXct(Week),col="Death"), lwd=lwd_size )+
+  geom_line(data=dataZH ,aes(y=DeathsInc,x= as.POSIXct(Reporting),col="Death"), lwd=lwd_size )+
   scale_x_datetime( breaks = date_breaks("12 month"), 
                     labels = label_date_short(),
                     limits =c(min(lims3), max(lims4)),
@@ -161,9 +126,9 @@ FigureHospInfl <- ggplot() +
   annotate("rect",xmin=datlim43,xmax=datlim44,ymin=-Inf,ymax=Inf,alpha=0.4,fill="orange") +
   annotate("rect",xmin=datlim45,xmax=datlim46,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=datlim47,xmax=datlim48,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # geom_line(data=dataZH_b ,aes(y=HospInfInc,x= as.POSIXct(Week),colour="Total minus other infections"), lwd=lwd_size )+
-  geom_line(data=dataZH_b,aes(y=AndereInc,x=as.POSIXct(Week),colour="Infections incl. influenza"), lwd=lwd_size ) +
-  # geom_line(data=dataZH_b,aes(y= HospInc,x=as.POSIXct(Week),colour="Total"), lwd=lwd_size ) +
+  # geom_line(data=dataZH ,aes(y=HospInfInc,x= as.POSIXct(Reporting),colour="Total minus other infections"), lwd=lwd_size )+
+  geom_line(data=dataZH,aes(y=AndereInc,x=as.POSIXct(Reporting),colour="Infections incl. influenza"), lwd=lwd_size ) +
+  # geom_line(data=dataZH,aes(y= HospInc,x=as.POSIXct(Reporting),colour="Total"), lwd=lwd_size ) +
   scale_x_datetime( breaks = date_breaks("12 month"), 
                     labels = label_date_short(),
                     limits =c(min(lims3), max(lims4)),
@@ -213,9 +178,9 @@ FigureHospital <- ggplot() +
   annotate("rect",xmin=datlim43,xmax=datlim44,ymin=-Inf,ymax=Inf,alpha=0.4,fill="orange") +
   annotate("rect",xmin=datlim45,xmax=datlim46,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=datlim47,xmax=datlim48,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # geom_line(data=dataZH_b ,aes(y=HospInfInc,x= as.POSIXct(Week),colour="Total minus other infections"), lwd=lwd_size )+
-  # geom_line(data=dataZH_b,aes(y=AndereInc,x=as.POSIXct(Week),colour="Infections incl. influenza"), lwd=lwd_size ) +
-  geom_line(data=dataZH_b,aes(y= HospInc,x=as.POSIXct(Week),colour="Total"), lwd=lwd_size ) +
+  # geom_line(data=dataZH ,aes(y=HospInfInc,x= as.POSIXct(Reporting),colour="Total minus other infections"), lwd=lwd_size )+
+  # geom_line(data=dataZH,aes(y=AndereInc,x=as.POSIXct(Reporting),colour="Infections incl. influenza"), lwd=lwd_size ) +
+  geom_line(data=dataZH,aes(y= HospInc,x=as.POSIXct(Reporting),colour="Total"), lwd=lwd_size ) +
   scale_x_datetime( breaks = date_breaks("12 month"), 
                     labels = label_date_short(),
                     limits =c(min(lims3), max(lims4)),
@@ -267,9 +232,9 @@ FigureTemp <- ggplot() +
   annotate("rect",xmin=datlim45,xmax=datlim46,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=datlim47,xmax=datlim48,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
 
-  # geom_line(data=dataZH_b  ,aes(y=mean_maxium,x= as.POSIXct(Week),colour="Maximum"), lwd=lwd_size )+
-  geom_line(data=dataZH_b ,aes(y=mean_mean,x=as.POSIXct(Week),colour="Mean"), lwd=lwd_size ) +
-  # geom_line(data=dataZH_b ,aes(y=mean_minimum,x=as.POSIXct(Week),colour="Minimum"), lwd=lwd_size ) +
+  # geom_line(data=dataZH  ,aes(y=mean_maxium,x= as.POSIXct(Reporting),colour="Maximum"), lwd=lwd_size )+
+  geom_line(data=dataZH ,aes(y=mean_mean,x=as.POSIXct(Reporting),colour="Mean"), lwd=lwd_size ) +
+  # geom_line(data=dataZH ,aes(y=mean_minimum,x=as.POSIXct(Reporting),colour="Minimum"), lwd=lwd_size ) +
   scale_x_datetime( breaks = date_breaks("12 month"), 
                     labels = label_date_short(),
                     limits =c(min(lims3), max(lims4)),
