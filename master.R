@@ -33,6 +33,7 @@ library(cowplot)
 library(tsoutliers)
 library(strucchange)
 library(conflicted)
+library(wktmo)
 
 
 conflict_prefer("rename", "dplyr")
@@ -63,7 +64,7 @@ col_pal <- pal_jco()(8)
 lims1 <- as.POSIXct(ymd("1909-07-31"))    
 lims2 <- as.POSIXct(ymd("1925-12-31"))    
 
-lims3 <- as.POSIXct(ymd("1910-01-01"))    
+lims3 <- as.POSIXct(ymd("1909-01-01"))    
 lims4 <- as.POSIXct(ymd("1970-12-31"))    
 
 
@@ -71,8 +72,8 @@ lims_swiss_re1 <- as.POSIXct(ymd("1909-07-31"))
 lims_swiss_re2 <- as.POSIXct(ymd("1930-12-31"))    
 
 
-datlim1 <- as.POSIXct(ymd("1918-07-06"))
-datlim2 <- as.POSIXct(ymd("1918-08-17"))
+datlim1 <- as.POSIXct(ymd("1918-06-29"))
+datlim2 <- as.POSIXct(ymd("1919-06-07"))
 
 datlim3 <- as.POSIXct(ymd("1918-09-14"))
 datlim4 <- as.POSIXct(ymd("1918-12-21"))
@@ -104,13 +105,11 @@ datlim20 <- as.POSIXct(ymd("1929-04-20"))
 datlim21 <- as.POSIXct(ymd("1932-12-31"))
 datlim22 <- as.POSIXct(ymd("1933-03-18"))
 
-datlim23 <- as.POSIXct(ymd("1957-08-31"))
+datlim23 <- as.POSIXct(ymd("1957-07-06"))
 datlim24 <- as.POSIXct(ymd("1958-05-17"))
 
-datlim25 <- as.POSIXct(ymd("1932-02-13"))
-datlim26 <- as.POSIXct(ymd("1932-05-07"))
 
-datlim25 <- as.POSIXct(ymd("1932-02-06"))
+datlim25 <- as.POSIXct(ymd("1932-02-13"))
 datlim26 <- as.POSIXct(ymd("1932-05-07"))
 
 datlim27 <- as.POSIXct(ymd("1939-01-07"))
@@ -148,6 +147,12 @@ datlim46 <- as.POSIXct(ymd("1960-04-23"))
 datlim47 <- as.POSIXct(ymd("1959-01-03"))
 datlim48 <- as.POSIXct(ymd("1959-05-30"))
 
+datlim49 <- as.POSIXct(ymd("1955-11-19"))
+datlim50 <- as.POSIXct(ymd("1956-05-12"))
+
+datlim51 <- as.POSIXct(ymd("1967-11-18"))
+datlim52 <- as.POSIXct(ymd("1968-04-13"))
+
 
 
 # datlim37 <- as.POSIXct(ymd("1940-01-06"))
@@ -182,6 +187,8 @@ datlim48 <- as.POSIXct(ymd("1959-05-30"))
 # load scripts
 
 source("R/Plot_weekly.R") 
+source("R/Plot_monthly.R") 
+source("R/Plot_yearly.R") 
 # source("R/Plot_Geburten.R")
 # source("R/Plot_Swiss_Re.R")
 # source("R/TS_Marriages.R")

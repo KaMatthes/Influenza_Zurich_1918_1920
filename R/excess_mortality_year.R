@@ -16,7 +16,7 @@ load("data/dataZH_month.RData")
          YearID = Year) %>%
   ungroup() %>%
     group_by(Year) %>%
-    mutate(death_year = sum(death)) %>%
+    mutate(death_year = sum(death, na.rm = TRUE)) %>%
   ungroup() %>%
   # mutate(YearID=Year) %>%
   filter(Year >=Year_min & Year <=Year_max )
@@ -56,8 +56,7 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
     if (YEAR==Year_Pan) {
     reg_data <-  dat.excess %>%
       filter(Year >= YEAR+1 - year_smooth & Year < YEAR+1)%>%
-      mutate(death=ifelse (Year ==YEAR, NA, death)) %>%
-      filter(!Year == 1918)
+      mutate(death=ifelse (Year ==YEAR, NA, death)) 
     
     }
 
@@ -66,7 +65,6 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
       filter(Year >= YEAR+1 - year_smooth & Year < YEAR+1)%>%
       mutate(death=ifelse (Year ==YEAR, NA, death)) %>% 
       filter(!Year == Year_Pan) 
-      # filter(!Year == 1918)
     }
     
     set.seed(20220421)
@@ -131,8 +129,9 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
   # save(expected_deaths,file=paste0("data/expected_death_inla_all_years.RData"))
   }
 
-
 function_inla_total(Year_Pan=1918, Year_max=1919, Year_min=1910)
-function_inla_total(Year_Pan=1920, Year_max=1928, Year_min=1915)
-function_inla_total(Year_Pan=1929, Year_max=1969, Year_min=1923)
+function_inla_total(Year_Pan=1929, Year_max=1943, Year_min=1924)
+function_inla_total(Year_Pan=1944, Year_max=1960, Year_min=1939)
+function_inla_total(Year_Pan=1961, Year_max=1968, Year_min=1956)
 
+function_inla_total(Year_Pan=1920, Year_max=1928, Year_min=1915)
