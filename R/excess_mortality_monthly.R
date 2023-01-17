@@ -73,6 +73,7 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
                      control.compute = list(config = TRUE),
                      control.mode = list(restart = TRUE),
                       # num.threads = round(parallel::detectCores() * .2),
+                     verbose=TRUE,
                      control.predictor = list(compute = TRUE, link = 1))
   
     
@@ -110,17 +111,18 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
   expected_deaths <- expected_deaths %>%
     bind_rows(., .id = "column_label")
   
-  write.xlsx(expected_deaths,paste0("data/expected_death_inla_month",Year_Pan,".xlsx"), rowNames=FALSE, overwrite = TRUE)
-  save(expected_deaths,file=paste0("data/expected_death_inla_month",Year_Pan,".RData"))
+  write.xlsx(expected_deaths,paste0("data/expected_death_inla_month_nb",Year_Pan,".xlsx"), rowNames=FALSE, overwrite = TRUE)
+  save(expected_deaths,file=paste0("data/expected_death_inla_month_nb",Year_Pan,".RData"))
 
   # write.xlsx(expected_deaths,paste0("data/expected_death_inla_all_years.xlsx"), row.names=FALSE, overwrite = TRUE)
   # save(expected_deaths,file=paste0("data/expected_death_inla_all_years.RData"))
   }
 
 
-function_inla_total(Year_Pan=1918, Year_max=1919, Year_min=1910)
+
 function_inla_total(Year_Pan=1920, Year_max=1928, Year_min=1915)
 
+function_inla_total(Year_Pan=1918, Year_max=1919, Year_min=1910)
 function_inla_total(Year_Pan=1929, Year_max=1943, Year_min=1924)
 function_inla_total(Year_Pan=1944, Year_max=1960, Year_min=1939)
 function_inla_total(Year_Pan=1961, Year_max=1968, Year_min=1956)

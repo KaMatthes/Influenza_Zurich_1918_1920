@@ -1,4 +1,4 @@
-function_plot_swiss_re <- function() {
+function_plot_swiss_re_yearly <- function() {
 
 swiss_re <-  read_excel("../data_raw/Master_SwissRE.xlsx") %>%
   rename(Datum =`...1`,
@@ -167,58 +167,60 @@ swiss_re <-  read_excel("../data_raw/Master_SwissRE.xlsx") %>%
            Leben_Kauf_Ab_W + Leben_Math_Ab_W +  Revisionsbureau_Ab_M+Unterabteilungen_Ab_W+Einruch_Ab_W + 
            Konzernbureau_Ab_W+ Zahlungsverkehr_Ab_W,
          Absenz_t = Absenz_M + Absenz_W,
-         Absenz_wo_Kr_M = Absenz_M - Krankheit_M,
-         Absenz_wo_Kr_W = Absenz_W - Krankheit_W,
-         Absenz_wo_Kr_t = Absenz_t - Krankheit_t,
-         Krank_ratio_M =  (Krankheit_M/Arbeit_M)*100,
-         Krank_ratio_W =  (Krankheit_W/Arbeit_W)*100,
-         Krank_ratio_t =  (Krankheit_t/Arbeit_t)*100,
-         Absenz_ratio_M =  (Absenz_M /Arbeit_M)*100,
-         Absenz_ratio_W =  (Absenz_W /Arbeit_W)*100,
-         Absenz_ratio_t =  (Absenz_t/Arbeit_t)*100,
-         Absenz_wo_ratio_M =  (Absenz_wo_Kr_M /Arbeit_M)*100,
-         Absenz_wo_ratio_W =  (Absenz_wo_Kr_W /Arbeit_W)*100,
-         Absenz_wo_ratio_t =  (Absenz_wo_Kr_t/Arbeit_t)*100,
-         date = as.Date(Datum, origin = "1900-01-01"))
-         
+        
+         date = as.Date(Datum, origin = "1900-01-01"),
+         Month = month(date),
+         Year = year(date)) %>%
+  group_by(Year) %>%
+  summarise(Arbeit_M = sum(Arbeit_M, na.rm = TRUE),
+            Arbeit_W = sum(Arbeit_W, na.rm = TRUE),
+            Arbeit_t = sum(Arbeit_t, na.rm = TRUE),
+            Krankheit_M = sum(Krankheit_M, na.rm = TRUE),
+            Krankheit_W = sum(Krankheit_W, na.rm = TRUE),
+            Krankheit_t = sum(Krankheit_t, na.rm = TRUE),
+            Absenz_M = sum(Absenz_M, na.rm = TRUE),
+            Absenz_W = sum(Absenz_W, na.rm = TRUE),
+            Absenz_t = sum(Absenz_t, na.rm = TRUE)) %>%
+  ungroup() %>%
+  mutate(
+    Absenz_wo_Kr_M = Absenz_M - Krankheit_M,
+    Absenz_wo_Kr_W = Absenz_W - Krankheit_W,
+    Absenz_wo_Kr_t = Absenz_t - Krankheit_t,
+  Krank_ratio_M =  (Krankheit_M/Arbeit_M)*100,
+  Krank_ratio_W =  (Krankheit_W/Arbeit_W)*100,
+  Krank_ratio_t =  (Krankheit_t/Arbeit_t)*100,
+  Absenz_ratio_M =  (Absenz_M /Arbeit_M)*100,
+  Absenz_ratio_W =  (Absenz_W /Arbeit_W)*100,
+  Absenz_ratio_t =  (Absenz_t/Arbeit_t)*100,
+  Absenz_wo_ratio_M =  (Absenz_wo_Kr_M /Arbeit_M)*100,
+  Absenz_wo_ratio_W =  (Absenz_wo_Kr_W /Arbeit_W)*100,
+  Absenz_wo_ratio_t =  (Absenz_wo_Kr_t/Arbeit_t)*100,
+  date = ymd(paste0(Year,"0101")))
+            
 Figure_Illness_t <- ggplot() +
-  annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim9,xmax=datlim10,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim11,xmax=datlim12,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim13,xmax=datlim14,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim17,xmax=datlim18,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim19,xmax=datlim20,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # annotate("rect",xmin=datlim21,xmax=datlim22,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim23,xmax=datlim24,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim25,xmax=datlim26,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim27,xmax=datlim28,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim29,xmax=datlim30,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=datlim31,xmax=datlim32,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=datlim33,xmax=datlim34,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # annotate("rect",xmin=datlim35,xmax=datlim36,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim37,xmax=datlim38,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim39,xmax=datlim40,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim41,xmax=datlim42,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim43,xmax=datlim44,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # annotate("rect",xmin=datlim45,xmax=datlim46,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim47,xmax=datlim48,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim49,xmax=datlim50,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=datlim51,xmax=datlim52,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_t,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
-  geom_line(data=swiss_re ,aes(y=Krank_ratio_t,x= as.POSIXct(date),colour="Absence because of illness"), lwd=lwd_size)  +
+  annotate("rect",xmin=as.POSIXct("1910-07-02"),xmax=as.POSIXct("1911-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1917-07-02"),xmax=as.POSIXct("1918-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=as.POSIXct("1919-07-02"),xmax=as.POSIXct("1920-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=as.POSIXct("1928-07-02"),xmax=as.POSIXct("1929-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1943-07-02"),xmax=as.POSIXct("1944-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=as.POSIXct("1946-07-02"),xmax=as.POSIXct("1947-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1951-07-02"),xmax=as.POSIXct("1952-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1955-07-02"),xmax=as.POSIXct("1956-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1957-07-02"),xmax=as.POSIXct("1958-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=as.POSIXct("1967-07-02"),xmax=as.POSIXct("1968-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  # geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_t,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
+  # geom_line(data=swiss_re ,aes(y=Krank_ratio_t,x= as.POSIXct(date),colour="Absence because of illness"), lwd=lwd_size)  +
+  geom_bar(data=swiss_re , aes(x = as.POSIXct(date), y =Krank_ratio_t,fill="Absence because of illness"),stat="identity") +
 
   scale_x_datetime( breaks = date_breaks("12 month"), 
                     labels = label_date_short(),
                     limits =c(min(lims3), max(lims4)),
                     expand = c(0,0)) +
-  scale_color_manual(name = "",
-                     values = c(col_pal[8],col_pal[2]))+
+  scale_fill_manual(name = "",
+                     values = c(col_pal[8]))+
   xlab("Year")+
   ylab("Percentages")+
-  ggtitle("Swiss Re Total") +
+  ggtitle("Swiss Re - Absence illness - Total") +
   theme_bw()+
   #theme_light(base_size = 16)+
   theme(axis.text.y = element_text(size=text_size),
@@ -235,43 +237,29 @@ Figure_Illness_t <- ggplot() +
 
 
 Figure_Illness_w <- ggplot() +
-  annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim9,xmax=datlim10,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim11,xmax=datlim12,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim13,xmax=datlim14,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim17,xmax=datlim18,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim19,xmax=datlim20,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # annotate("rect",xmin=datlim21,xmax=datlim22,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim23,xmax=datlim24,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim25,xmax=datlim26,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim27,xmax=datlim28,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim29,xmax=datlim30,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=datlim31,xmax=datlim32,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=datlim33,xmax=datlim34,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # annotate("rect",xmin=datlim35,xmax=datlim36,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim37,xmax=datlim38,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim39,xmax=datlim40,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim41,xmax=datlim42,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim43,xmax=datlim44,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # annotate("rect",xmin=datlim45,xmax=datlim46,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim47,xmax=datlim48,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim49,xmax=datlim50,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=datlim51,xmax=datlim52,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_W,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
-  geom_line(data=swiss_re ,aes(y=Krank_ratio_W,x= as.POSIXct(date),colour="Absence because of illness"), lwd=lwd_size)  +
+  annotate("rect",xmin=as.POSIXct("1910-07-02"),xmax=as.POSIXct("1911-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1917-07-02"),xmax=as.POSIXct("1918-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=as.POSIXct("1919-07-02"),xmax=as.POSIXct("1920-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=as.POSIXct("1928-07-02"),xmax=as.POSIXct("1929-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1943-07-02"),xmax=as.POSIXct("1944-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=as.POSIXct("1946-07-02"),xmax=as.POSIXct("1947-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1951-07-02"),xmax=as.POSIXct("1952-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1955-07-02"),xmax=as.POSIXct("1956-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1957-07-02"),xmax=as.POSIXct("1958-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=as.POSIXct("1967-07-02"),xmax=as.POSIXct("1968-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  # geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_W,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
+  # geom_line(data=swiss_re ,aes(y=Krank_ratio_W,x= as.POSIXct(date),colour="Absence because of illness"), lwd=lwd_size)  +
+  geom_bar(data=swiss_re , aes(x = as.POSIXct(date), y =Krank_ratio_W,fill="Absence because of illness"),stat="identity") +
 
   scale_x_datetime( breaks = date_breaks("12 month"), 
                     labels = label_date_short(),
                     limits =c(min(lims3), max(lims4)),
                     expand = c(0,0)) +
-  scale_color_manual(name = "",
-                     values = c(col_pal[8],col_pal[2]))+
+  scale_fill_manual(name = "",
+                    values = c(col_pal[8]))+
   xlab("Year")+
   ylab("Percentages")+
-  ggtitle("Swiss Re Women") +
+  ggtitle("Swiss Re - Absence illness - Women") +
   theme_bw()+
   #theme_light(base_size = 16)+
   theme(axis.text.y = element_text(size=text_size),
@@ -288,43 +276,29 @@ Figure_Illness_w <- ggplot() +
 
 
 Figure_Illness_m <- ggplot() +
-  annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim9,xmax=datlim10,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim11,xmax=datlim12,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim13,xmax=datlim14,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim17,xmax=datlim18,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim19,xmax=datlim20,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # annotate("rect",xmin=datlim21,xmax=datlim22,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim23,xmax=datlim24,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim25,xmax=datlim26,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim27,xmax=datlim28,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim29,xmax=datlim30,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=datlim31,xmax=datlim32,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=datlim33,xmax=datlim34,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # annotate("rect",xmin=datlim35,xmax=datlim36,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim37,xmax=datlim38,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim39,xmax=datlim40,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim41,xmax=datlim42,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim43,xmax=datlim44,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # annotate("rect",xmin=datlim45,xmax=datlim46,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim47,xmax=datlim48,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim49,xmax=datlim50,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=datlim51,xmax=datlim52,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_M,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
-  geom_line(data=swiss_re ,aes(y=Krank_ratio_M,x= as.POSIXct(date),colour="Absence because of illness"), lwd=lwd_size)  +
-
+  annotate("rect",xmin=as.POSIXct("1910-07-02"),xmax=as.POSIXct("1911-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1917-07-02"),xmax=as.POSIXct("1918-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=as.POSIXct("1919-07-02"),xmax=as.POSIXct("1920-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=as.POSIXct("1928-07-02"),xmax=as.POSIXct("1929-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1943-07-02"),xmax=as.POSIXct("1944-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=as.POSIXct("1946-07-02"),xmax=as.POSIXct("1947-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1951-07-02"),xmax=as.POSIXct("1952-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1955-07-02"),xmax=as.POSIXct("1956-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1957-07-02"),xmax=as.POSIXct("1958-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=as.POSIXct("1967-07-02"),xmax=as.POSIXct("1968-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  # geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_M,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
+  # geom_line(data=swiss_re ,aes(y=Krank_ratio_M,x= as.POSIXct(date),colour="Absence because of illness"), lwd=lwd_size)  +
+  geom_bar(data=swiss_re , aes(x = as.POSIXct(date), y =Krank_ratio_M,fill="Absence because of illness"),stat="identity") +
+  
   scale_x_datetime( breaks = date_breaks("12 month"), 
                     labels = label_date_short(),
                     limits =c(min(lims3), max(lims4)),
                     expand = c(0,0)) +
-  scale_color_manual(name = "",
-                     values = c(col_pal[8],col_pal[2]))+
+  scale_fill_manual(name = "",
+                    values = c(col_pal[8]))+
   xlab("Year")+
   ylab("Percentages")+
-  ggtitle("Swiss Re Men") +
+  ggtitle("Swiss Re - Absence illness - Men") +
   theme_bw()+
   #theme_light(base_size = 16)+
   theme(axis.text.y = element_text(size=text_size),

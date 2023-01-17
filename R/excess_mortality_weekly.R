@@ -55,7 +55,7 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
     if (YEAR==Year_Pan) {
       reg_data <-  dat.excess %>%
         filter(Year >= YEAR+1 - year_smooth & Year < YEAR+1)%>%
-        mutate(death=ifelse (Year ==YEAR, NA, death)) 
+        mutate(death=ifelse (Year ==YEAR, NA, death))
     }
     
     else {
@@ -114,8 +114,8 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
   expected_deaths <- expected_deaths %>%
     bind_rows(., .id = "column_label")
   
-  write.xlsx(expected_deaths,paste0("data/expected_death_inla_weekly",Year_Pan,".xlsx"), row.names=FALSE, overwrite = TRUE)
-  save(expected_deaths,file=paste0("data/expected_death_inla_weekly",Year_Pan,".RData"))
+  write.xlsx(expected_deaths,paste0("data/expected_death_inla_weekly_nb",Year_Pan,".xlsx"), row.names=FALSE, overwrite = TRUE)
+  save(expected_deaths,file=paste0("data/expected_death_inla_weekly_nb",Year_Pan,".RData"))
 
   # write.xlsx(expected_deaths,paste0("data/expected_death_inla_all_years.xlsx"), row.names=FALSE, overwrite = TRUE)
   # save(expected_deaths,file=paste0("data/expected_death_inla_all_years.RData"))

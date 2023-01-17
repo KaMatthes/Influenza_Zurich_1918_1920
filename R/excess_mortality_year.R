@@ -3,7 +3,7 @@ function_inla_total <- function(Year_Pan, Year_max, Year_min) {
 load("data/dataZH_month.RData")
   
   dat.excess <- dataZH_month  %>%
-  select(Year, Month, death_m,CityZurich ) %>%
+  select(Year, Month, death_m,CityZurich, pop.monthly ) %>%
   rename(death=death_m) %>%
   mutate(death = as.integer(round(death,0))) %>%
   # mutate(Year = as.factor(Year),
@@ -43,7 +43,7 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
   # f(timeID, model='seasonal',season.length=12)
   
   
-  formula <- death ~ 1 + offset(log(CityZurich)) +
+  formula <- death ~ 1 + offset(log(pop.monthly)) +
     f(YearID,model='iid',hyper=hyper.iid) +
     f(timeID, model='seasonal', season.length = 12)
 
