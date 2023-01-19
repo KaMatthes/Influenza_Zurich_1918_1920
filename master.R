@@ -1,4 +1,4 @@
-.libPaths(c("H:/Documents/R/win-library/4.1", "C:/Program Files/R/R-4.2.1/library"))
+.libPaths(c("H:/Documents/R/win-library/4.1", "C:/Program Files/R/R-4.2.2/library"))
 
 library(tidyverse)
 library(readxl)
@@ -16,8 +16,8 @@ library(sp)
 library(spdep)
 library(rgdal)
 library(rgeos)
-library(tmap)
-library(tmaptools)
+# library(tmap)
+# library(tmaptools)
 library(spgwr)
 library(grid)
 library(gridExtra)
@@ -55,8 +55,6 @@ title_size <- 15
 
 size_axis <-12
 size_axis_title <- 12
-
-
 
 
 col_pal <- pal_jco()(8)

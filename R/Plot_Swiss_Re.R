@@ -1,6 +1,6 @@
 function_plot_swiss_re <- function() {
 
-swiss_re <-  read_excel("../data_raw/Master_SwissRE.xlsx") %>%
+swiss_re <-  read_excel("data_raw/Master_SwissRE.xlsx") %>%
   rename(Datum =`...1`,
          Kassa_Wert_Ar_M = `Kassa & Wertschriften`,
          Kassa_Wert_Ar_W = `...3`,
@@ -207,8 +207,11 @@ Figure_Illness_t <- ggplot() +
   # annotate("rect",xmin=datlim47,xmax=datlim48,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=datlim49,xmax=datlim50,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
   annotate("rect",xmin=datlim51,xmax=datlim52,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_t,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
-  geom_line(data=swiss_re ,aes(y=Krank_ratio_t,x= as.POSIXct(date),colour="Absence because of illness"), lwd=lwd_size)  +
+  # geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_t,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
+  # geom_line(data=swiss_re ,aes(y=Krank_ratio_t,x= as.POSIXct(date),colour="Absence because of illness"), lwd=lwd_size)  +
+  
+  geom_line(data=swiss_re ,aes(y=Krank_ratio_W,x= as.POSIXct(date),colour="Female"), lwd=lwd_size)  +
+  geom_line(data=swiss_re ,aes(y=Krank_ratio_M,x= as.POSIXct(date),colour="Male"), lwd=lwd_size)  +
 
   scale_x_datetime( breaks = date_breaks("12 month"), 
                     labels = label_date_short(),
@@ -228,8 +231,7 @@ Figure_Illness_t <- ggplot() +
         legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
-        axis.text.x = element_blank(),
-        axis.title.x  = element_blank(),
+        axis.text.x = element_text(size=10,angle=45,hjust=1),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
 
@@ -260,8 +262,9 @@ Figure_Illness_w <- ggplot() +
   # annotate("rect",xmin=datlim47,xmax=datlim48,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=datlim49,xmax=datlim50,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
   annotate("rect",xmin=datlim51,xmax=datlim52,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_W,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
-  geom_line(data=swiss_re ,aes(y=Krank_ratio_W,x= as.POSIXct(date),colour="Absence because of illness"), lwd=lwd_size)  +
+  # geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_W,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
+  geom_line(data=swiss_re ,aes(y=Krank_ratio_W,x= as.POSIXct(date),colour="Female"), lwd=lwd_size)  +
+  geom_line(data=swiss_re ,aes(y=Krank_ratio_M,x= as.POSIXct(date),colour="Male"), lwd=lwd_size)  +
 
   scale_x_datetime( breaks = date_breaks("12 month"), 
                     labels = label_date_short(),
