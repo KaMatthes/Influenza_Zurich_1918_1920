@@ -10,13 +10,6 @@ dat.excess <- dataZH_month  %>%
   #        Month = as.factor(Month)) %>%
   filter(!Year==1909) %>%
   filter(!Year==1969) %>%
-  arrange(Year, Month) %>%
-  group_by(Year,Month) %>%
-  mutate(timeID = cur_group_id()) %>%
-  arrange(timeID) %>%
-  ungroup() %>%
-  mutate(MonthID = Month,
-         YearID = Year) %>%
   filter(Year >=Year_min & Year <=Year_max )
 
 
@@ -51,14 +44,30 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
     if (YEAR==Year_Pan) {
     reg_data <-  dat.excess %>%
       filter(Year >= YEAR+1 - year_smooth & Year < YEAR+1)%>%
-      mutate(death=ifelse (Year ==YEAR, NA, death))  
+      mutate(death=ifelse (Year ==YEAR, NA, death))  %>%
+      # filter(!Year==1918) %>%
+      arrange(Year, Month) %>%
+      group_by(Year,Month) %>%
+      mutate(timeID = cur_group_id()) %>%
+      arrange(timeID) %>%
+      ungroup() %>%
+      mutate(MonthID = Month,
+             YearID = Year)
     }
     
     else {
       reg_data <-  dat.excess %>% 
         filter(Year >= YEAR+1 - year_smooth & Year < YEAR+1)%>%
         mutate(death=ifelse (Year ==YEAR, NA, death)) %>% 
-        filter(!Year == Year_Pan) 
+        filter(!Year == Year_Pan)  %>% 
+        # filter(!Year==1918) %>%
+        arrange(Year, Month) %>%
+        group_by(Year,Month) %>%
+        mutate(timeID = cur_group_id()) %>%
+        arrange(timeID) %>%
+        ungroup() %>%
+        mutate(MonthID = Month,
+               YearID = Year)
     }
     
     set.seed(20220421)
@@ -73,7 +82,7 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
                      control.compute = list(config = TRUE),
                      control.mode = list(restart = TRUE),
                       # num.threads = round(parallel::detectCores() * .2),
-                     verbose=TRUE,
+                     # verbose=TRUE,
                      control.predictor = list(compute = TRUE, link = 1))
   
     

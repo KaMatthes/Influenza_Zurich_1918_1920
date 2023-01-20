@@ -2,11 +2,17 @@ function_plot_yearly <- function() {
 
   load("../data/dataZH_month.RData")
   
+  
+  # load("data/dataZH_month.RData")
+  
+  
   dataZH_year <- dataZH_month %>%
     mutate(
-           influenza_m = ifelse(is.na(influenza_m), 0, influenza_m))%>%
+      death_m = ifelse(is.na(death_m), 0,death_m),
+      influenza_m = ifelse(is.na(influenza_m), 0,influenza_m))%>%
     group_by(Year,CityZurich) %>%
-    summarise(Inf_year = sum(influenza_m, na.rm=TRUE)) %>%
+    summarise(death_year = sum(death_m, na.rm=TRUE),
+              Inf_year = sum(influenza_m, na.rm=TRUE)) %>%
     ungroup()
               
   
@@ -21,6 +27,17 @@ function_plot_yearly <- function() {
   load("../data/expected_death_inla_year1961.RData")
   excess1961 <-   expected_deaths
   
+  # load("data/expected_death_inla_year1918.RData")
+  # excess1918 <-   expected_deaths
+  # load("data/expected_death_inla_year1920.RData")
+  # excess1920 <-   expected_deaths
+  # load("data/expected_death_inla_year1929.RData")
+  # excess1929 <-   expected_deaths
+  # load("data/expected_death_inla_year1944.RData")
+  # excess1944 <-   expected_deaths
+  # load("data/expected_death_inla_year1961.RData")
+  # excess1961 <-   expected_deaths
+  # 
 data_excess <- rbind( excess1918,  excess1920, excess1929, excess1944, excess1961) %>%
   tibble() 
 
@@ -57,12 +74,13 @@ FigureInc <- ggplot() +
   annotate("rect",xmin=as.POSIXct("1910-07-02"),xmax=as.POSIXct("1911-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
   annotate("rect",xmin=as.POSIXct("1917-07-02"),xmax=as.POSIXct("1918-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=as.POSIXct("1919-07-02"),xmax=as.POSIXct("1920-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=as.POSIXct("1928-07-02"),xmax=as.POSIXct("1929-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1928-07-02"),xmax=as.POSIXct("1929-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
   annotate("rect",xmin=as.POSIXct("1943-07-02"),xmax=as.POSIXct("1944-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=as.POSIXct("1946-07-02"),xmax=as.POSIXct("1947-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
   annotate("rect",xmin=as.POSIXct("1951-07-02"),xmax=as.POSIXct("1952-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=as.POSIXct("1955-07-02"),xmax=as.POSIXct("1956-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1955-07-02"),xmax=as.POSIXct("1956-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
   annotate("rect",xmin=as.POSIXct("1957-07-02"),xmax=as.POSIXct("1958-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=as.POSIXct("1962-07-02"),xmax=as.POSIXct("1963-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
   annotate("rect",xmin=as.POSIXct("1967-07-02"),xmax=as.POSIXct("1968-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   # geom_line(data=dataZH ,aes(y=InfluenzaInc,x= Year,colour="City of Zurich"), lwd=lwd_size )+
   geom_bar(data=dataZH, aes(x = as.POSIXct(Reporting), y =InfluenzaInc,fill="City of Zurich"),stat="identity") +
@@ -86,7 +104,7 @@ FigureInc <- ggplot() +
     legend.text=element_text(size=legend_size),
     # legend.key.size = unit(1.5, 'cm'),
     # legend.spacing.x = unit(1.5, 'cm'),
-    axis.text.x = element_blank(),
+    axis.text.x = element_text(size=10,angle=45,hjust=1),
     axis.title.x  = element_blank(),
     axis.title.y  = element_text(size=axis_legend_size),
     title =element_text(size=title_size))
@@ -97,12 +115,13 @@ FigureDeath <- ggplot() +
   annotate("rect",xmin=as.POSIXct("1910-07-02"),xmax=as.POSIXct("1911-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
   annotate("rect",xmin=as.POSIXct("1917-07-02"),xmax=as.POSIXct("1918-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=as.POSIXct("1919-07-02"),xmax=as.POSIXct("1920-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=as.POSIXct("1928-07-02"),xmax=as.POSIXct("1929-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1928-07-02"),xmax=as.POSIXct("1929-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
   annotate("rect",xmin=as.POSIXct("1943-07-02"),xmax=as.POSIXct("1944-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=as.POSIXct("1946-07-02"),xmax=as.POSIXct("1947-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
   annotate("rect",xmin=as.POSIXct("1951-07-02"),xmax=as.POSIXct("1952-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=as.POSIXct("1955-07-02"),xmax=as.POSIXct("1956-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1955-07-02"),xmax=as.POSIXct("1956-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
   annotate("rect",xmin=as.POSIXct("1957-07-02"),xmax=as.POSIXct("1958-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=as.POSIXct("1962-07-02"),xmax=as.POSIXct("1963-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
   annotate("rect",xmin=as.POSIXct("1967-07-02"),xmax=as.POSIXct("1968-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   geom_bar(data=dataZH, aes(x = as.POSIXct(Reporting), y =death_inc,fill="Death"),stat="identity") +
   scale_x_datetime( breaks = date_breaks("12 month"),
@@ -124,7 +143,7 @@ FigureDeath <- ggplot() +
         legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
-        axis.text.x = element_blank(),
+        axis.text.x = element_text(size=10,angle=45,hjust=1),
         axis.title.x  = element_blank(),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
@@ -187,12 +206,13 @@ FigureExcess<- ggplot() +
   annotate("rect",xmin=as.POSIXct("1910-07-02"),xmax=as.POSIXct("1911-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
   annotate("rect",xmin=as.POSIXct("1917-07-02"),xmax=as.POSIXct("1918-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=as.POSIXct("1919-07-02"),xmax=as.POSIXct("1920-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=as.POSIXct("1928-07-02"),xmax=as.POSIXct("1929-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1928-07-02"),xmax=as.POSIXct("1929-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
   annotate("rect",xmin=as.POSIXct("1943-07-02"),xmax=as.POSIXct("1944-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=as.POSIXct("1946-07-02"),xmax=as.POSIXct("1947-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
   annotate("rect",xmin=as.POSIXct("1951-07-02"),xmax=as.POSIXct("1952-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=as.POSIXct("1955-07-02"),xmax=as.POSIXct("1956-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1955-07-02"),xmax=as.POSIXct("1956-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
   annotate("rect",xmin=as.POSIXct("1957-07-02"),xmax=as.POSIXct("1958-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=as.POSIXct("1962-07-02"),xmax=as.POSIXct("1963-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
   annotate("rect",xmin=as.POSIXct("1967-07-02"),xmax=as.POSIXct("1968-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   geom_col(data= dataZH,aes(x= as.POSIXct(Reporting),y = rel_excess_death, fill= Difference_sig)) +
   # geom_ribbon(data=dataZH,aes(ymin=LL_inc, ymax=UL_inc, x=as.POSIXct(Reporting),fill="CI_area"), alpha=0.2) +

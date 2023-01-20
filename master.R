@@ -151,6 +151,10 @@ datlim50 <- as.POSIXct(ymd("1956-05-12"))
 datlim51 <- as.POSIXct(ymd("1967-11-18"))
 datlim52 <- as.POSIXct(ymd("1968-04-13"))
 
+datlim53 <- as.POSIXct(ymd("1926-01-01"))
+
+datlim55 <- as.POSIXct(ymd("1962-10-28"))
+datlim56 <- as.POSIXct(ymd("1963-03-17"))
 
 
 # datlim37 <- as.POSIXct(ymd("1940-01-06"))
@@ -184,7 +188,7 @@ datlim52 <- as.POSIXct(ymd("1968-04-13"))
 
 # load scripts
 
-source("R/Plot_weekly.R") 
+source("R/Plot_weekly_tmp.R") 
 source("R/Plot_monthly.R") 
 source("R/Plot_Swiss_Re.R") 
 source("R/Plot_yearly.R") 

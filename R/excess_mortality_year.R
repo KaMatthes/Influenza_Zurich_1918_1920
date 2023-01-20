@@ -10,14 +10,7 @@ load("data/dataZH_month.RData")
   #        Month = as.factor(Month)) %>%
   filter(!Year==1909) %>%
   filter(!Year==1969) %>%
-  arrange(Year, Month) %>%
-  group_by(Year, Month) %>%
-  mutate(timeID = cur_group_id(),
-         YearID = Year) %>%
-  ungroup() %>%
-    group_by(Year) %>%
-    mutate(death_year = sum(death, na.rm = TRUE)) %>%
-  ungroup() %>%
+  
   # mutate(YearID=Year) %>%
   filter(Year >=Year_min & Year <=Year_max )
 
@@ -56,7 +49,16 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
     if (YEAR==Year_Pan) {
     reg_data <-  dat.excess %>%
       filter(Year >= YEAR+1 - year_smooth & Year < YEAR+1)%>%
-      mutate(death=ifelse (Year ==YEAR, NA, death)) 
+      mutate(death=ifelse (Year ==YEAR, NA, death))  %>%
+      filter(!Year==1918) %>%
+      arrange(Year, Month) %>%
+      group_by(Year, Month) %>%
+      mutate(timeID = cur_group_id(),
+             YearID = Year) %>%
+      ungroup() %>%
+      group_by(Year) %>%
+      mutate(death_year = sum(death, na.rm = TRUE)) %>%
+      ungroup() 
     
     }
 
@@ -64,7 +66,16 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
     reg_data <-  dat.excess %>% 
       filter(Year >= YEAR+1 - year_smooth & Year < YEAR+1)%>%
       mutate(death=ifelse (Year ==YEAR, NA, death)) %>% 
-      filter(!Year == Year_Pan) 
+      filter(!Year==1918) %>%
+      filter(!Year == Year_Pan) %>%
+      arrange(Year, Month) %>%
+      group_by(Year, Month) %>%
+      mutate(timeID = cur_group_id(),
+             YearID = Year) %>%
+      ungroup() %>%
+      group_by(Year) %>%
+      mutate(death_year = sum(death, na.rm = TRUE)) %>%
+      ungroup() 
     }
     
     set.seed(20220421)

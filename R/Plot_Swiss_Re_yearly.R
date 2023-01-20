@@ -197,54 +197,54 @@ swiss_re <-  read_excel("../data_raw/Master_SwissRE.xlsx") %>%
   Absenz_wo_ratio_t =  (Absenz_wo_Kr_t/Arbeit_t)*100,
   date = ymd(paste0(Year,"0101")))
             
-Figure_Illness_t <- ggplot() +
-  annotate("rect",xmin=as.POSIXct("1910-07-02"),xmax=as.POSIXct("1911-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=as.POSIXct("1917-07-02"),xmax=as.POSIXct("1918-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=as.POSIXct("1919-07-02"),xmax=as.POSIXct("1920-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=as.POSIXct("1928-07-02"),xmax=as.POSIXct("1929-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=as.POSIXct("1943-07-02"),xmax=as.POSIXct("1944-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=as.POSIXct("1946-07-02"),xmax=as.POSIXct("1947-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=as.POSIXct("1951-07-02"),xmax=as.POSIXct("1952-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=as.POSIXct("1955-07-02"),xmax=as.POSIXct("1956-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=as.POSIXct("1957-07-02"),xmax=as.POSIXct("1958-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=as.POSIXct("1967-07-02"),xmax=as.POSIXct("1968-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_t,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
-  # geom_line(data=swiss_re ,aes(y=Krank_ratio_t,x= as.POSIXct(date),colour="Absence because of illness"), lwd=lwd_size)  +
-  geom_bar(data=swiss_re , aes(x = as.POSIXct(date), y =Krank_ratio_t,fill="Absence because of illness"),stat="identity") +
-
-  scale_x_datetime( breaks = date_breaks("12 month"), 
-                    labels = label_date_short(),
-                    limits =c(min(lims3), max(lims4)),
-                    expand = c(0,0)) +
-  scale_fill_manual(name = "",
-                     values = c(col_pal[8]))+
-  xlab("Year")+
-  ylab("Percentages")+
-  ggtitle("Swiss Re - Absence illness - Total") +
-  theme_bw()+
-  #theme_light(base_size = 16)+
-  theme(axis.text.y = element_text(size=text_size),
-        panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank(),
-        legend.position = c(0.9, .8),
-        legend.text=element_text(size=legend_size),
-        # legend.key.size = unit(1.5, 'cm'),
-        # legend.spacing.x = unit(1.5, 'cm'),
-        axis.text.x = element_blank(),
-        axis.title.x  = element_blank(),
-        axis.title.y  = element_text(size=axis_legend_size),
-        title =element_text(size=title_size))
-
+# Figure_Illness_t <- ggplot() +
+#   annotate("rect",xmin=as.POSIXct("1910-07-02"),xmax=as.POSIXct("1911-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+#   annotate("rect",xmin=as.POSIXct("1917-07-02"),xmax=as.POSIXct("1918-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   annotate("rect",xmin=as.POSIXct("1919-07-02"),xmax=as.POSIXct("1920-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   annotate("rect",xmin=as.POSIXct("1928-07-02"),xmax=as.POSIXct("1929-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
+#   annotate("rect",xmin=as.POSIXct("1943-07-02"),xmax=as.POSIXct("1944-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   annotate("rect",xmin=as.POSIXct("1946-07-02"),xmax=as.POSIXct("1947-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+#   annotate("rect",xmin=as.POSIXct("1951-07-02"),xmax=as.POSIXct("1952-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+#   annotate("rect",xmin=as.POSIXct("1955-07-02"),xmax=as.POSIXct("1956-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
+#   annotate("rect",xmin=as.POSIXct("1957-07-02"),xmax=as.POSIXct("1958-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   annotate("rect",xmin=as.POSIXct("1967-07-02"),xmax=as.POSIXct("1968-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_t,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
+#   # geom_line(data=swiss_re ,aes(y=Krank_ratio_t,x= as.POSIXct(date),colour="Absence because of illness"), lwd=lwd_size)  +
+#   geom_bar(data=swiss_re , aes(x = as.POSIXct(date), y =Krank_ratio_t,fill="Absence because of illness"),stat="identity") +
+# 
+#   scale_x_datetime( breaks = date_breaks("12 month"), 
+#                     labels = label_date_short(),
+#                     limits =c(min(lims3), max(lims4)),
+#                     expand = c(0,0)) +
+#   scale_fill_manual(name = "",
+#                      values = c(col_pal[8]))+
+#   xlab("Year")+
+#   ylab("Percentages")+
+#   ggtitle("Swiss Re - Absence illness - Total") +
+#   theme_bw()+
+#   #theme_light(base_size = 16)+
+#   theme(axis.text.y = element_text(size=text_size),
+#         panel.grid.major.x = element_blank(),
+#         panel.grid.minor.x = element_blank(),
+#         legend.position = c(0.9, .8),
+#         legend.text=element_text(size=legend_size),
+#         # legend.key.size = unit(1.5, 'cm'),
+#         # legend.spacing.x = unit(1.5, 'cm'),
+#         axis.text.x = element_blank(),
+#         axis.title.x  = element_blank(),
+#         axis.title.y  = element_text(size=axis_legend_size),
+#         title =element_text(size=title_size))
+# 
 
 Figure_Illness_w <- ggplot() +
   annotate("rect",xmin=as.POSIXct("1910-07-02"),xmax=as.POSIXct("1911-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
   annotate("rect",xmin=as.POSIXct("1917-07-02"),xmax=as.POSIXct("1918-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=as.POSIXct("1919-07-02"),xmax=as.POSIXct("1920-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=as.POSIXct("1928-07-02"),xmax=as.POSIXct("1929-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1928-07-02"),xmax=as.POSIXct("1929-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
   annotate("rect",xmin=as.POSIXct("1943-07-02"),xmax=as.POSIXct("1944-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=as.POSIXct("1946-07-02"),xmax=as.POSIXct("1947-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
   annotate("rect",xmin=as.POSIXct("1951-07-02"),xmax=as.POSIXct("1952-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=as.POSIXct("1955-07-02"),xmax=as.POSIXct("1956-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1955-07-02"),xmax=as.POSIXct("1956-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
   annotate("rect",xmin=as.POSIXct("1957-07-02"),xmax=as.POSIXct("1958-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=as.POSIXct("1967-07-02"),xmax=as.POSIXct("1968-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   # geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_W,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
@@ -265,11 +265,11 @@ Figure_Illness_w <- ggplot() +
   theme(axis.text.y = element_text(size=text_size),
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
-        legend.position = c(0.9, .8),
+        legend.position = "none",
         legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
-        axis.text.x = element_blank(),
+        axis.text.x = element_text(size=10,angle=45,hjust=1),
         axis.title.x  = element_blank(),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
@@ -279,12 +279,13 @@ Figure_Illness_m <- ggplot() +
   annotate("rect",xmin=as.POSIXct("1910-07-02"),xmax=as.POSIXct("1911-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
   annotate("rect",xmin=as.POSIXct("1917-07-02"),xmax=as.POSIXct("1918-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=as.POSIXct("1919-07-02"),xmax=as.POSIXct("1920-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=as.POSIXct("1928-07-02"),xmax=as.POSIXct("1929-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1928-07-02"),xmax=as.POSIXct("1929-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
   annotate("rect",xmin=as.POSIXct("1943-07-02"),xmax=as.POSIXct("1944-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=as.POSIXct("1946-07-02"),xmax=as.POSIXct("1947-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
   annotate("rect",xmin=as.POSIXct("1951-07-02"),xmax=as.POSIXct("1952-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=as.POSIXct("1955-07-02"),xmax=as.POSIXct("1956-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=as.POSIXct("1955-07-02"),xmax=as.POSIXct("1956-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
   annotate("rect",xmin=as.POSIXct("1957-07-02"),xmax=as.POSIXct("1958-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=as.POSIXct("1962-07-02"),xmax=as.POSIXct("1963-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
   annotate("rect",xmin=as.POSIXct("1967-07-02"),xmax=as.POSIXct("1968-06-30"),ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   # geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_M,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
   # geom_line(data=swiss_re ,aes(y=Krank_ratio_M,x= as.POSIXct(date),colour="Absence because of illness"), lwd=lwd_size)  +
@@ -304,7 +305,7 @@ Figure_Illness_m <- ggplot() +
   theme(axis.text.y = element_text(size=text_size),
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
-        legend.position = c(0.9, .8),
+        legend.position = "none",
         legend.text=element_text(size=legend_size),
         axis.text.x = element_text(size=10,angle=45,hjust=1),
         # legend.key.size = unit(1.5, 'cm'),
@@ -314,9 +315,9 @@ Figure_Illness_m <- ggplot() +
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
 
-plot_swiss_re <- cowplot::plot_grid(Figure_Illness_t ,Figure_Illness_w,Figure_Illness_m, 
-                                  ncol=1, nrow=3, align="hv",
-                                  rel_heights = c(1,1,1))
+plot_swiss_re <- cowplot::plot_grid(Figure_Illness_w,Figure_Illness_m, 
+                                  ncol=1, nrow=2, align="hv",
+                                  rel_heights = c(1,1))
 
 
 return(plot_swiss_re)

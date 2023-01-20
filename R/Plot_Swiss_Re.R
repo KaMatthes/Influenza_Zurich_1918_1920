@@ -1,6 +1,6 @@
 function_plot_swiss_re <- function() {
 
-swiss_re <-  read_excel("data_raw/Master_SwissRE.xlsx") %>%
+swiss_re <-  read_excel("../data_raw/Master_SwissRE.xlsx") %>%
   rename(Datum =`...1`,
          Kassa_Wert_Ar_M = `Kassa & Wertschriften`,
          Kassa_Wert_Ar_W = `...3`,
@@ -181,7 +181,7 @@ swiss_re <-  read_excel("data_raw/Master_SwissRE.xlsx") %>%
          Absenz_wo_ratio_t =  (Absenz_wo_Kr_t/Arbeit_t)*100,
          date = as.Date(Datum, origin = "1900-01-01"))
          
-Figure_Illness_t <- ggplot() +
+plot_swiss_re <- ggplot() +
   annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   # annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   # annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
@@ -190,7 +190,7 @@ Figure_Illness_t <- ggplot() +
   # annotate("rect",xmin=datlim11,xmax=datlim12,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   # annotate("rect",xmin=datlim13,xmax=datlim14,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   # annotate("rect",xmin=datlim17,xmax=datlim18,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim19,xmax=datlim20,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=datlim19,xmax=datlim20,ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
   # annotate("rect",xmin=datlim21,xmax=datlim22,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   annotate("rect",xmin=datlim23,xmax=datlim24,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   # annotate("rect",xmin=datlim25,xmax=datlim26,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
@@ -205,8 +205,10 @@ Figure_Illness_t <- ggplot() +
   # annotate("rect",xmin=datlim43,xmax=datlim44,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
   # annotate("rect",xmin=datlim45,xmax=datlim46,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   # annotate("rect",xmin=datlim47,xmax=datlim48,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim49,xmax=datlim50,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+  annotate("rect",xmin=datlim49,xmax=datlim50,ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
   annotate("rect",xmin=datlim51,xmax=datlim52,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+  annotate("rect",xmin=datlim55,xmax=datlim56,ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
+  geom_vline(xintercept = datlim53) +
   # geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_t,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
   # geom_line(data=swiss_re ,aes(y=Krank_ratio_t,x= as.POSIXct(date),colour="Absence because of illness"), lwd=lwd_size)  +
   
@@ -221,7 +223,7 @@ Figure_Illness_t <- ggplot() +
                      values = c(col_pal[8],col_pal[2]))+
   xlab("Year")+
   ylab("Percentages")+
-  ggtitle("Swiss Re Total") +
+  ggtitle("Swiss Re") +
   theme_bw()+
   #theme_light(base_size = 16)+
   theme(axis.text.y = element_text(size=text_size),
@@ -235,117 +237,117 @@ Figure_Illness_t <- ggplot() +
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
 
-
-Figure_Illness_w <- ggplot() +
-  annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim9,xmax=datlim10,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim11,xmax=datlim12,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim13,xmax=datlim14,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim17,xmax=datlim18,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim19,xmax=datlim20,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # annotate("rect",xmin=datlim21,xmax=datlim22,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim23,xmax=datlim24,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim25,xmax=datlim26,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim27,xmax=datlim28,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim29,xmax=datlim30,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=datlim31,xmax=datlim32,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=datlim33,xmax=datlim34,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # annotate("rect",xmin=datlim35,xmax=datlim36,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim37,xmax=datlim38,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim39,xmax=datlim40,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim41,xmax=datlim42,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim43,xmax=datlim44,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # annotate("rect",xmin=datlim45,xmax=datlim46,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim47,xmax=datlim48,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim49,xmax=datlim50,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=datlim51,xmax=datlim52,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_W,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
-  geom_line(data=swiss_re ,aes(y=Krank_ratio_W,x= as.POSIXct(date),colour="Female"), lwd=lwd_size)  +
-  geom_line(data=swiss_re ,aes(y=Krank_ratio_M,x= as.POSIXct(date),colour="Male"), lwd=lwd_size)  +
-
-  scale_x_datetime( breaks = date_breaks("12 month"), 
-                    labels = label_date_short(),
-                    limits =c(min(lims3), max(lims4)),
-                    expand = c(0,0)) +
-  scale_color_manual(name = "",
-                     values = c(col_pal[8],col_pal[2]))+
-  xlab("Year")+
-  ylab("Percentages")+
-  ggtitle("Swiss Re Women") +
-  theme_bw()+
-  #theme_light(base_size = 16)+
-  theme(axis.text.y = element_text(size=text_size),
-        panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank(),
-        legend.position = c(0.9, .8),
-        legend.text=element_text(size=legend_size),
-        # legend.key.size = unit(1.5, 'cm'),
-        # legend.spacing.x = unit(1.5, 'cm'),
-        axis.text.x = element_blank(),
-        axis.title.x  = element_blank(),
-        axis.title.y  = element_text(size=axis_legend_size),
-        title =element_text(size=title_size))
-
-
-Figure_Illness_m <- ggplot() +
-  annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim9,xmax=datlim10,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim11,xmax=datlim12,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim13,xmax=datlim14,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim17,xmax=datlim18,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim19,xmax=datlim20,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # annotate("rect",xmin=datlim21,xmax=datlim22,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim23,xmax=datlim24,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim25,xmax=datlim26,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim27,xmax=datlim28,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim29,xmax=datlim30,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=datlim31,xmax=datlim32,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=datlim33,xmax=datlim34,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # annotate("rect",xmin=datlim35,xmax=datlim36,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim37,xmax=datlim38,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim39,xmax=datlim40,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim41,xmax=datlim42,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim43,xmax=datlim44,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # annotate("rect",xmin=datlim45,xmax=datlim46,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim47,xmax=datlim48,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  annotate("rect",xmin=datlim49,xmax=datlim50,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  annotate("rect",xmin=datlim51,xmax=datlim52,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_M,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
-  geom_line(data=swiss_re ,aes(y=Krank_ratio_M,x= as.POSIXct(date),colour="Absence because of illness"), lwd=lwd_size)  +
-
-  scale_x_datetime( breaks = date_breaks("12 month"), 
-                    labels = label_date_short(),
-                    limits =c(min(lims3), max(lims4)),
-                    expand = c(0,0)) +
-  scale_color_manual(name = "",
-                     values = c(col_pal[8],col_pal[2]))+
-  xlab("Year")+
-  ylab("Percentages")+
-  ggtitle("Swiss Re Men") +
-  theme_bw()+
-  #theme_light(base_size = 16)+
-  theme(axis.text.y = element_text(size=text_size),
-        panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank(),
-        legend.position = c(0.9, .8),
-        legend.text=element_text(size=legend_size),
-        axis.text.x = element_text(size=10,angle=45,hjust=1),
-        # legend.key.size = unit(1.5, 'cm'),
-        # legend.spacing.x = unit(1.5, 'cm'),
-        # axis.text.x = element_blank(),
-        # axis.title.x  = element_blank(),
-        axis.title.y  = element_text(size=axis_legend_size),
-        title =element_text(size=title_size))
-
-plot_swiss_re <- cowplot::plot_grid(Figure_Illness_t ,Figure_Illness_w,Figure_Illness_m, 
-                                  ncol=1, nrow=3, align="hv",
-                                  rel_heights = c(1,1,1))
+# 
+# Figure_Illness_w <- ggplot() +
+#   annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim9,xmax=datlim10,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim11,xmax=datlim12,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim13,xmax=datlim14,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim17,xmax=datlim18,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   annotate("rect",xmin=datlim19,xmax=datlim20,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+#   # annotate("rect",xmin=datlim21,xmax=datlim22,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   annotate("rect",xmin=datlim23,xmax=datlim24,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim25,xmax=datlim26,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim27,xmax=datlim28,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   annotate("rect",xmin=datlim29,xmax=datlim30,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+#   annotate("rect",xmin=datlim31,xmax=datlim32,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+#   annotate("rect",xmin=datlim33,xmax=datlim34,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+#   # annotate("rect",xmin=datlim35,xmax=datlim36,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   annotate("rect",xmin=datlim37,xmax=datlim38,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim39,xmax=datlim40,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim41,xmax=datlim42,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim43,xmax=datlim44,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+#   # annotate("rect",xmin=datlim45,xmax=datlim46,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim47,xmax=datlim48,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   annotate("rect",xmin=datlim49,xmax=datlim50,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+#   annotate("rect",xmin=datlim51,xmax=datlim52,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_W,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
+#   geom_line(data=swiss_re ,aes(y=Krank_ratio_W,x= as.POSIXct(date),colour="Female"), lwd=lwd_size)  +
+#   geom_line(data=swiss_re ,aes(y=Krank_ratio_M,x= as.POSIXct(date),colour="Male"), lwd=lwd_size)  +
+# 
+#   scale_x_datetime( breaks = date_breaks("12 month"), 
+#                     labels = label_date_short(),
+#                     limits =c(min(lims3), max(lims4)),
+#                     expand = c(0,0)) +
+#   scale_color_manual(name = "",
+#                      values = c(col_pal[8],col_pal[2]))+
+#   xlab("Year")+
+#   ylab("Percentages")+
+#   ggtitle("Swiss Re Women") +
+#   theme_bw()+
+#   #theme_light(base_size = 16)+
+#   theme(axis.text.y = element_text(size=text_size),
+#         panel.grid.major.x = element_blank(),
+#         panel.grid.minor.x = element_blank(),
+#         legend.position = c(0.9, .8),
+#         legend.text=element_text(size=legend_size),
+#         # legend.key.size = unit(1.5, 'cm'),
+#         # legend.spacing.x = unit(1.5, 'cm'),
+#         axis.text.x = element_blank(),
+#         axis.title.x  = element_blank(),
+#         axis.title.y  = element_text(size=axis_legend_size),
+#         title =element_text(size=title_size))
+# 
+# 
+# Figure_Illness_m <- ggplot() +
+#   annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim9,xmax=datlim10,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim11,xmax=datlim12,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim13,xmax=datlim14,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim17,xmax=datlim18,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   annotate("rect",xmin=datlim19,xmax=datlim20,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+#   # annotate("rect",xmin=datlim21,xmax=datlim22,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   annotate("rect",xmin=datlim23,xmax=datlim24,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim25,xmax=datlim26,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim27,xmax=datlim28,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   annotate("rect",xmin=datlim29,xmax=datlim30,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+#   annotate("rect",xmin=datlim31,xmax=datlim32,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+#   annotate("rect",xmin=datlim33,xmax=datlim34,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+#   # annotate("rect",xmin=datlim35,xmax=datlim36,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   annotate("rect",xmin=datlim37,xmax=datlim38,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim39,xmax=datlim40,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim41,xmax=datlim42,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim43,xmax=datlim44,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+#   # annotate("rect",xmin=datlim45,xmax=datlim46,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   # annotate("rect",xmin=datlim47,xmax=datlim48,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   annotate("rect",xmin=datlim49,xmax=datlim50,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
+#   annotate("rect",xmin=datlim51,xmax=datlim52,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
+#   geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_M,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
+#   geom_line(data=swiss_re ,aes(y=Krank_ratio_M,x= as.POSIXct(date),colour="Absence because of illness"), lwd=lwd_size)  +
+# 
+#   scale_x_datetime( breaks = date_breaks("12 month"), 
+#                     labels = label_date_short(),
+#                     limits =c(min(lims3), max(lims4)),
+#                     expand = c(0,0)) +
+#   scale_color_manual(name = "",
+#                      values = c(col_pal[8],col_pal[2]))+
+#   xlab("Year")+
+#   ylab("Percentages")+
+#   ggtitle("Swiss Re Men") +
+#   theme_bw()+
+#   #theme_light(base_size = 16)+
+#   theme(axis.text.y = element_text(size=text_size),
+#         panel.grid.major.x = element_blank(),
+#         panel.grid.minor.x = element_blank(),
+#         legend.position = c(0.9, .8),
+#         legend.text=element_text(size=legend_size),
+#         axis.text.x = element_text(size=10,angle=45,hjust=1),
+#         # legend.key.size = unit(1.5, 'cm'),
+#         # legend.spacing.x = unit(1.5, 'cm'),
+#         # axis.text.x = element_blank(),
+#         # axis.title.x  = element_blank(),
+#         axis.title.y  = element_text(size=axis_legend_size),
+#         title =element_text(size=title_size))
+# 
+# plot_swiss_re <- cowplot::plot_grid(Figure_Illness_t ,Figure_Illness_w,Figure_Illness_m, 
+#                                   ncol=1, nrow=3, align="hv",
+#                                   rel_heights = c(1,1,1))
 
 
 return(plot_swiss_re)
