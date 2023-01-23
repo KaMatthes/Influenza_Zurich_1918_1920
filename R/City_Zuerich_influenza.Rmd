@@ -1,0 +1,233 @@
+---
+title: "Past Pandemics City Zuerich"
+author: "Katarina Matthes"
+date: "`r Sys.Date()`"
+output:
+  rmdformats::robobook:
+    code_folding: show
+    self_contained: true
+    highlight: pygments
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Methods
+* Estimation of excess mortality using a Bayesian approach (INLA)
+* Expected values estimated including 5 prior years
+* Poisson regression
+* Random effects: Time, Year, Temperatur (for weekly data)
+
+Orange areas are periods of heat waves, blue areas cold waves, gray areas are periods of more sever pandemics/epidemics/influenza waves.
+
+# Weekly data
+
+* To estimate the weekly population data, linear interpolation between the yearly population was performed.
+* Weekly death data only available until 1960
+
+```{r, echo=TRUE,message=FALSE, eval=FALSE}
+
+hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
+
+ formula <- death ~ 1 + offset(log(pop.weekly))  +
+    f(WeekID, model='iid',hyper=hyper.iid) +
+    f(timeID, model='rw1',scale.model = T,cyclic = TRUE, hyper=hyper.iid) +
+    f(TempID, model='rw2',hyper=hyper.iid)
+
+inla.mod <- inla(formula,
+                     data=reg_data,
+                     family="Poisson",
+                     control.family = control.family,
+                     control.compute = list(config = TRUE),
+                     control.mode = list(restart = TRUE),
+                     control.predictor = list(compute = TRUE, link = 1))
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.height =45 , fig.width = 15,message=FALSE}
+function_plot_weekly_tmp()
+```
+
+# Monthly Data
+
+* To estimate the monthly population data, linear interpolation between the yearly population was performed.
+* Transformation from weekly to monthly death and influenza data using the package wktmo and weekToMonth() function
+* December 1961 is not complete and missing from the analysis (also excluded by estimation of expected value)
+
+
+```{r, echo=TRUE,message=FALSE, eval=FALSE}
+hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
+
+
+ formula <- death ~ 1 + offset(log(pop.monthly))  +
+    f(MonthID, model='iid',hyper=hyper.iid) +
+    f(timeID, model='seasonal', season.length = 12)
+
+inla.mod <- inla(formula,
+                     data=reg_data,
+                     family="Poisson",
+                     control.family = control.family,
+                     control.compute = list(config = TRUE),
+                     control.mode = list(restart = TRUE),
+                     control.predictor = list(compute = TRUE, link = 1))
+```
+
+
+```{r, echo=FALSE, warning=FALSE, fig.height =30 , fig.width = 15,message=FALSE}
+function_plot_monthly()
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.height =6 , fig.width = 15,message=FALSE}
+function_plot_swiss_re()
+```
+
+# Yearly Data
+
+* To estimate the monthly population data, linear interpolation between the yearly population was performed.
+* Transformation from weekly to monthly death and influenza data using the package wktmo and weekToMonth() function
+* December 1961 is not complete and missing from the analysis (also excluded by estimation of expected value)
+
+```{r, echo=TRUE,message=FALSE, eval=FALSE}
+
+hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
+
+  formula <- death ~ 1 + offset(log(pop.monthly)) +
+    f(YearID,model='iid',hyper=hyper.iid) +
+    f(timeID, model='seasonal', season.length = 12)
+
+inla.mod <- inla(formula,
+                     data=reg_data,
+                     family="Poisson",
+                     control.family = control.family,
+                     control.compute = list(config = TRUE),
+                     control.mode = list(restart = TRUE),
+                     control.predictor = list(compute = TRUE, link = 1))
+```
+
+
+```{r, echo=FALSE, warning=FALSE, fig.height =15, fig.width = 15,message=FALSE}
+function_plot_yearly()
+```
+
+
+```{r, echo=FALSE, warning=FALSE, fig.height =15 , fig.width = 15,message=FALSE}
+function_plot_swiss_re_yearly()
+```
+
+# Reporting weeks
+
+```{r echo=FALSE, out.width = '100%'}
+knitr::include_graphics("../data/Reporting.png")
+```
+
+
+<!-- ```{r, echo=FALSE, warning=FALSE, nmessage=FALSE} -->
+<!-- opts <- options(knitr.kable.NA = "") -->
+<!-- read_excel("../data/Reportingweeks.xlsx") %>% -->
+<!--       kbl() %>% -->
+<!--     kable_paper("hover", full_width = F) -->
+
+
+<!-- ``` 
+
+<!-- excelTable(reporting_weeks,columns=16) <!-- -->
+<!-- excelTable(reporting_weeks,defaultColWidth = 16,showToolbar = TRUE)  --> <!-- -->
+<!-- datatable(reporting_weeks, --> <!-- options = list( --> <!--     dom = 't', --> -->
+<!-- <!--     scrollX = TRUE, --> <!--     fixedColumns = TRUE --> <!--   ) --> <!-- -->
+<!-- excelTable(reporting_weeks,defaultColWidth = 16,showToolbar = TRUE)  --> -->
+<!-- |Meldewoche|37 (08.09.1918-14.09.1918)|38 (15.09.1918-21.09.1918)|39 -->
+<!-- (22.09.1918-28.09.1918)|40 (29.09.1918-05.10.1918)|41 (06.10.1918-12.10.1918)|42 -->
+<!-- (13.10.1918-19.10.1918)|43 (20.10.1918-26.10.1918)|44 (27.10.1918-02.11.1918)|45 -->
+<!-- (03.11.1918-09.11.1918)|46 (10.11.1918-16.11.1918)|48 (24.11.1918-30.11.1918)|49 -->
+<!-- (01.12.1918-07.12.1918)|50 (08.12.1918-14.12.1918)|51 (15.12.1918-21.12.1918)|52 -->
+<!-- (22.12.1918-28.12.1918)|1 (29.12.1918-04.01.1919)|14 (30.03.1919-05.04.1919)|15 -->
+<!-- (06.04.1919-12.04.1919)| -->
+<!-- |:----|:----|:----|:----|:----|:----|:----|:----|:----|:----|:----|:----|:----|:----|:----|:----|:----|:----|:----| -->
+<!-- |Fälle Total in -->
+<!-- Meldewoche|406|743|955|1953|3151|3673|4761|4294|2603|2167|1442|1068|979|987|373|432|168|88| -->
+<!-- |Todesfälle Total in -->
+<!-- Meldewoche|5|10|15|30|73|111|131|95|63|39|23|54|39|21|10|6|3|4| |(E)bis -->
+<!-- 17.07.1918| |27| |53| | | | |1| | | | | | | | | | |(T)bis 17.07.1918| | | | | | -->
+<!-- | | | | | | | | | | | | | |(E)18.07.1918-27.07.1918| |6| |42| | | | | | | | | | -->
+<!-- | | | | | |(T)18.07.1918-27.07.1918| | | | | | | | | | | | | | | | | | | |(E) -->
+<!-- 28.07.1918-03.08.1918| |4| |17| | | | | | | | | | | | | | | |(T) -->
+<!-- 28.07.1918-03.08.1918| | | | | | | | | | | | | | | | | | | |(E) -->
+<!-- 04.08.1918-10.08.1918| |9| |9| | | | | | | | | | | | | | | |(T) -->
+<!-- 04.08.1918-10.08.1918| | | | | | | | | | | | | | | | | | | |(E) -->
+<!-- 11.08.1918-17.08.1918|1|5| | | | | | | | | | | | | | | | | |(T) -->
+<!-- 11.08.1918-17.08.1918| | | | | | | | | | | | | | | | | | | |(E) -->
+<!-- 18.08.1918-24.08.1918|3|2|2| | | | | | | |1| | | | | | | | |(T) -->
+<!-- 18.08.1918-24.08.1918| | | | | | | | | | | | | | | | | | | |(E) -->
+<!-- 25.08.1918-31.08.1918|8|2|2| | |1| | | |5| | | | | | | | | |(T) -->
+<!-- 25.08.1918-31.08.1918| | | | | | | | | | | | | | | | | | | |(E) -->
+<!-- 01.09.1918-07.09.1918|186|12|7|17| | | | | | | | | | | | | | | |(T) -->
+<!-- 01.09.1918-07.09.1918|2| | | | | | | | | | | | | | | | | | |(E) -->
+<!-- 08.09.1918-14.09.1918|208|258|20|6| | | | | | | | | | | | | | | |(T) -->
+<!-- 08.09.1918-14.09.1918|3|4| | | | | | | | | | | | | | | | | |(E) -->
+<!-- 15.09.1918-21.09.1918| |418|395|43|3| | | |1| | | | | | | | | | |(T) -->
+<!-- 15.09.1918-21.09.1918| |6|2| | | | | | | | | | | | | | | | |(E) -->
+<!-- 22.09.1918-28.09.1918| | |529|699|47|8|2| |3|32|2| | | | | | | | |(T) -->
+<!-- 22.09.1918-28.09.1918| | |13| | | | | | | | | | | | | | | | |(E) -->
+<!-- 29.09.1918-05.10.1918| | | |1067|1369|17|19|9|15|29|2| |6| | | | | | |(T) -->
+<!-- 29.09.1918-05.10.1918| | | |30|3| | | | | | | | | | | | | | |(E) -->
+<!-- 06.10.1918-12.10.1918| | | | |1732|1974|528|275|131|312|2| |27| | | | | | |(T) -->
+<!-- 06.10.1918-12.10.1918| | | | |70|3| | | | | | | | | | | | | |(E) -->
+<!-- 13.10.1918-19.10.1918| | | | | |1673|3425|311|324|344|17|2|23|19| | | | | |(T) -->
+<!-- 13.10.1918-19.10.1918| | | | | |108|8|2| | | | | | | | | | | |(E) -->
+<!-- 20.10.1918-26.10.1918| | | | | | |787|3322|304|214|16|1|22|13| |3| | | |(T) -->
+<!-- 20.10.1918-26.10.1918| | | | | | |123|13|2| | | | | | | | | | |(E) -->
+<!-- 27.10.1918-02.11.1918| | | | | | | |377|1643|142|12|7|8|15|1|5| | | |(T) -->
+<!-- 27.10.1918-02.11.1918| | | | | | | |80|7|3| | | | | | | | | |(E) -->
+<!-- 03.11.1918-09.11.1918| | | | | | | | |181|835|15|5|3|7| |3| | | |(T) -->
+<!-- 03.11.1918-09.11.1918| | | | | | | | |54|8| | | | | | | | | |(E) -->
+<!-- 10.11.1918-16.11.1918| | | | | | | | | |254|33| |3|8| |7| | | |(T) -->
+<!-- 10.11.1918-16.11.1918| | | | | | | | | |28| | | | | | | | | |(E) -->
+<!-- 17.11.1918-23.11.1918| | | | | | | | | | |757|13|9|15|4|7| | | |(T) -->
+<!-- 17.11.1918-23.11.1918| | | | | | | | | | |2| | | | | | | | |(E) -->
+<!-- 24.11.1918-30.11.1918| | | | | | | | | | |585|742|12|84|4|30| | | |(T) -->
+<!-- 24.11.1918-30.11.1918| | | | | | | | | | |21|8| | | | | | | |(E) -->
+<!-- 01.12.1918-07.12.1918| | | | | | | | | | | |298|742|55|12|54| | | |(T) -->
+<!-- 01.12.1918-07.12.1918| | | | | | | | | | | |46|4| | | | | | |(E) -->
+<!-- 08.12.1918-14.12.1918| | | | | | | | | | | | |124|664|17|44| | | |(T) -->
+<!-- 08.12.1918-14.12.1918| | | | | | | | | | | | |35|3|1| | | | |(E) -->
+<!-- 15.12.1918-21.12.1918| | | | | | | | | | | | | |107|288|33| | | |(T) -->
+<!-- 15.12.1918-21.12.1918| | | | | | | | | | | | | |18|1|1| | | |(E) -->
+<!-- 22.12.1918-28.12.1918| | | | | | | | | | | | | | |47|219| | | |(T) -->
+<!-- 22.12.1918-28.12.1918| | | | | | | | | | | | | | |8| | | | |(E) -->
+<!-- 29.12.1918-04.01.1919| | | | | | | | | | | | | | | |27| | | |(T) -->
+<!-- 29.12.1918-04.01.1919| | | | | | | | | | | | | | | |5| | | |(E) -->
+<!-- 02.03.1919-08.03.1919| | | | | | | | | | | | | | | | |1|1| |(T) -->
+<!-- 02.03.1919-08.03.1919| | | | | | | | | | | | | | | | | | | |(E) -->
+<!-- 09.03.1919-15.03.1919| | | | | | | | | | | | | | | | | |1| |(T) -->
+<!-- 09.03.1919-15.03.1919| | | | | | | | | | | | | | | | | | | |(E) -->
+<!-- 16.03.1919-22.03.1919| | | | | | | | | | | | | | | | |9|2| |(T) -->
+<!-- 16.03.1919-22.03.1919| | | | | | | | | | | | | | | | | | | |(E) -->
+<!-- 23.03.1919-29.03.1919| | | | | | | | | | | | | | | | |131|3| |(T) -->
+<!-- 23.03.1919-29.03.1919| | | | | | | | | | | | | | | | |1| | |(E) -->
+<!-- 30.03.1919-05.04.1919| | | | | | | | | | | | | | | | |27|64| |(T) -->
+<!-- 30.03.1919-05.04.1919| | | | | | | | | | | | | | | | |2|1| |(E) -->
+<!-- 06.04.1919-12.04.1919| | | | | | | | | | | | | | | | | |17| |(T) -->
+<!-- 06.04.1919-12.04.1919| | | | | | | | | | | | | | | | | |3| -->
+<!-- Births per marriage were calculated with the number of births 39 weeks
+after the marriage. Am not quite sure if this makes sense. But a direct
+comparison makes even less sense to me. Because first fewer marriages and then
+fewer births (9 months later at the earliest). -->
+<!-- ```{r, echo=FALSE, warning=FALSE, fig.height =18 , fig.width =
+18,message=FALSE} --> <!-- function_plot_birth() --> <!-- ``` -->
+<!-- # Data Swiss-re 1918-1930 --> <!-- The absence is displayed in relation to
+the number of working days. Absence because of other reasons = Absence total -
+Illness. --> <!-- <br /> --> <!-- <br /> --> <!-- The peaks in "absences for
+other reasons" reflect the August vacation season. "Absences for other reasons"
+in August 1918 high for women, as in the following years. For men, highest in
+July, but also increased the months before -> reason: military absence. But why
+highest in July? --> <!-- <br /> --> <!-- <br /> --> <!-- From 1926, seasonal
+absenteeism increases in summer -> change in labor protection law? Absences due
+to illness also increase among women from 1926 onward. A high level of
+absenteeism among women can be seen particularly in the winter of 1927(Reasons?
+Since it is not that high for men). --> <!-- <br /> --> <!-- <br /> --> <!-- In
+the influenza winter of 1928/1929, an increase in absences due to illness can be
+seen in both sexes.  -->
+<!-- ```{r, echo=FALSE, warning=FALSE, fig.height =18 , fig.width =
+18,message=FALSE} --> <!-- function_plot_swiss_re() --> <!-- ``` -->
