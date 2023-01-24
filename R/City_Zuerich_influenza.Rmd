@@ -19,9 +19,9 @@ knitr::opts_chunk$set(echo = FALSE)
 * Estimation of excess mortality using a Bayesian approach (INLA)
 * Expected values estimated including 5 prior years
 * Poisson regression
-* Random effects: Time, Year, Temperatur (for weekly data)
+* Random effects: Time, Year, Temperature (for weekly data)
 
-Orange areas are periods of heat waves, blue areas cold waves, gray areas are periods of more sever pandemics/epidemics/influenza waves.
+Orange areas are periods of heat waves, blue areas are cold waves, gray areas are periods of more severe pandemics/epidemics/influenza waves.
 
 # Weekly data
 
@@ -116,7 +116,7 @@ function_plot_yearly()
 function_plot_swiss_re_yearly()
 ```
 
-# Reporting weeks
+# Reporting vs. illness onset weeks for new cases and deaths in the City of Zurich 1918 
 
 ```{r echo=FALSE, out.width = '100%'}
 knitr::include_graphics("../data/Reporting.png")
