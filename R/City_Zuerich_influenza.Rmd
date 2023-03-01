@@ -63,7 +63,7 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
 
  formula <- death ~ 1 + offset(log(pop.monthly))  +
     f(MonthID, model='iid',hyper=hyper.iid) +
-    f(timeID, model='seasonal', season.length = 12)
+    f(timeID, model='rw1',scale.model = T,cyclic = TRUE, hyper=hyper.iid)
 
 inla.mod <- inla(formula,
                      data=reg_data,
@@ -94,8 +94,8 @@ function_plot_swiss_re()
 hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
 
   formula <- death ~ 1 + offset(log(pop.monthly)) +
-    f(YearID,model='iid',hyper=hyper.iid) +
-    f(timeID, model='seasonal', season.length = 12)
+      f(YearID,model='iid',hyper=hyper.iid) +
+    f(YearID2, model='rw1',scale.model = T,cyclic = TRUE, hyper=hyper.iid)
 
 inla.mod <- inla(formula,
                      data=reg_data,

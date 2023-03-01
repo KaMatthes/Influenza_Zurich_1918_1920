@@ -5,7 +5,11 @@ load("data/dataZH_month.RData")
   dat.excess <- dataZH_month  %>%
   select(Year, Month, death_m,CityZurich, pop.monthly ) %>%
   rename(death=death_m) %>%
-  mutate(death = as.integer(round(death,0))) %>%
+  mutate(death = as.integer(round(death,0)),
+         si_one = sin(2*pi*Month/12),
+         si_two = sin(4*pi*Month/12),
+         co_one = cos(2*pi*Month/12),
+         co_two = cos(4*pi*Month/12)) %>%
   # mutate(Year = as.factor(Year),
   #        Month = as.factor(Month)) %>%
   filter(!Year==1909) %>%
@@ -38,7 +42,9 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
   
   formula <- death ~ 1 + offset(log(pop.monthly)) +
     f(YearID,model='iid',hyper=hyper.iid) +
-    f(timeID, model='seasonal', season.length = 12)
+    f(YearID2, model='rw1',scale.model = T,cyclic = TRUE, hyper=hyper.iid)
+    # f(YearID2,model='rw1',hyper=hyper.iid, scale.model=T)
+    # f(seasID, model='seasonal', season.length = 4) 
 
   expected_deaths <- list()
   
@@ -53,8 +59,10 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
       filter(!Year==1918) %>%
       arrange(Year, Month) %>%
       group_by(Year, Month) %>%
-      mutate(timeID = cur_group_id(),
-             YearID = Year) %>%
+      mutate(seasID = cur_group_id(),
+             YearID = Year,
+             YearID2 = Year,
+             trendID = seasID) %>%
       ungroup() %>%
       group_by(Year) %>%
       mutate(death_year = sum(death, na.rm = TRUE)) %>%
@@ -70,8 +78,10 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
       filter(!Year == Year_Pan) %>%
       arrange(Year, Month) %>%
       group_by(Year, Month) %>%
-      mutate(timeID = cur_group_id(),
-             YearID = Year) %>%
+      mutate(seasID = cur_group_id(),
+             YearID = Year,
+             YearID2 = Year,
+             trendID = seasID) %>%
       ungroup() %>%
       group_by(Year) %>%
       mutate(death_year = sum(death, na.rm = TRUE)) %>%
@@ -133,7 +143,7 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
   expected_deaths <- expected_deaths %>%
     bind_rows(., .id = "column_label")
   
-  write.xlsx(expected_deaths,paste0("data/expected_death_inla_year",Year_Pan,".xlsx"), row.names=FALSE, overwrite = TRUE)
+  write.xlsx(expected_deaths,paste0("data/expected_death_inla_year",Year_Pan,".xlsx"), rowNames=FALSE, overwrite = TRUE)
   save(expected_deaths,file=paste0("data/expected_death_inla_year",Year_Pan,".RData"))
 
   # write.xlsx(expected_deaths,paste0("data/expected_death_inla_all_years.xlsx"), row.names=FALSE, overwrite = TRUE)
@@ -141,8 +151,10 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
   }
 
 function_inla_total(Year_Pan=1918, Year_max=1919, Year_min=1910)
+
+function_inla_total(Year_Pan=1920, Year_max=1928, Year_min=1915)
 function_inla_total(Year_Pan=1929, Year_max=1943, Year_min=1924)
 function_inla_total(Year_Pan=1944, Year_max=1960, Year_min=1939)
 function_inla_total(Year_Pan=1961, Year_max=1968, Year_min=1956)
 
-function_inla_total(Year_Pan=1920, Year_max=1928, Year_min=1915)
+
