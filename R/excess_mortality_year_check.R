@@ -1,6 +1,17 @@
-function_inla_total <- function(Year_Pan, Year_max, Year_min) {
+function_year_check <- function() {
   
-load("data/dataZH_month.RData")
+load("../data/dataZH_month.RData")
+  
+  
+  dataZH_year <- dataZH_month %>%
+    mutate(
+      death_m = ifelse(is.na(death_m), 0,death_m),
+      influenza_m = ifelse(is.na(influenza_m), 0,influenza_m))%>%
+    group_by(Year,CityZurich) %>%
+    summarise(death_year = sum(death_m, na.rm=TRUE),
+              Inf_year = sum(influenza_m, na.rm=TRUE)) %>%
+    ungroup() 
+  
   
   dat.excess <- dataZH_month  %>%
   select(Year, Month, death_m,CityZurich, pop.monthly ) %>%
@@ -12,7 +23,7 @@ load("data/dataZH_month.RData")
   filter(!Year==1969) %>%
   
   # mutate(YearID=Year) %>%
-  filter(Year >=Year_min & Year <=Year_max )
+    filter(Year >=1912 & Year <=1918 )
 
 
 year_smooth <- 5
@@ -43,17 +54,9 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
     # f(YearID2, model='rw1',scale.model = T,cyclic = TRUE, hyper=hyper.iid) 
     # f(YearID2,model='rw1',hyper=hyper.iid, scale.model=T)
 
-  expected_deaths <- list()
-  
-  for (YEAR in year_reg:Year_max){
-    
-    print(YEAR)
-    
-    if (YEAR==Year_Pan) {
     reg_data <-  dat.excess %>%
-      filter(Year >= YEAR+1 - year_smooth & Year < YEAR+1)%>%
-      mutate(death=ifelse (Year ==YEAR, NA, death))  %>%
-      filter(!Year==1918) %>%
+      filter(Year >= 1918+1 - year_smooth & Year < 1918+1)%>%
+      mutate(death=ifelse (Year ==1918, NA, death))  %>%
       arrange(Year, Month) %>%
       group_by(Year, Month) %>%
       mutate(seasID = cur_group_id(),
@@ -64,27 +67,7 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
       group_by(Year) %>%
       mutate(death_year = sum(death, na.rm = TRUE)) %>%
       ungroup() 
-    
-    }
-
-    else {
-    reg_data <-  dat.excess %>% 
-      filter(Year >= YEAR+1 - year_smooth & Year < YEAR+1)%>%
-      mutate(death=ifelse (Year ==YEAR, NA, death)) %>% 
-      filter(!Year==1918) %>%
-      filter(!Year == Year_Pan) %>%
-      arrange(Year, Month) %>%
-      group_by(Year, Month) %>%
-      mutate(seasID = cur_group_id(),
-             YearID = Year,
-             YearID2 = Year,
-             timeID = seasID) %>%
-      ungroup() %>%
-      group_by(Year) %>%
-      mutate(death_year = sum(death, na.rm = TRUE)) %>%
-      ungroup() 
-    }
-    
+  
     set.seed(20220421)
    
     inla.mod <- inla(formula,
@@ -126,32 +109,47 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
            LL = quantile(c_across(V1:V1000), probs= 0.025),
            UL = quantile(c_across(V1:V1000), probs= 0.975)) %>%
     select( fit, LL, UL, Year) %>%
-    filter(Year==YEAR) %>%
     arrange(Year) %>%
     # left_join(dat.excess, by=c("Year")) %>%
-    distinct(Year, .keep_all = TRUE)
-  
-  
-  expected_deaths[[YEAR]] <-  mean.samples
-  expected_deaths <- expected_deaths[-which(sapply(expected_deaths, is.null))] 
-  
-  }
-  
-  expected_deaths <- expected_deaths %>%
-    bind_rows(., .id = "column_label")
-  
-  write.xlsx(expected_deaths,paste0("data/expected_death_inla_year",Year_Pan,".xlsx"), rowNames=FALSE, overwrite = TRUE)
-  save(expected_deaths,file=paste0("data/expected_death_inla_year",Year_Pan,".RData"))
+    distinct(Year, .keep_all = TRUE) %>%
+    left_join(  dataZH_year)
 
-  # write.xlsx(expected_deaths,paste0("data/expected_death_inla_all_years.xlsx"), row.names=FALSE, overwrite = TRUE)
-  # save(expected_deaths,file=paste0("data/expected_death_inla_all_years.RData"))
-  }
+  
+  data_cases <- mean.samples %>%
+    mutate(Year = as.numeric(Year),
+           inc_cases = death_year/  CityZurich*100000,
+           inc_fit = fit/ CityZurich*100000,
+           inc_LL = LL/ CityZurich*100000,
+           inc_UL = UL/ CityZurich*100000) %>%
+    ungroup()
+  
+  plot_check <- ggplot()+
+    geom_line(data=data_cases, aes(x=Year, y=inc_cases, col="notified cases"),lwd= 1) +
+    geom_line(data=data_cases, aes(x=Year, y=inc_fit, col="fitting values"), lwd=1.5) +
 
-function_inla_total(Year_Pan=1918, Year_max=1919, Year_min=1910)
-
-function_inla_total(Year_Pan=1920, Year_max=1928, Year_min=1915)
-function_inla_total(Year_Pan=1929, Year_max=1943, Year_min=1924)
-function_inla_total(Year_Pan=1944, Year_max=1960, Year_min=1939)
-function_inla_total(Year_Pan=1961, Year_max=1968, Year_min=1956)
-
-
+    geom_ribbon(data=data_cases,aes(ymin=inc_LL, ymax=inc_UL,x=Year, y=inc_fit), linetype=2, alpha=0.2) +
+    # coord_cartesian(ylim=c(0, 100)) +
+    xlab("Year") +
+    ylab("Mortality per 100'000 inhabitants")+
+    # scale_x_datetime( breaks = date_breaks("12 month"),
+    #                   labels = label_date_short(),
+    #                   # limits =c(min(lims3), max(lims4)),
+    #                   expand = c(0,0)) +
+    scale_color_manual("",
+                       values=c( "red","black"))+
+    theme_bw() +
+    #theme_light(base_size = 16)+
+    theme(axis.text.y = element_text(size=text_size),
+          panel.grid.major.x = element_blank(),
+          panel.grid.minor.x = element_blank(),
+          legend.position = c(.2, .8),
+          legend.text=element_text(size=legend_size),
+          # legend.key.size = unit(1.5, 'cm'),
+          # legend.spacing.x = unit(1.5, 'cm'),
+          axis.text.x = element_text(size=10,angle=45,hjust=1),
+          axis.title.x  = element_blank(),
+          axis.title.y  = element_text(size=axis_legend_size),
+          title =element_text(size=title_size))
+  
+  return(plot_check)
+}

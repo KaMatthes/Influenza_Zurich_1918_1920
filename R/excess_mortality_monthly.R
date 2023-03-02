@@ -1,11 +1,17 @@
+
 function_inla_total <- function(Year_Pan,Year_max, Year_min) {
   
 load("data/dataZH_month.RData")
 
 dat.excess <- dataZH_month  %>%
   select(Year, Month, death_m,pop.monthly ) %>%
-  rename(death=death_m) %>%
-  mutate(death = as.integer(round(death,0))) %>%
+  # rename(death=death_m) %>%
+  mutate(death=death_m,
+         death = as.integer(round(death,0)),
+         si_one = sin(2*pi*Month/12),
+         si_two = sin(4*pi*Month/12),
+         co_one = cos(2*pi*Month/12),
+         co_two = cos(4*pi*Month/12)) %>%
   # mutate(Year = as.factor(Year),
   #        Month = as.factor(Month)) %>%
   filter(!Year==1909) %>%
@@ -29,11 +35,12 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
   # # f(timeID, model='seasonal',season.length=12)
   
   
-  formula <- death ~ 1 + offset(log(pop.monthly))  +
+  formula <- death ~ 1 + offset(log(pop.monthly))  + 
+    # si_one + si_two +co_one + co_two +
     f(MonthID, model='iid',hyper=hyper.iid) +
+    # f(timeID, model='ar1')
+    f(seasID, model='seasonal', season.length =12) +
     f(timeID, model='rw1',scale.model = T,cyclic = TRUE, hyper=hyper.iid)
-    # f(timeID, model='seasonal', season.length = 12)
-    # f(timeID, model='rw1',scale.model = T,cyclic = TRUE, hyper=hyper.iid)
   # f(timeID, model='seasonal',season.length=12)
 
   expected_deaths <- list()
@@ -49,7 +56,8 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
       filter(!Year==1918) %>%
       arrange(Year, Month) %>%
       group_by(Year,Month) %>%
-      mutate(timeID = cur_group_id()) %>%
+      mutate(timeID = cur_group_id(),
+             seasID = timeID) %>%
       arrange(timeID) %>%
       ungroup() %>%
       mutate(MonthID = Month,
@@ -64,7 +72,8 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
         filter(!Year==1918) %>%
         arrange(Year, Month) %>%
         group_by(Year,Month) %>%
-        mutate(timeID = cur_group_id()) %>%
+        mutate(timeID = cur_group_id(),
+               seasID = timeID) %>%
         arrange(timeID) %>%
         ungroup() %>%
         mutate(MonthID = Month,
@@ -80,13 +89,13 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
                      # family = "zeroinflatednbinomial1",
                      #verbose = TRUE,
                      control.family = control.family,
-                     control.compute = list(config = TRUE),
+                     control.compute = list(config = TRUE,dic=TRUE),
                      control.mode = list(restart = TRUE),
                       # num.threads = round(parallel::detectCores() * .2),
                      # verbose=TRUE,
                      control.predictor = list(compute = TRUE, link = 1))
   
-    
+
     # inla.mod$summary.random$t %>% 
     #   ggplot() +
     #   geom_line(aes(ID, mean)) +
@@ -96,22 +105,27 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
   predlist <- do.call(cbind, lapply(post.samples, function(X)
     exp(X$latent[startsWith(rownames(X$latent), "Pred")])))
   
-  rate.drawsMed<-array(unlist( predlist), dim=c(dim(reg_data)[1], 1000)); dim(rate.drawsMed) 
+  rate.drawsMed <-array(unlist( predlist), dim=c(dim(reg_data)[1], 1000)); dim(rate.drawsMed) 
   dM = as.data.frame(rate.drawsMed)
   # Add to the data and save
   Data= cbind(reg_data,dM)
   
   mean.samples <- Data %>%
-    select(starts_with("V"), "Month", "Year") %>%
+    select(starts_with("V"), "Month", "Year", "death", "pop.monthly","death_m") %>%
     rowwise(Month) %>%
     mutate(fit = median(c_across(V1:V1000)),
            LL = quantile(c_across(V1:V1000), probs= 0.025),
            UL = quantile(c_across(V1:V1000), probs= 0.975)) %>%
-    select(Month, fit, LL, UL, Year) %>%
+    select(Month, fit, LL, UL, Year, death,pop.monthly,death_m) %>%
     filter(Year==YEAR) %>%
-    arrange(Year, Month) %>%
-    left_join(dat.excess, by=c("Year", "Month")) 
+    arrange(Year, Month) 
+  # %>%
+  #   left_join(dat.excess, by=c("Year", "Month")) 
+  # 
   
+  
+  # write.xlsx(expected_deaths,paste0("data/expected_death_inla_month",Year_Pan,".xlsx"), rowNames=FALSE, overwrite = TRUE)
+  # save(expected_deaths,file=paste0("data/expected_death_inla_month",Year_Pan,".RData"))
   
   expected_deaths[[YEAR]] <-  mean.samples
   expected_deaths <- expected_deaths[-which(sapply(expected_deaths, is.null))] 
@@ -123,9 +137,6 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
   
   write.xlsx(expected_deaths,paste0("data/expected_death_inla_month",Year_Pan,".xlsx"), rowNames=FALSE, overwrite = TRUE)
   save(expected_deaths,file=paste0("data/expected_death_inla_month",Year_Pan,".RData"))
-
-  # write.xlsx(expected_deaths,paste0("data/expected_death_inla_all_years.xlsx"), row.names=FALSE, overwrite = TRUE)
-  # save(expected_deaths,file=paste0("data/expected_death_inla_all_years.RData"))
   }
 
 
@@ -140,3 +151,15 @@ function_inla_total(Year_Pan=1944, Year_max=1960, Year_min=1939)
 function_inla_total(Year_Pan=1961, Year_max=1968, Year_min=1956)
 
 
+
+
+
+inla.mod$summary.fixed$seasID %>% ggplot() +
+  geom_line(aes(ID, mean)) +
+  geom_ribbon(aes(ID, ymin = `0.025quant`, ymax = `0.975quant`), alpha = 0.3) +
+  geom_vline(xintercept=12) +
+  geom_vline(xintercept=24) +
+  geom_vline(xintercept=36) +
+  geom_vline(xintercept=78)
+  xlim(1,24)
+  geom_point(data = data.frame(t=reg_data$timeID , ar =reg_data$death/reg_data$pop.monthly*100), aes(t,ar), color = "red")

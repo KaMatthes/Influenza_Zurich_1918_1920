@@ -32,10 +32,10 @@ Orange areas are periods of heat waves, blue areas are cold waves, gray areas ar
 
 hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
 
- formula <- death ~ 1 + offset(log(pop.weekly))  +
-    f(WeekID, model='iid',hyper=hyper.iid) +
+ f(WeekID, model='iid',hyper=hyper.iid) +
+    f(seasID, model='seasonal', season.length =12) +
     f(timeID, model='rw1',scale.model = T,cyclic = TRUE, hyper=hyper.iid) +
-    f(TempID, model='rw2',hyper=hyper.iid)
+    f(TempID, model='rw2',hyper=hyper.iid) 
 
 inla.mod <- inla(formula,
                      data=reg_data,
@@ -45,6 +45,14 @@ inla.mod <- inla(formula,
                      control.mode = list(restart = TRUE),
                      control.predictor = list(compute = TRUE, link = 1))
 ```
+
+## Example for fitted values 1918
+
+```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
+function_weekly_check()
+```
+
+## Results
 
 ```{r, echo=FALSE, warning=FALSE, fig.height =45 , fig.width = 15,message=FALSE}
 function_plot_weekly_tmp()
@@ -63,6 +71,7 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
 
  formula <- death ~ 1 + offset(log(pop.monthly))  +
     f(MonthID, model='iid',hyper=hyper.iid) +
+    f(seasID, model='seasonal', season.length =12) +
     f(timeID, model='rw1',scale.model = T,cyclic = TRUE, hyper=hyper.iid)
 
 inla.mod <- inla(formula,
@@ -74,6 +83,13 @@ inla.mod <- inla(formula,
                      control.predictor = list(compute = TRUE, link = 1))
 ```
 
+## Example for fitted values 1918
+
+```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
+function_monthly_check()
+```
+
+## Results
 
 ```{r, echo=FALSE, warning=FALSE, fig.height =30 , fig.width = 15,message=FALSE}
 function_plot_monthly()
@@ -94,8 +110,9 @@ function_plot_swiss_re()
 hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
 
   formula <- death ~ 1 + offset(log(pop.monthly)) +
-      f(YearID,model='iid',hyper=hyper.iid) +
-    f(YearID2, model='rw1',scale.model = T,cyclic = TRUE, hyper=hyper.iid)
+    f(YearID,model='iid',hyper=hyper.iid) +
+    f(seasID, model='seasonal', season.length =12) +
+    f(timeID, model='rw1',scale.model = T,cyclic = TRUE, hyper=hyper.iid)
 
 inla.mod <- inla(formula,
                      data=reg_data,
@@ -106,6 +123,14 @@ inla.mod <- inla(formula,
                      control.predictor = list(compute = TRUE, link = 1))
 ```
 
+## Example for fitted values 1918
+
+```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
+function_year_check()
+```
+
+
+## Results
 
 ```{r, echo=FALSE, warning=FALSE, fig.height =15, fig.width = 15,message=FALSE}
 function_plot_yearly()

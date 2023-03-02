@@ -42,7 +42,7 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
   
   formula <- death ~ 1 + offset(log(pop.weekly))  +
     f(WeekID, model='iid',hyper=hyper.iid) +
-    # f(timeID, model='seasonal', season.length = 12)
+    f(seasID, model='seasonal', season.length =12) +
     f(timeID, model='rw1',scale.model = T,cyclic = TRUE, hyper=hyper.iid)
   # f(timeID, model='seasonal',season.length=12)
 
@@ -56,7 +56,7 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
       reg_data <-  dat.excess %>%
         filter(Year >= YEAR+1 - year_smooth & Year < YEAR+1)%>%
         mutate(death=ifelse (Year ==YEAR, NA, death)) %>%
-        # filter(!Year==1918) %>%
+        filter(!Year==1918) %>%
         arrange(Year, Month,iso_cw) %>%
         group_by(Year,Month,iso_cw) %>%
         mutate(timeID = cur_group_id()) %>%
@@ -64,6 +64,7 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
         ungroup() %>%
         mutate(
                MonthID = Month,
+               seasID = Month,
                YearID = Year,
                WeekID =iso_cw) 
     }
@@ -73,16 +74,17 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
         filter(Year >= YEAR+1 - year_smooth & Year < YEAR+1)%>%
         mutate(death=ifelse (Year ==YEAR, NA, death)) %>% 
         filter(!Year == Year_Pan)  %>%
-        # filter(!Year==1918) %>%
+        filter(!Year==1918) %>%
         arrange(Year, Month,iso_cw) %>%
         group_by(Year,Month,iso_cw) %>%
         mutate(timeID = cur_group_id()) %>%
         arrange(timeID) %>%
         ungroup() %>%
         mutate(
-               MonthID = Month,
-               YearID = Year,
-               WeekID =iso_cw)
+          MonthID = Month,
+          seasID = Month,
+          YearID = Year,
+          WeekID =iso_cw) 
     }
     
     
@@ -116,15 +118,15 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
   Data= cbind(reg_data,dM)
   
   mean.samples <- Data %>%
-    select(starts_with("V"), "iso_cw", "Year") %>%
+    select(starts_with("V"), "iso_cw", "Year", "death", "pop.weekly", "timeID") %>%
     rowwise(iso_cw) %>%
     mutate(fit = median(c_across(V1:V1000)),
            LL = quantile(c_across(V1:V1000), probs= 0.025),
            UL = quantile(c_across(V1:V1000), probs= 0.975)) %>%
-    select(iso_cw, fit, LL, UL, Year) %>%
+    select(iso_cw, fit, LL, UL, Year, death, pop.weekly,timeID) %>%
     filter(Year==YEAR) %>%
-    arrange(Year, iso_cw) %>%
-    left_join(dat.excess, by=c("Year", "iso_cw")) 
+    arrange(Year, iso_cw) 
+    # left_join(dat.excess, by=c("Year", "iso_cw")) 
   
   
   expected_deaths[[YEAR]] <-  mean.samples
@@ -135,18 +137,21 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
   expected_deaths <- expected_deaths %>%
     bind_rows(., .id = "column_label")
   
-  write.xlsx(expected_deaths,paste0("data/expected_death_inla_weekly_nb",Year_Pan,".xlsx"), row.names=FALSE, overwrite = TRUE)
-  save(expected_deaths,file=paste0("data/expected_death_inla_weekly_nb",Year_Pan,".RData"))
+  write.xlsx(expected_deaths,paste0("data/expected_death_inla_weekly",Year_Pan,".xlsx"), rowNames=FALSE, overwrite = TRUE)
+  save(expected_deaths,file=paste0("data/expected_death_inla_weekly",Year_Pan,".RData"))
 
   # write.xlsx(expected_deaths,paste0("data/expected_death_inla_all_years.xlsx"), row.names=FALSE, overwrite = TRUE)
   # save(expected_deaths,file=paste0("data/expected_death_inla_all_years.RData"))
+  
+  # write.xlsx(  mean.samples,paste0("data/mean.samples.xlsx"), rowNames=FALSE, overwrite = TRUE)
+  # save(  mean.samples,file=paste0("data/mean.samples.RData"))
   }
 
 
+# function_inla_total(Year_Pan=1918, Year_max=1919, Year_min=1910)
+
 
 function_inla_total(Year_Pan=1920, Year_max=1928, Year_min=1915)
-
-function_inla_total(Year_Pan=1918, Year_max=1919, Year_min=1910)
 function_inla_total(Year_Pan=1929, Year_max=1943, Year_min=1924)
 function_inla_total(Year_Pan=1944, Year_max=1960, Year_min=1936)
 
