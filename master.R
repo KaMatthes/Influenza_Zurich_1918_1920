@@ -1,5 +1,6 @@
 .libPaths(c("H:/Documents/R/win-library/4.2", "C:/Program Files/R/R-4.2.2/library"))
 
+library(vcdExtra)
 library(tidyverse)
 library(readxl)
 library(openxlsx)
@@ -34,6 +35,8 @@ library(tsoutliers)
 library(strucchange)
 library(conflicted)
 library(wktmo)
+library(R0)
+
 
 
 conflict_prefer("rename", "dplyr")
@@ -42,6 +45,7 @@ conflict_prefer("select", "dplyr")
 conflict_prefer("filter", "dplyr")
 conflict_prefer("arrange", "dplyr")
 conflict_prefer("group_by", "dplyr")
+conflict_prefer("summarise", "dplyr")
 
 
 # Plot parameter
@@ -196,7 +200,11 @@ source("R/Plot_Swiss_Re_yearly.R")
 source("R/excess_mortality_weekly_check.R") 
 source("R/excess_mortality_monthly_check.R") 
 source("R/excess_mortality_year_check.R") 
-
+source("R/Meldungen_Erkrankungen.R") 
+source("R/delay.R") 
+source("R/Reproductive_value.R") 
+source("R/delay_time.R") 
+source("R/delay_distribution.R") 
 # source("R/Plot_Geburten.R")
 # source("R/Plot_Swiss_Re.R")
 # source("R/TS_Marriages.R")

@@ -32,10 +32,11 @@ Orange areas are periods of heat waves, blue areas are cold waves, gray areas ar
 
 hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
 
+formula <- death ~ 1 + offset(log(pop.monthly)) +
  f(WeekID, model='iid',hyper=hyper.iid) +
     f(seasID, model='seasonal', season.length =12) +
     f(timeID, model='rw1',scale.model = T,cyclic = TRUE, hyper=hyper.iid) +
-    f(TempID, model='rw2',hyper=hyper.iid) 
+    f(TempID, model='rw2',hyper=hyper.iid)
 
 inla.mod <- inla(formula,
                      data=reg_data,
@@ -125,9 +126,9 @@ inla.mod <- inla(formula,
 
 ## Example for fitted values 1918
 
-```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
-function_year_check()
-```
+<!-- ```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE} -->
+<!-- function_year_check() -->
+<!-- ``` -->
 
 
 ## Results
@@ -141,10 +142,72 @@ function_plot_yearly()
 function_plot_swiss_re_yearly()
 ```
 
-# Reporting vs. illness onset weeks for new cases and deaths in the City of Zurich 1918 
 
-```{r echo=FALSE, out.width = '100%'}
-knitr::include_graphics("../data/Reporting.png")
+<!-- # Reporting vs. illness onset weeks for new cases and deaths in the City of Zurich 1918 -->
+
+# Reporting delays
+<!-- ```{r echo=FALSE, out.width = '100%'} -->
+<!-- knitr::include_graphics("../data/Reporting.png") -->
+<!-- ``` -->
+
+## Delay time
+
+```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
+funtion_time_delay("Faelle")
+```
+
+
+
+```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
+funtion_dis_delay("Faelle")
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
+funtion_time_delay("Totesfaelle")
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
+funtion_dis_delay("Totesfaelle")
+```
+
+
+
+## Proportions of the reporting
+
+
+```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 8,message=FALSE}
+funtion_heatmap_delay("Faelle")
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 8,message=FALSE}
+funtion_heatmap_delay("Totesfaelle")
+```
+
+## Course of disease vs. reporting
+
+```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
+function_plot_meldungen("Faelle")
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
+function_plot_meldungen("Totesfaelle")
+```
+
+# Reproductions numbers
+
+"Reports" sind die Daten aus der Tabelle "Reportingweeks"
+
+```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
+function_reproductive_table("short") %>%
+  kbl(caption = "Serial interval  = 2.6 days") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
+```
+
+<!-- ## Time serial interval 4.0 days  -->
+```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
+function_reproductive_table("long")%>%
+  kbl(caption = "Serial interval = 4  days") %>%
+  kable_classic(full_width = F, html_font = "Cambria")
 ```
 
 
