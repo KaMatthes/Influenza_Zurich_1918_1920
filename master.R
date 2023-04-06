@@ -36,6 +36,7 @@ library(strucchange)
 library(conflicted)
 library(wktmo)
 library(R0)
+library(ggtext)
 
 
 
@@ -51,10 +52,10 @@ conflict_prefer("summarise", "dplyr")
 # Plot parameter
 
 lwd_size <- 1.2
-text_size <- 15
+text_size <- 20
 legend_size <- 12
-axis_legend_size <- 15
-title_size <- 15
+axis_legend_size <- 20
+title_size <- 20
 
 
 size_axis <-12
@@ -62,13 +63,18 @@ size_axis_title <- 12
 
 
 col_pal <- pal_jco()(8)
+pd <-position_dodge(width=2)
+
 
 lims1 <- as.POSIXct(ymd("1909-07-31"))    
 lims2 <- as.POSIXct(ymd("1925-12-31"))    
 
 lims3 <- as.POSIXct(ymd("1909-01-01"))    
-lims4 <- as.POSIXct(ymd("1970-12-31"))    
+lims4 <- as.POSIXct(ymd("1970-12-31"))  
 
+
+lims5 <- ymd("1918-05-01")
+lims6 <- ymd("1920-05-30")    
 
 lims_swiss_re1 <- as.POSIXct(ymd("1909-07-31"))    
 lims_swiss_re2 <- as.POSIXct(ymd("1930-12-31"))    
@@ -190,11 +196,67 @@ datlim56 <- as.POSIXct(ymd("1963-03-17"))
 # source("R/data_weekly.R")
 
 
+measures <- tibble(
+  "A" = as.Date("10.07.1918", "%d.%m.%Y"),
+  "B" = as.Date("19.07.1918", "%d.%m.%Y"),
+  "C" = as.Date("03.08.1918", "%d.%m.%Y"),
+  "D" = as.Date("06.09.1918", "%d.%m.%Y"),
+  "E" = as.Date("12.10.1918", "%d.%m.%Y"),
+  "F" = as.Date("17.10.1918", "%d.%m.%Y"),
+  "G" = as.Date("31.10.1918", "%d.%m.%Y"),
+  "H" = as.Date("11.11.1918", "%d.%m.%Y"),
+  "I" = as.Date("19.11.1918", "%d.%m.%Y"),
+  "J" = as.Date("08.02.1919", "%d.%m.%Y")) %>%
+  gather(.,key, date, A:J, factor_key=TRUE)
+
+explain <- tibble(
+  "A" = "Schools go into summer vacation earlier",
+  "B" = "Health workers are adviced to wear a mask and a special shirt when around infected patients",
+  "C" = "1st closing of Movie theaters, Theater performance, Sport performances, concerts in closed locations,
+    conferences, public church services, Banquets, Dance balls, dance courses, fairs, competitions, 
+    assemblies, rehearsals and races",
+  "D" = "Movie theater shows are allowed again",
+  "E" = "Closure of public and private schools and caf?s and public places at 9pm",
+  "F" = "2nd closing of movie theaters, etc. group meetings prohibited",
+  "G" = "Masks are making their first appearances",
+  "H" = "Big strike, military in city after demobilization",
+  "I" = "??",
+  "J" = "Subventions for local communities and their increased spendings due to the preventive measures") %>%
+  gather(.,key, Explanation, A:J, factor_key=TRUE)
+
+table_legend <- explain %>%
+  full_join(measures) 
+
+
+
+text_box <- table_legend %>%
+  dplyr::select(key, Explanation) %>%
+  mutate(key = as.character(key),
+         text=paste(key,"=",Explanation, "<br>"),
+         y=c(seq(0.1,2.8, by=0.3))) %>%
+  dplyr::select(text,y) 
+
+text_box2 <- text_box$text 
+label_text <- paste(text_box2[1], text_box2[2], text_box2[3], text_box2[4], text_box2[5], text_box2[6],
+                    text_box2[7], text_box2[8], text_box2[9], text_box2[10])
+
+text_plot <- data.frame(
+  x = as.Date("1919-10-15"),
+  y = 500,
+  label = label_text
+)
+
+
+
+
+
 # load scripts
 
 source("R/Plot_weekly_tmp.R") 
+source("R/Plot_weekly_spanishflu.R") 
 source("R/Plot_monthly.R") 
 source("R/Plot_Swiss_Re.R") 
+source("R/Plot_Swiss_Re_spanishflu.R") 
 source("R/Plot_yearly.R") 
 source("R/Plot_Swiss_Re_yearly.R") 
 source("R/excess_mortality_weekly_check.R") 
@@ -213,7 +275,11 @@ source("R/delay_distribution.R")
 # source("R/TS_stillborn.R")
 
 
-render(paste0("R/City_Zuerich_influenza.Rmd"), output_file = paste0("../output/",today(),"_Report_City_Zurich_influenza.html"))
+# render(paste0("R/City_Zuerich_influenza.Rmd"), output_file = paste0("../output/",today(),"_Report_City_Zurich_influenza.html"))
+
+
+
+render(paste0("R/City_Zuerich_spanishflu.Rmd"), output_file = paste0("../output/",today(),"_Report_City_Zurich_spanishflu.html"))
 
 # 
 # render(paste0("R/City_Zuerich.Rmd"), output_file = paste0("../output/",today(),"_Report_City_Zurich.html"))

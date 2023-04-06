@@ -156,20 +156,9 @@ function_plot_swiss_re_yearly()
 funtion_time_delay("Faelle")
 ```
 
-
-
-```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
-funtion_dis_delay("Faelle")
-```
-
 ```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
 funtion_time_delay("Totesfaelle")
 ```
-
-```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
-funtion_dis_delay("Totesfaelle")
-```
-
 
 
 ## Proportions of the reporting
@@ -199,14 +188,14 @@ function_plot_meldungen("Totesfaelle")
 
 ```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
 function_reproductive_table("short") %>%
-  kbl(caption = "Serial interval  = 2.6 days") %>%
+  kbl(caption = "Time serial interval 2.6 days") %>%
   kable_classic(full_width = F, html_font = "Cambria")
 ```
 
 <!-- ## Time serial interval 4.0 days  -->
 ```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
 function_reproductive_table("long")%>%
-  kbl(caption = "Serial interval = 4  days") %>%
+  kbl(caption = "Serial interval 4  days") %>%
   kable_classic(full_width = F, html_font = "Cambria")
 ```
 

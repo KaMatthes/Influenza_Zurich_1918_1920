@@ -1,6 +1,5 @@
-funtion_time_delay <- function(type_data) {
+funtion_time_delay <- function() {
 
-if(type_data=="Faelle") {
 data_delay_faelle <-  read_excel("../data_raw/Delay_Meldungen.xlsx", sheet="Faelle") %>%
   expand.dft(., freq="Number")  %>%
   mutate(Number= 1,
@@ -18,31 +17,10 @@ data_delay_faelle <-  read_excel("../data_raw/Delay_Meldungen.xlsx", sheet="Fael
          Year_KW_m = paste0(Year,"/",iso_meld)) %>%
   filter(Year==1918) %>%
   group_by(Meldung,Year_KW_m) %>%
-  summarise(weeks_delay_sum=mean(weeks_delay))
+  summarise(weeks_delay_sum=mean(weeks_delay)) %>%
+  ungroup() %>%
+  mutate(Var= "Cases")
 
-
-plot_delays_time <- ggplot() +
-  geom_line(data=data_delay_faelle , aes(x=as.Date(Meldung,format = "%Y-%m-%d"),y=weeks_delay_sum), lwd=1.5) +
-  scale_x_date( breaks = date_breaks("2 week"),
-                    labels = label_date_short(),
-                    # limits =c(min(lims3), max(lims4)),
-                    expand = c(0,0)) +
-  xlab("Reporting week") +
-  ylab("Mean reporting delay in weeks") +
-  ylim(0,3) +
-  ggtitle("Cases") +
-  theme_bw() +
-  theme(
-        axis.text = element_text(size=text_size),
-        axis.title  = element_text(size=axis_legend_size), 
-        legend.text=element_text(size=15),
-        legend.title=element_text(size=15),
-        title =element_text(size=title_size),
-        legend.position = "bottom")
-
-}
-
-else if(type_data=="Totesfaelle") {
 data_delay_deaths  <-  read_excel("../data_raw/Delay_Meldungen.xlsx", sheet="Totesfaelle") %>%
   expand.dft(., freq="Number")  %>%
   mutate(Number= 1,
@@ -60,28 +38,36 @@ data_delay_deaths  <-  read_excel("../data_raw/Delay_Meldungen.xlsx", sheet="Tot
          Year_KW_m = paste0(Year,"/",iso_meld)) %>%
   filter(Year==1918) %>%
   group_by(Meldung,Year_KW_m) %>%
-  summarise(weeks_delay_sum=mean(weeks_delay))
+  summarise(weeks_delay_sum=mean(weeks_delay)) %>%  
+  ungroup() %>%
+  mutate(Var= "Deaths")
+
+
+data_delay <- data_delay_faelle %>%
+  rbind(data_delay_deaths)
 
 
 plot_delays_time <- ggplot() +
-  geom_line(data=data_delay_deaths, aes(x=as.Date(Meldung,format = "%Y-%m-%d"),y=weeks_delay_sum), lwd=1.5) +
+  geom_line(data=data_delay , aes(x=as.Date(Meldung,format = "%Y-%m-%d"),y=weeks_delay_sum, col=Var), lwd=1.5) +
   scale_x_date( breaks = date_breaks("2 week"),
-                labels = label_date_short(),
-                # limits =c(min(lims3), max(lims4)),
-                expand = c(0,0)) +
+                    labels = label_date_short(),
+                    # limits =c(min(lims3), max(lims4)),
+                    expand = c(0,0)) +
+  scale_color_manual("",values=c(col_pal[1], col_pal[4])) +
   xlab("Reporting week") +
   ylab("Mean reporting delay in weeks") +
-  ylim(0,1) +
-  ggtitle("Deaths") +
+  ylim(0,3) +
+  ggtitle("Cases") +
   theme_bw() +
   theme(
-    axis.text = element_text(size=text_size),
-    axis.title  = element_text(size=axis_legend_size), 
-    legend.text=element_text(size=15),
-    legend.title=element_text(size=15),
-    title =element_text(size=title_size),
-    legend.position = "bottom")
-}
+        axis.text = element_text(size=text_size),
+        axis.title  = element_text(size=axis_legend_size), 
+        legend.text=element_text(size=15),
+        legend.title=element_text(size=15),
+        title =element_text(size=title_size),
+        legend.position = "bottom")
+
+
 
 return(plot_delays_time)
 
