@@ -242,7 +242,7 @@ label_text <- paste(text_box2[1], text_box2[2], text_box2[3], text_box2[4], text
 
 text_plot <- data.frame(
   x = as.Date("1919-10-15"),
-  y = 500,
+  y = 270,
   label = label_text
 )
 
