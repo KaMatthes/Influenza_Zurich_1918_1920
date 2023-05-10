@@ -53,8 +53,10 @@ conflict_prefer("summarise", "dplyr")
 
 lwd_size <- 1.2
 text_size <- 20
+text_size_heat_map <- 15
 legend_size <- 12
 axis_legend_size <- 20
+axis_legend_size_heat_map <- 15
 title_size <- 20
 
 
@@ -197,52 +199,108 @@ datlim56 <- as.POSIXct(ymd("1963-03-17"))
 
 
 measures <- tibble(
-  "A" = as.Date("10.07.1918", "%d.%m.%Y"),
-  "B" = as.Date("19.07.1918", "%d.%m.%Y"),
-  "C" = as.Date("03.08.1918", "%d.%m.%Y"),
-  "D" = as.Date("06.09.1918", "%d.%m.%Y"),
-  "E" = as.Date("12.10.1918", "%d.%m.%Y"),
-  "F" = as.Date("17.10.1918", "%d.%m.%Y"),
-  "G" = as.Date("31.10.1918", "%d.%m.%Y"),
-  "H" = as.Date("11.11.1918", "%d.%m.%Y"),
-  "I" = as.Date("19.11.1918", "%d.%m.%Y"),
-  "J" = as.Date("08.02.1919", "%d.%m.%Y")) %>%
-  gather(.,key, date, A:J, factor_key=TRUE)
+  "A" = as.Date("15.07.1918", "%d.%m.%Y"),
+  "B" = as.Date("18.07.1918", "%d.%m.%Y"),
+  "C" = as.Date("25.07.1918", "%d.%m.%Y"),
+  "D" = as.Date("30.07.1918", "%d.%m.%Y"),
+  "E" = as.Date("23.08.1918", "%d.%m.%Y"),
+  "F" = as.Date("24.08.1918", "%d.%m.%Y"),
+  "G" = as.Date("28.08.1918", "%d.%m.%Y"),
+  "H" = as.Date("10.10.1918", "%d.%m.%Y"),
+  "I" = as.Date("11.10.1918", "%d.%m.%Y"),
+  "J" = as.Date("23.10.1918",  "%d.%m.%Y"),
+  "K" = as.Date("18.11.1918", "%d.%m.%Y"),
+  "L" = as.Date("05.12.1918", "%d.%m.%Y"),
+  "M" = as.Date("11.12.1918", "%d.%m.%Y"),
+  "N" = as.Date("14.12.1918", "%d.%m.%Y"),
+  "O" = as.Date("28.12.1918", "%d.%m.%Y"),
+  "P" = as.Date("23.05.1919", "%d.%m.%Y")) %>%
+  gather(.,key, date, A:P, factor_key=TRUE)
+
+
+
+date_label <- tibble(
+  "A" = 350,
+  "B" = 300,
+  "C" = 340,
+  "D" = 320,
+  "E" = 350,
+  "F" = 300,
+  "G" = 330,
+  "H" = 300,
+  "I" = 350,
+  "J" = 300,
+  "K" = 350,
+  "L" = 300,
+  "M" = 320,
+  "N" = 350,
+  "O" = 350,
+  "P" = 350) %>%
+  gather(.,key, Y_value, A:P, factor_key=TRUE)
+
+
+
+color_label <- tibble(
+  "A" = "City of Zurich",
+  "B" = "Federal state",
+  "C" = "Canton Zurich",
+  "D" = "City of Zurich",
+  "E" = "Canton Zurich",
+  "F" = "City of Zurich",
+  "G" = "Canton Zurich",
+  "H" = "City of Zurich",
+  "I" = "Federal state",
+  "J" = "Federal state",
+  "K" = "Canton Zurich",
+  "L" = "City of Zurich",
+  "M" = "City of Zurich",
+  "N" = "Canton Zurich",
+  "O" = "Canton Zurich",
+  "P" = "Federal state") %>%
+  gather(.,key, col_value, A:P, factor_key=TRUE)
 
 explain <- tibble(
-  "A" = "Schools go into summer vacation earlier",
-  "B" = "Health workers are adviced to wear a mask and a special shirt when around infected patients",
-  "C" = "1st closing of Movie theaters, Theater performance, Sport performances, concerts in closed locations,
-    conferences, public church services, Banquets, Dance balls, dance courses, fairs, competitions, 
-    assemblies, rehearsals and races",
-  "D" = "Movie theater shows are allowed again",
-  "E" = "Closure of public and private schools and caf?s and public places at 9pm",
-  "F" = "2nd closing of movie theaters, etc. group meetings prohibited",
-  "G" = "Masks are making their first appearances",
-  "H" = "Big strike, military in city after demobilization",
-  "I" = "??",
-  "J" = "Subventions for local communities and their increased spendings due to the preventive measures") %>%
-  gather(.,key, Explanation, A:J, factor_key=TRUE)
+  "A" = "School closure (vacations)",
+  "B" = "Federal decree authorizes the cantons and municipalities to prohibit events that may lead to mass",
+  "C" = "Prohibition of events and implementation of the influenza reporting obligation for the canton of Zürich",
+  "D" = "Set of measure",
+  "E" = "First relaxations for the districts of Zurich, Affoltern, Horgen, Meilen and Dielsdorf",
+  "F" = "Schools open after summer vaccation",
+  "G" = "Further relaxations",
+  "H" = "Schools close" ,
+  "I" = "Nationwide reporting obligation for influenza and Reintroduction of the same measures of 25.07.1918",
+  "J" = "Partial assumption of costs by the federal government for the construction of emergency hospitals, employment of nursing staff, compensation for doctors and the unemployed.",
+  "K" = "General strike 09.11.-14.11.1918",
+  "L" = "Municipal authorities have, at their own discretion, retracted most of the necessary measures",
+  "M" = "Regular school starts again",
+  "N" = "First relaxation of the measures and the Zurich Health Department advised against holding public Christmas parties.",
+  "O" = "Further relaxation",
+  "P" = "All decisions issued by the federal government are repealed again.") %>%
+  gather(.,key, Explanation, A:P, factor_key=TRUE)
 
 table_legend <- explain %>%
-  full_join(measures) 
+  full_join(measures) %>%
+  full_join(date_label) %>%
+  full_join(color_label)
 
+# table_legend <- explain 
 
 
 text_box <- table_legend %>%
-  dplyr::select(key, Explanation) %>%
+  dplyr::select(key, Explanation,col_value) %>%
   mutate(key = as.character(key),
          text=paste(key,"=",Explanation, "<br>"),
-         y=c(seq(0.1,2.8, by=0.3))) %>%
-  dplyr::select(text,y) 
+         y=c(seq(0.1,4.6, by=0.3))) %>%
+  dplyr::select(text,y,col_value) 
 
 text_box2 <- text_box$text 
 label_text <- paste(text_box2[1], text_box2[2], text_box2[3], text_box2[4], text_box2[5], text_box2[6],
-                    text_box2[7], text_box2[8], text_box2[9], text_box2[10])
+                    text_box2[7], text_box2[8], text_box2[9], text_box2[10],text_box2[11],text_box2[12], text_box2[13], text_box2[14],text_box2[15],
+                    text_box2[16])
 
 text_plot <- data.frame(
-  x = as.Date("1919-10-15"),
-  y = 270,
+  x = as.Date("1919-12-15"),
+  y = 280,
   label = label_text
 )
 
