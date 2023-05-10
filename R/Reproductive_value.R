@@ -272,7 +272,7 @@ else if(interval_length == "medium") {
       Wave2 = as.numeric(Wave2),
       R_number = paste0(R," [",CIl,"-", CIu,"]")) %>%
     arrange(Wave2) %>%
-    select(Date= Type, Wave, R_number) 
+    select(Wave, Data= Type, R_number) 
   
   
   

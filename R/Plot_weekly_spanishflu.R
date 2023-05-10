@@ -1,7 +1,7 @@
 function_plot_weekly_spa <- function() {
 
   load("../data/dataZH.RData")
-  
+
   load("../data/expected_death_inla_weekly1918.RData")
   excess1918 <-   expected_deaths
   load("../data/expected_death_inla_weekly1920.RData")
@@ -41,6 +41,7 @@ dataZH <- dataZH %>%
          rel_excess_death = excess_death/fit*100,
          significant_dummy = ifelse(death > LL & death < UL,0,1),
          significant_dummy = as.factor( significant_dummy),
+         Reporting = Reporting +2,
          Difference_sig =  ifelse( excess_death > 0, "More than expected", "Fewer than expected"),
          Difference_sig= replace( Difference_sig, significant_dummy==1 & Difference_sig=="More than expected", "Significant more"))
          # Difference_sig= replace(  Difference_sig,significant_dummy==1 & Difference_sig=="Fewer than expected", "Significant more"))
@@ -48,44 +49,21 @@ dataZH <- dataZH %>%
 
 
 FigureInc <- ggplot() +
-  # annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # # annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # # annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # # annotate("rect",xmin=datlim9,xmax=datlim10,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # # annotate("rect",xmin=datlim11,xmax=datlim12,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # # annotate("rect",xmin=datlim13,xmax=datlim14,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # # annotate("rect",xmin=datlim17,xmax=datlim18,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim19,xmax=datlim20,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # # annotate("rect",xmin=datlim21,xmax=datlim22,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim23,xmax=datlim24,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # # annotate("rect",xmin=datlim25,xmax=datlim26,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # # annotate("rect",xmin=datlim27,xmax=datlim28,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim29,xmax=datlim30,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # annotate("rect",xmin=datlim31,xmax=datlim32,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # annotate("rect",xmin=datlim33,xmax=datlim34,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # # annotate("rect",xmin=datlim35,xmax=datlim36,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim37,xmax=datlim38,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # # annotate("rect",xmin=datlim39,xmax=datlim40,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # # annotate("rect",xmin=datlim41,xmax=datlim42,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # # annotate("rect",xmin=datlim43,xmax=datlim44,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # # annotate("rect",xmin=datlim45,xmax=datlim46,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # # annotate("rect",xmin=datlim47,xmax=datlim48,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
-  # annotate("rect",xmin=datlim49,xmax=datlim50,ymin=-Inf,ymax=Inf,alpha=0.2,fill="orange") +
-  # annotate("rect",xmin=datlim51,xmax=datlim52,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
 
-  geom_line(data=dataZH ,aes(y=infl_inc ,x= Reporting,colour="City of Zurich"), lwd=lwd_size )+
+  geom_line(data=dataZH ,aes(y=infl_inc ,x= Reporting,colour="City of Zurich"), lwd=lwd_size)+
   geom_line(data=dataZH,aes(y=infl_inc_canton,x=Reporting,colour="Canton Zurich"), lwd=lwd_size ) +
   # scale_x_datetime( breaks = date_breaks("2 month"),
   #                   labels = label_date_short(),
   #                   limits =c(min(lims5), max(lims6)))+
-  scale_x_date( date_labels ='%W / %y', date_breaks="2 weeks",limits =c(min(lims5), max(lims6))) +
-  geom_vline(data=table_legend, aes(xintercept = date), linetype = "dashed") + 
-  geom_label(data=table_legend, aes(y=350, x=date,  label= key)) +
-  geom_textbox(data=text_plot,aes(x=x, y=y, label=label), width = grid::unit(0.55, "npc"),
-               height = grid::unit(0.4, "npc"), size=5.5) +
+  scale_x_date( date_labels ='%W / %y', date_breaks="1 weeks",limits =c(min(lims5), max(lims6))) +
+  geom_vline(data=table_legend, aes(xintercept = date,colour = col_value), linetype = "dashed", lwd=1) + 
+  # geom_vline(data=table_legend, aes(xintercept = as.Date("02.12.1918", "%d.%m.%Y")),col="green", linetype = "dashed", lwd=1) + 
+  geom_label(data=table_legend, aes(y=Y_value, x=date,  label= key,colour = col_value), show.legend = FALSE) +
+  geom_textbox(data=text_plot,aes(x=x, y=y, label=label), width = grid::unit(0.45, "npc"),
+               height = grid::unit(0.40, "npc"), size=4) +
   scale_color_manual(name = "",
-                     values = c(col_pal[4],  col_pal[1]))+
+                     label =c("City of Zurich","Canton Zurich","Federal state"),
+                     values = c(col_pal[4],  col_pal[1], "black"))+
   xlab("Calendar week/Year")+
   ylab("per 10'000 inhab.")+
   ggtitle("Influenza Incidence") +

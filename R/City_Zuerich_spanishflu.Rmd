@@ -46,16 +46,16 @@ function_plot_swiss_re_spa()
 funtion_dis_delay()
 ```
 
-<!-- ## Proportions of the reporting -->
+## Proportions of the reporting
 
 
-<!-- ```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 8,message=FALSE} -->
-<!-- funtion_heatmap_delay("Faelle") -->
-<!-- ``` -->
+```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 8,message=FALSE}
+funtion_heatmap_delay("Faelle")
+```
 
-<!-- ```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 8,message=FALSE} -->
-<!-- funtion_heatmap_delay("Totesfaelle") -->
-<!-- ``` -->
+```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 8,message=FALSE}
+funtion_heatmap_delay("Totesfaelle")
+```
 
 
 # Reproductions numbers

@@ -48,8 +48,8 @@ plot_heat <- ggplot() +
   ggtitle("Cases") +
   theme_bw() +
   theme(aspect.ratio=1,
-        axis.text = element_text(size=text_size),
-        axis.title  = element_text(size=axis_legend_size), 
+        axis.text = element_text(size=text_size_heat_map),
+        axis.title  = element_text(size=axis_legend_size_heat_map ), 
         legend.text=element_text(size=15),
         legend.title=element_text(size=15),
         title =element_text(size=title_size),
@@ -102,6 +102,7 @@ plot_heat <- ggplot() +
   scale_fill_manual("Reports in %",
                     labels=c("0",">0 - 20",">20-40",">40-60",">60-80",">80-100"),
                     values=c("grey70",brewer.pal(5, "YlGnBu"))) +
+  # ylim(36,53) +
 
   # scale_fill_manual("Reports in %",
   #                   labels=c("0",">0 - 20",">20-40",">40-60",">60-80",">80-100"),
@@ -111,8 +112,8 @@ plot_heat <- ggplot() +
   ggtitle("Deaths") +
   theme_bw() +
   theme(aspect.ratio=1,
-        axis.text = element_text(size=text_size),
-        axis.title  = element_text(size=axis_legend_size), 
+        axis.text = element_text(size=text_size_heat_map),
+        axis.title  = element_text(size=axis_legend_size_heat_map ), 
         legend.text=element_text(size=15),
         legend.title=element_text(size=15),
         title =element_text(size=title_size),
