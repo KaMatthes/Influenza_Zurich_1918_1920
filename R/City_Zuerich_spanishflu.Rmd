@@ -11,8 +11,15 @@ editor_options:
   chunk_output_type: console
 ---
 
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+```{r set-options, echo=FALSE, cache=FALSE}
+options(width = 2000)
 ```
 
 <!-- # Methods -->
@@ -24,7 +31,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 <!-- ## Results -->
 
-```{r, echo=FALSE, warning=FALSE, fig.height =30 , fig.width = 25,message=FALSE}
+```{r, echo=FALSE, warning=FALSE, fig.height =45 , fig.width = 25,message=FALSE}
 function_plot_weekly_spa()
 ```
 
@@ -33,6 +40,10 @@ function_plot_weekly_spa()
 function_plot_swiss_re_spa()
 ```
 
+# Interventions
+```{r echo=FALSE, out.width = '100%'}
+knitr::include_graphics("../data/Tabelle Interventionen.png")
+```
 
 # Reporting delays
 <!-- ```{r echo=FALSE, out.width = '100%'} -->
@@ -59,6 +70,16 @@ funtion_heatmap_delay("Totesfaelle")
 
 
 # Reproductions numbers
+
+* mean serial interval = 3 days
+* sd of mean serial interval = 1 day
+* A gamma distribution (mean=3, sd=1) for the generation time was selected on the basis of previous studies estimating the reproduction number of Spanish flu
+* exponential growth period;
+  -  Wave 1: 4 weeks
+  - during the 
+  -  1920:  5 weeks 
+
+initial exponential growth rate in the weekly number of cases 57. Since the mean serial interval of the Spanish flu is not well understood yet and ranged between 2.6 56,58 and 6 days 15,59, we defined the mean serial interval as 3 days. In this study, we were particularly interested in the relative comparison of the two waves (and in between regions), rather than the absolute values of R. For that reason, we did not present results for different serial interval. The serial interval was fitted using a gamma distribution (mean=3 days, standard deviation=1 day).
 
 "Reports" sind die Daten aus der Tabelle "Reportingweeks"
 

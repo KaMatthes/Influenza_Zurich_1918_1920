@@ -56,7 +56,7 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
       reg_data <-  dat.excess %>%
         filter(Year >= YEAR+1 - year_smooth & Year < YEAR+1)%>%
         mutate(death=ifelse (Year ==YEAR, NA, death)) %>%
-        filter(!Year==1918) %>%
+        # filter(!Year==1918) %>%
         arrange(Year, Month,iso_cw) %>%
         group_by(Year,Month,iso_cw) %>%
         mutate(timeID = cur_group_id()) %>%
@@ -118,12 +118,12 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
   Data= cbind(reg_data,dM)
   
   mean.samples <- Data %>%
-    select(starts_with("V"), "iso_cw", "Year", "death", "pop.weekly", "timeID") %>%
+    select(starts_with("V"), "iso_cw", "Year", "pop.weekly", "timeID") %>%
     rowwise(iso_cw) %>%
     mutate(fit = median(c_across(V1:V1000)),
            LL = quantile(c_across(V1:V1000), probs= 0.025),
            UL = quantile(c_across(V1:V1000), probs= 0.975)) %>%
-    select(iso_cw, fit, LL, UL, Year, death, pop.weekly,timeID) %>%
+    select(iso_cw, fit, LL, UL, Year, pop.weekly,timeID) %>%
     filter(Year==YEAR) %>%
     arrange(Year, iso_cw) 
     # left_join(dat.excess, by=c("Year", "iso_cw")) 
@@ -134,8 +134,12 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
   
   }
   
+  death_data <- dat.excess %>%
+    select(Year, iso_cw, death)
+  
   expected_deaths <- expected_deaths %>%
-    bind_rows(., .id = "column_label")
+    bind_rows(., .id = "column_label") %>%
+    left_join(  death_data)
   
   write.xlsx(expected_deaths,paste0("data/expected_death_inla_weekly",Year_Pan,".xlsx"), rowNames=FALSE, overwrite = TRUE)
   save(expected_deaths,file=paste0("data/expected_death_inla_weekly",Year_Pan,".RData"))
@@ -148,10 +152,10 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
   }
 
 
-# function_inla_total(Year_Pan=1918, Year_max=1919, Year_min=1910)
+function_inla_total(Year_Pan=1918, Year_max=1919, Year_min=1910)
 
+function_inla_total(Year_Pan=1920, Year_max=1921, Year_min=1915)
 
-function_inla_total(Year_Pan=1920, Year_max=1928, Year_min=1915)
 function_inla_total(Year_Pan=1929, Year_max=1943, Year_min=1924)
 function_inla_total(Year_Pan=1944, Year_max=1960, Year_min=1936)
 

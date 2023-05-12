@@ -51,17 +51,18 @@ conflict_prefer("summarise", "dplyr")
 
 # Plot parameter
 
-lwd_size <- 1.2
-text_size <- 20
+lwd_size <- 1.8
+lwd_size_vline <- 0.8
+text_size <- 25
 text_size_heat_map <- 15
-legend_size <- 12
-axis_legend_size <- 20
+legend_size <- 25
+axis_legend_size <- 25
 axis_legend_size_heat_map <- 15
 title_size <- 20
 
 
-size_axis <-12
-size_axis_title <- 12
+size_axis <-15
+size_axis_title <- 15
 
 
 col_pal <- pal_jco()(8)
@@ -214,29 +215,31 @@ measures <- tibble(
   "M" = as.Date("11.12.1918", "%d.%m.%Y"),
   "N" = as.Date("14.12.1918", "%d.%m.%Y"),
   "O" = as.Date("28.12.1918", "%d.%m.%Y"),
-  "P" = as.Date("23.05.1919", "%d.%m.%Y")) %>%
-  gather(.,key, date, A:P, factor_key=TRUE)
+  "P" = as.Date("23.05.1919", "%d.%m.%Y"),
+  "Q" = as.Date("05.02.1920", "%d.%m.%Y")) %>%
+  gather(.,key, date, A:Q, factor_key=TRUE)
 
 
 
 date_label <- tibble(
-  "A" = 350,
-  "B" = 300,
-  "C" = 340,
-  "D" = 320,
-  "E" = 350,
-  "F" = 300,
-  "G" = 330,
-  "H" = 300,
-  "I" = 350,
-  "J" = 300,
-  "K" = 350,
-  "L" = 300,
-  "M" = 320,
-  "N" = 350,
-  "O" = 350,
-  "P" = 350) %>%
-  gather(.,key, Y_value, A:P, factor_key=TRUE)
+  "A" = 310,
+  "B" = 260,
+  "C" = 300,
+  "D" = 280,
+  "E" = 310,
+  "F" = 260,
+  "G" = 290,
+  "H" = 280,
+  "I" = 320,
+  "J" = 260,
+  "K" = 310,
+  "L" = 260,
+  "M" = 280,
+  "N" = 310,
+  "O" = 310,
+  "P" = 310,
+  "Q" = 310) %>%
+  gather(.,key, Y_value, A:Q, factor_key=TRUE)
 
 
 
@@ -256,8 +259,9 @@ color_label <- tibble(
   "M" = "City of Zurich",
   "N" = "Canton Zurich",
   "O" = "Canton Zurich",
-  "P" = "Federal state") %>%
-  gather(.,key, col_value, A:P, factor_key=TRUE)
+  "P" = "Federal state",
+  "Q" = "Canton Zurich") %>%
+  gather(.,key, col_value, A:Q, factor_key=TRUE)
 
 explain <- tibble(
   "A" = "School closure (vacations)",
@@ -275,8 +279,9 @@ explain <- tibble(
   "M" = "Regular school starts again",
   "N" = "First relaxation of the measures and the Zurich Health Department advised against holding public Christmas parties.",
   "O" = "Further relaxation",
-  "P" = "All decisions issued by the federal government are repealed again.") %>%
-  gather(.,key, Explanation, A:P, factor_key=TRUE)
+  "P" = "All decisions issued by the federal government are repealed again.",
+  "Q" = "Recommendation of prohibition of dancing and singing in large events.") %>%
+  gather(.,key, Explanation, A:Q, factor_key=TRUE)
 
 table_legend <- explain %>%
   full_join(measures) %>%
@@ -290,13 +295,13 @@ text_box <- table_legend %>%
   dplyr::select(key, Explanation,col_value) %>%
   mutate(key = as.character(key),
          text=paste(key,"=",Explanation, "<br>"),
-         y=c(seq(0.1,4.6, by=0.3))) %>%
+         y=c(seq(0.1,4.9, by=0.3))) %>%
   dplyr::select(text,y,col_value) 
 
 text_box2 <- text_box$text 
 label_text <- paste(text_box2[1], text_box2[2], text_box2[3], text_box2[4], text_box2[5], text_box2[6],
                     text_box2[7], text_box2[8], text_box2[9], text_box2[10],text_box2[11],text_box2[12], text_box2[13], text_box2[14],text_box2[15],
-                    text_box2[16])
+                    text_box2[16],   text_box2[17])
 
 text_plot <- data.frame(
   x = as.Date("1919-12-15"),
