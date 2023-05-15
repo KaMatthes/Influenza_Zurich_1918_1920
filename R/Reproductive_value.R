@@ -4,7 +4,7 @@ function_reproductive_table <- function(interval_length) {
 
 function_reproductive <- function(wave, data_typ, Year_wave, beginn,end,mean.time,sd.time) {
 
-  
+
   load("../data/dataZH.RData")
   load("../data/data_meldungen.RData")
   # 
@@ -12,7 +12,8 @@ function_reproductive <- function(wave, data_typ, Year_wave, beginn,end,mean.tim
   #   filter(Year==1918) %>%
   #   filter(iso_cw >26 & iso_cw < 31) %>%
   #   mutate(Days = c(0,7,14,21))
-  # 
+
+  
 if(wave==1) {
     data.wave <- dataZH %>%
       filter(Year==Year_wave) %>%
@@ -20,12 +21,24 @@ if(wave==1) {
       mutate(Days = c(0,7,14,21, 28))
     
 }
-  else if (wave==2) {
+  else if (wave==2.1) {
     
     data.wave <- dataZH %>%
       filter(Year==Year_wave) %>%
       filter(iso_cw > beginn & iso_cw < end) %>%
-      mutate(Days = c(0,7,14,21,28,35,42,49,56))
+       mutate(Days = c(0,7,14))
+    # mutate(Days = c(0,7,14))
+    # mutate(Days = c(0,7,14,21,28,35,42,49,56,63,70,77,84))
+  }
+  
+  
+  else if (wave==2.2) {
+    
+    data.wave <- dataZH %>%
+      filter(Year==Year_wave) %>%
+      filter(iso_cw > beginn & iso_cw < end) %>%
+      mutate(Days = c(0,7,14))
+    # mutate(Days = c(0,7,14))
     # mutate(Days = c(0,7,14,21,28,35,42,49,56,63,70,77,84))
   }
   
@@ -34,7 +47,7 @@ if(wave==1) {
     data.wave <- dataZH %>%
       filter(Year==Year_wave) %>%
       filter(iso_cw > beginn & iso_cw < end) %>%
-      mutate(Days = c(0,7,14,21,28,35))
+     mutate(Days = c(0,7,14,21,28,35))
     # mutate(Days = c(0,7,14,21,28,35,42,49,56,63,70,77,84))
   }
   
@@ -53,13 +66,13 @@ if(wave==1) {
     data.wave <- data_meldungen %>%
       filter(Erhebung=="Notifications")  %>%
       filter(Year==Year_wave) %>%
-      filter(iso_cw > beginn & iso_cw < end) %>%
+      filter(iso_cw > beginn & iso_cw < end)  %>%
       mutate(Days = c(0,7,14,21,28,35))
     # mutate(Days = c(0,7,14,21,28,35,42,49,56,63,70,77,84))
   }
     
     GT.flu <- generation.time("gamma", c(mean.time, sd.time))
-    Res.Wave <- est.R0.EG(epid=as.matrix(data.wave[, data_typ])[,1],GT=GT.flu,t=data.wave$Days,time.step = 7 )
+    Res.Wave <- est.R0.EG(epid=as.matrix(data.wave[, data_typ])[,1],GT=GT.flu,time.step = 7 )
     Res.Wave <- data.frame(Type=  data_typ, 
                            Wave=wave,
                            R=format(round(Res.Wave$R,2),nsmall = 2),
@@ -106,11 +119,11 @@ Results_R0_short <- rbind(RO.inc.canton1,RO.inc.city1,RO.death.city1,RO.hos.city
                   "CantonCases" = "Canton Cases",
                   "CityCases"    = "City Zurich Cases",
                   "CityDeathsTotal" = "City Zurich Deaths",
-                  "Andere_Infekt" = "Hospitalisation Infection inkl.Influenza"),
+                  "Andere_Infekt" = "Hospitalisation Infection incl.Influenza"),
     Type = ifelse(Type=="Faelle" & Wave==4, "Reports Disease", Type),
     Type = ifelse(Type=="Faelle" & Wave==5, "Reports Notifications Disease", Type),
-    Type = ifelse(Type=="Totesfaelle" & Wave==4, "Reports Death", Type),
-    Type = ifelse(Type=="Totesfaelle" & Wave==5, "Reports Notifications Death", Type),
+    Type = ifelse(Type=="Totesfaelle" & Wave==4, "Reports Death Influenza", Type),
+    Type = ifelse(Type=="Totesfaelle" & Wave==5, "Reports Notifications Death Influenza", Type),
     Wave2 = Wave,
     Wave = recode(Wave, 
                   "1" = "1918 Summer",
@@ -178,11 +191,11 @@ Results_R0_long <- rbind(RO.inc.canton1,RO.inc.city1,RO.death.city1,RO.hos.city1
                   "CantonCases" = "Canton Cases",
                   "CityCases"    = "City Zurich Cases",
                   "CityDeathsTotal" = "City Zurich Deaths",
-                  "Andere_Infekt" = "Hospitalisation Infection inkl.Influenza"),
+                  "Andere_Infekt" = "Hospitalisation Infection incl.Influenza"),
     Type = ifelse(Type=="Faelle" & Wave==4, "Reports Disease", Type),
     Type = ifelse(Type=="Faelle" & Wave==5, "Reports Notifications Disease", Type),
-    Type = ifelse(Type=="Totesfaelle" & Wave==4, "Reports Death", Type),
-    Type = ifelse(Type=="Totesfaelle" & Wave==5, "Reports Notifications Death", Type),
+    Type = ifelse(Type=="Totesfaelle" & Wave==4, "Reports Death Influenza", Type),
+    Type = ifelse(Type=="Totesfaelle" & Wave==5, "Reports Notifications Death Influenza", Type),
     Wave2 = Wave,
     Wave = recode(Wave, 
                   "1" = "1918 Summer",
@@ -219,10 +232,16 @@ else if(interval_length == "medium") {
   RO.hos.city1 <- function_reproductive(1,  "Andere_Infekt" , 1918, 25, 31, 3,1)
   
   
-  RO.inc.canton2 <- function_reproductive(2,"CantonCases", 1918, 36, 46, 3,1)
-  RO.inc.city2 <- function_reproductive(2,  "CityCases" , 1918, 36, 46, 3,1)
-  RO.death.city2 <- function_reproductive(2,  "CityDeathsTotal" , 1918, 36, 46, 3,1)
-  RO.hos.city2 <- function_reproductive(2,  "Andere_Infekt" , 1918, 36, 46, 3,1)
+  RO.inc.canton2.1 <- function_reproductive(2.1,"CantonCases", 1918, 35, 39, 3,1)
+  RO.inc.city2.1 <- function_reproductive(2.1,  "CityCases" , 1918, 35, 39, 3,1)
+  RO.death.city2.1 <- function_reproductive(2.1,  "CityDeathsTotal" , 1918, 35, 39, 3,1)
+  RO.hos.city2.1 <- function_reproductive(2.1,  "Andere_Infekt" , 1918, 35, 39, 3,1)
+  
+  
+  RO.inc.canton2.2 <- function_reproductive(2.2,"CantonCases", 1918, 39, 43, 3,1)
+  RO.inc.city2.2 <- function_reproductive(2.2,  "CityCases" , 1918, 39, 43, 3,1)
+  RO.death.city2.2 <- function_reproductive(2.2,  "CityDeathsTotal" , 1918, 39, 43, 3,1)
+  RO.hos.city2.2 <- function_reproductive(2.2,  "Andere_Infekt" , 1918, 39, 43, 3,1)
   
   
   RO.inc.canton3 <- function_reproductive(3,"CantonCases", 1920, 2, 9, 3,1)
@@ -242,7 +261,8 @@ else if(interval_length == "medium") {
   RO.death.Meldungen5 <- function_reproductive(5,"Totesfaelle", 1918, 36, 43, 3,1)
   
   Results_R0_medium <- rbind(RO.inc.canton1,RO.inc.city1,RO.death.city1,RO.hos.city1,
-                           RO.inc.canton2,RO.inc.city2,RO.death.city2,RO.hos.city2,
+                           RO.inc.canton2.1,RO.inc.city2.1,RO.death.city2.1,RO.hos.city2.1,
+                           RO.inc.canton2.2,RO.inc.city2.2,RO.death.city2.2,RO.hos.city2.2,
                            RO.inc.canton3,RO.inc.city3,RO.death.city3,RO.hos.city3,
                            RO.inc.Meldungen4, RO.inc.Meldungen5,
                            RO.death.Meldungen4, RO.death.Meldungen5) %>%
@@ -251,28 +271,30 @@ else if(interval_length == "medium") {
                     "CantonCases" = "Canton Cases",
                     "CityCases"    = "City Zurich Cases",
                     "CityDeathsTotal" = "City Zurich Deaths",
-                    "Andere_Infekt" = "Hospitalisation Infection inkl.Influenza"),
+                    "Andere_Infekt" = "Hospitalisation Infection incl.Influenza"),
       Type = ifelse(Type=="Faelle" & Wave==4, "Reports Disease", Type),
       Type = ifelse(Type=="Faelle" & Wave==5, "Reports Notifications Disease", Type),
-      Type = ifelse(Type=="Totesfaelle" & Wave==4, "Reports Death", Type),
-      Type = ifelse(Type=="Totesfaelle" & Wave==5, "Reports Notifications Death", Type),
+      Type = ifelse(Type=="Totesfaelle" & Wave==4, "Reports Death Influenza", Type),
+      Type = ifelse(Type=="Totesfaelle" & Wave==5, "Reports Notifications Death Influenza", Type),
       Wave2 = Wave,
       Wave = recode(Wave, 
                     "1" = "1918 Summer",
-                    "2" = "1918 Fall",
+                    "2.1" = "1918 Fall CW 36-38",
+                    "2.2" = "1918 Fall CW 40-42",
                     "3" = "1920",
                     "4" = "1918 Fall",
                     "5" = "1918 Fall"),
       Wave2 = recode(Wave2, 
                      "1" = "1",
-                     "2" = "2",
+                     "2.1" = "2.1",
+                     "2.2" = "2.2",
                      "3" = "3",
                      "4" = "2",
                      "5" = "2"),
       Wave2 = as.numeric(Wave2),
       R_number = paste0(R," [",CIl,"-", CIu,"]")) %>%
     arrange(Wave2) %>%
-    select(Wave, Data= Type, R_number) 
+    select(Wave, Data= Type, `Reproduction number`=R_number) 
   
   
   

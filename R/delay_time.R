@@ -57,7 +57,7 @@ plot_delays_time <- ggplot() +
   xlab("Reporting week") +
   ylab("Mean reporting delay in weeks") +
   ylim(0,3) +
-  ggtitle("Cases") +
+  # ggtitle("") +
   theme_bw() +
   theme(
         axis.text = element_text(size=text_size),

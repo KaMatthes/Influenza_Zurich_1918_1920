@@ -22,6 +22,7 @@ knitr::opts_chunk$set(echo = FALSE)
 options(width = 2000)
 ```
 
+# Epidemic curves
 <!-- # Methods -->
 
 <!-- # Weekly data -->
@@ -70,18 +71,16 @@ funtion_heatmap_delay("Totesfaelle")
 
 
 # Reproductions numbers
-
+* R packages R0 (https://cran.r-project.org/web/packages/R0/index.html)
+* time steps = 7 days (since weekly data)
 * mean serial interval = 3 days
 * sd of mean serial interval = 1 day
-* A gamma distribution (mean=3, sd=1) for the generation time was selected on the basis of previous studies estimating the reproduction number of Spanish flu
-* exponential growth period;
-  -  Wave 1: 4 weeks
-  - during the 
-  -  1920:  5 weeks 
-
-initial exponential growth rate in the weekly number of cases 57. Since the mean serial interval of the Spanish flu is not well understood yet and ranged between 2.6 56,58 and 6 days 15,59, we defined the mean serial interval as 3 days. In this study, we were particularly interested in the relative comparison of the two waves (and in between regions), rather than the absolute values of R. For that reason, we did not present results for different serial interval. The serial interval was fitted using a gamma distribution (mean=3 days, standard deviation=1 day).
-
-"Reports" sind die Daten aus der Tabelle "Reportingweeks"
+* gamma distribution (mean=3, sd=1) for the generation time -  selected on the basis of previous studies estimating R0 of Spanish flu
+* exponential growth period:
+  -  Wave 1: 4 weeks (28 days)
+  -  Wave 2 CW 36-38: 2 weeks (14 days) 
+  -  Wave 2 CW 40-42: 2 weeks (14 days) 
+  -  Wave 3: 5 weeks (35 days)
 
 <!-- ## Time serial interval 4.0 days  -->
 ```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
@@ -90,4 +89,27 @@ function_reproductive_table("medium")%>%
   kable_classic(full_width = F, html_font = "Cambria")
 ```
 
+
+
+# Relative incidence rate ratio (RIRR)
+Adapted from Staub K, Jüni P, et al. Public health interventions, epidemic growth, and regional variation of the
+1918 influenza pandemic outbreak in a Swiss canton and its greater regions. Ann Intern, https://doi.org/10.7326/M20-6231
+
+* $RIRR_{i} = (d_{i}/d_{i-1})/(d_{i-1}/d_{i-2})$  where $d_{i}$ is the number of cases during week i, $d_{i-1}$ the number of cases during week i-1, and $d_{i-2}$ the number cases during week i-2
+* Standard error: $SE_{i}= \sqrt(1/d_{i} + 4/d_{i-1} + 1/d_{i-2})$
+* 95% confidence interval of ln(RIRRi) is $ln(RIRRi) \pm 1.96 * SE_{i}$
+<br >
+<br >
+An RIRR greater than 1 indicates an acceleration of epidemic growth, whereas an RIRR less than 1 indicates a deceleration.
+
+## Canton Zurich
+```{r echo=FALSE, out.width = '100%'}
+knitr::include_graphics("../output/RRIR_Canton.png")
+```
+
+
+## City of Zurich
+```{r echo=FALSE, out.width = '100%'}
+knitr::include_graphics("../output/RRIR_City.png")
+```
 
