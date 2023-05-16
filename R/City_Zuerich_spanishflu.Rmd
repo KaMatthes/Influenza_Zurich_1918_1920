@@ -98,6 +98,7 @@ Adapted from Staub K, Jüni P, et al. Public health interventions, epidemic grow
 * $RIRR_{i} = (d_{i}/d_{i-1})/(d_{i-1}/d_{i-2})$  where $d_{i}$ is the number of cases during week i, $d_{i-1}$ the number of cases during week i-1, and $d_{i-2}$ the number cases during week i-2
 * Standard error: $SE_{i}= \sqrt(1/d_{i} + 4/d_{i-1} + 1/d_{i-2})$
 * 95% confidence interval of ln(RIRRi) is $ln(RIRRi) \pm 1.96 * SE_{i}$
+* The calculations were made one week after the introduction of the enactment. Except in cases where reporting delays were greater than 1 week (see also figure "Course of disease vs. reporting")
 <br >
 <br >
 An RIRR greater than 1 indicates an acceleration of epidemic growth, whereas an RIRR less than 1 indicates a deceleration.
