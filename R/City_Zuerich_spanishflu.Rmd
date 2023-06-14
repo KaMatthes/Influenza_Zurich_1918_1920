@@ -46,6 +46,8 @@ function_plot_swiss_re_spa()
 knitr::include_graphics("../data/Tabelle Interventionen.png")
 ```
 
+
+
 # Reporting delays
 <!-- ```{r echo=FALSE, out.width = '100%'} -->
 <!-- knitr::include_graphics("../data/Reporting.png") -->
@@ -71,24 +73,29 @@ funtion_heatmap_delay("Totesfaelle")
 
 
 # Reproductions numbers
-* R packages R0 (https://cran.r-project.org/web/packages/R0/index.html)
+* negative binomial generalized linear model
 * time steps = 7 days (since weekly data)
 * mean serial interval = 3 days
 * sd of mean serial interval = 1 day
-* gamma distribution (mean=3, sd=1) for the generation time -  selected on the basis of previous studies estimating R0 of Spanish flu
-* exponential growth period:
-  -  Wave 1: 4 weeks (28 days)
-  -  Wave 2 CW 36-38: 2 weeks (14 days) 
-  -  Wave 2 CW 40-42: 2 weeks (14 days) 
-  -  Wave 3: 5 weeks (35 days)
+* 3 prevoius weeks (i.e. 4 data points)
 
-<!-- ## Time serial interval 4.0 days  -->
-```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE}
-function_reproductive_table("medium")%>%
-  kbl(caption = "Serial interval 3  days") %>%
-  kable_classic(full_width = F, html_font = "Cambria")
+<!-- * gamma distribution (mean=3, sd=1) for the generation time -  selected on the basis of previous studies estimating R0 of Spanish flu -->
+<!-- * exponential growth period: -->
+<!--   -  Wave 1: 4 weeks (28 days) -->
+<!--   -  Wave 2 CW 36-38: 2 weeks (14 days)  -->
+<!--   -  Wave 2 CW 40-42: 2 weeks (14 days)  -->
+<!--   -  Wave 3: 5 weeks (35 days) -->
+
+<!--  ## Time serial interval 4.0 days  --> -->
+<!-- ```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 15,message=FALSE} -->
+<!-- function_reproductive_table("medium")%>% -->
+<!--   kbl(caption = "Serial interval 3  days") %>% -->
+<!--   kable_classic(full_width = F, html_font = "Cambria") -->
+<!-- ``` -->
+
+```{r, echo=FALSE, warning=FALSE, fig.height =45 , fig.width = 25,message=FALSE}
+function_plot_re()
 ```
-
 
 
 # Relative incidence rate ratio (RIRR)

@@ -98,7 +98,7 @@ FigureInc <- ggplot() +
     legend.text=element_text(size=legend_size),
     # legend.key.size = unit(1.5, 'cm'),
     # legend.spacing.x = unit(1.5, 'cm'),
-    axis.text.x = element_text(size=10,angle=45,hjust=1),
+    axis.text.x = element_text(size=size_axis_x,angle=45,hjust=1),
     axis.title.x  = element_blank(),
     axis.title.y  = element_text(size=axis_legend_size),
     title =element_text(size=title_size))
@@ -122,7 +122,7 @@ FigureDeath_Inf <- ggplot() +
         legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
-        axis.text.x = element_text(size=10,angle=45,hjust=1),
+        axis.text.x = element_text(size=size_axis_x,angle=45,hjust=1),
         axis.title.x  = element_blank(),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
@@ -146,7 +146,7 @@ FigureDeath <- ggplot() +
         legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
-        axis.text.x = element_text(size=10,angle=45,hjust=1),
+        axis.text.x = element_text(size=size_axis_x,angle=45,hjust=1),
         axis.title.x  = element_blank(),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
@@ -175,7 +175,7 @@ FigureExcess<- ggplot() +
         legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
-        axis.text.x = element_text(size=10,angle=45,hjust=1),
+        axis.text.x = element_text(size=size_axis_x,angle=45,hjust=1),
         axis.title.x  = element_blank(),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
@@ -200,7 +200,7 @@ FigureHospInfl <- ggplot() +
         legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
-        axis.text.x = element_text(size=10,angle=45,hjust=1),
+        axis.text.x = element_text(size=size_axis_x,angle=45,hjust=1),
         axis.title.x  = element_blank(),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))

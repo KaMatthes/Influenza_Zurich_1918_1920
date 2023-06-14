@@ -37,6 +37,7 @@ library(conflicted)
 library(wktmo)
 library(R0)
 library(ggtext)
+library(MASS)
 
 
 
@@ -60,7 +61,7 @@ axis_legend_size <- 25
 axis_legend_size_heat_map <- 15
 title_size <- 20
 
-
+size_axis_x <- 20
 size_axis <-15
 size_axis_title <- 15
 
@@ -95,103 +96,7 @@ datlim6 <- as.POSIXct(ymd("1919-05-10"))
 datlim7 <- as.POSIXct(ymd("1920-01-10"))
 datlim8 <- as.POSIXct(ymd("1920-05-22"))
 
-datlim9 <- as.POSIXct(ymd("1921-12-31"))
-datlim10 <- as.POSIXct(ymd("1922-04-08"))
 
-datlim11 <- as.POSIXct(ymd("1924-01-19"))
-datlim12 <- as.POSIXct(ymd("1924-05-10"))
-
-datlim13 <- as.POSIXct(ymd("1925-01-31"))
-datlim14 <- as.POSIXct(ymd("1925-05-16"))
-
-datlim15 <- as.POSIXct(ymd("1914-07-28"))
-datlim16 <- as.POSIXct(ymd("1918-11-11"))
-
-datlim17 <- as.POSIXct(ymd("1926-12-11"))
-datlim18 <- as.POSIXct(ymd("1927-02-19"))
-
-datlim19 <- as.POSIXct(ymd("1928-12-22"))
-datlim20 <- as.POSIXct(ymd("1929-04-20"))
-
-datlim21 <- as.POSIXct(ymd("1932-12-31"))
-datlim22 <- as.POSIXct(ymd("1933-03-18"))
-
-datlim23 <- as.POSIXct(ymd("1957-07-06"))
-datlim24 <- as.POSIXct(ymd("1958-05-17"))
-
-
-datlim25 <- as.POSIXct(ymd("1932-02-13"))
-datlim26 <- as.POSIXct(ymd("1932-05-07"))
-
-datlim27 <- as.POSIXct(ymd("1939-01-07"))
-datlim28 <- as.POSIXct(ymd("1939-03-25"))
-
-datlim29 <- as.POSIXct(ymd("1911-06-10"))
-datlim30 <- as.POSIXct(ymd("1911-09-09"))
-
-datlim31 <- as.POSIXct(ymd("1947-06-07"))
-datlim32 <- as.POSIXct(ymd("1947-10-04"))
-
-datlim33 <- as.POSIXct(ymd("1952-05-24"))
-datlim34 <- as.POSIXct(ymd("1952-08-23"))
-
-datlim35 <- as.POSIXct(ymd("1938-01-22"))
-datlim36 <- as.POSIXct(ymd("1938-04-23"))
-
-datlim37 <- as.POSIXct(ymd("1943-12-25"))
-datlim38 <- as.POSIXct(ymd("1944-05-13"))
-
-datlim39 <- as.POSIXct(ymd("1950-12-30"))
-datlim40 <- as.POSIXct(ymd("1951-05-12"))
-
-
-datlim41 <- as.POSIXct(ymd("1953-01-10"))
-datlim42 <- as.POSIXct(ymd("1953-05-16"))
-
-datlim43 <- as.POSIXct(ymd("1957-05-25"))
-datlim44 <- as.POSIXct(ymd("1957-08-24"))
-
-datlim45 <- as.POSIXct(ymd("1960-01-02"))
-datlim46 <- as.POSIXct(ymd("1960-04-23"))
-
-
-datlim47 <- as.POSIXct(ymd("1959-01-03"))
-datlim48 <- as.POSIXct(ymd("1959-05-30"))
-
-datlim49 <- as.POSIXct(ymd("1955-11-19"))
-datlim50 <- as.POSIXct(ymd("1956-05-12"))
-
-datlim51 <- as.POSIXct(ymd("1967-11-18"))
-datlim52 <- as.POSIXct(ymd("1968-04-13"))
-
-datlim53 <- as.POSIXct(ymd("1926-01-01"))
-
-datlim55 <- as.POSIXct(ymd("1962-10-28"))
-datlim56 <- as.POSIXct(ymd("1963-03-17"))
-
-
-# datlim37 <- as.POSIXct(ymd("1940-01-06"))
-# datlim38 <- as.POSIXct(ymd("1940-04-13"))
-# 
-
-# 
-# datlim41 <- as.POSIXct(ymd("1945-01-06"))
-# datlim42 <- as.POSIXct(ymd("1945-06-02"))
-# 
-# datlim43 <- as.POSIXct(ymd("1945-12-22"))
-# datlim44 <- as.POSIXct(ymd("1946-04-20"))
-# 
-# datlim45 <- as.POSIXct(ymd("1946-12-21"))
-# datlim46 <- as.POSIXct(ymd("1947-03-29"))
-# 
-# datlim47 <- as.POSIXct(ymd("1948-12-11"))
-# datlim48 <- as.POSIXct(ymd("1949-04-30"))
-# 
-# datlim49 <- as.POSIXct(ymd("1948-12-11"))
-# datlim50 <- as.POSIXct(ymd("1949-04-30"))
-# 
-# datlim49 <- as.POSIXct(ymd("1948-12-11"))
-# datlim50 <- as.POSIXct(ymd("1949-04-30"))
 # 
 
 
@@ -330,6 +235,7 @@ source("R/delay.R")
 source("R/Reproductive_value.R") 
 source("R/delay_time.R") 
 source("R/delay_distribution.R") 
+source("R/Reproductive_value_nb.R") 
 # source("R/Plot_Geburten.R")
 # source("R/Plot_Swiss_Re.R")
 # source("R/TS_Marriages.R")
