@@ -208,7 +208,7 @@ plot_swiss_re <- ggplot() +
   # annotate("rect",xmin=datlim49,xmax=datlim50,ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
   # annotate("rect",xmin=datlim51,xmax=datlim52,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   # annotate("rect",xmin=datlim55,xmax=datlim56,ymin=-Inf,ymax=Inf,alpha=0.2,fill="#15beed") +
-  geom_vline(xintercept = datlim53) +
+  # geom_vline(xintercept = datlim53) +
   # geom_line(data=swiss_re,aes(y=Absenz_wo_ratio_t,x=as.POSIXct(date),colour="Absence because of other reasons"), lwd=lwd_size ) +
   # geom_line(data=swiss_re ,aes(y=Krank_ratio_t,x= as.POSIXct(date),colour="Absence because of illness"), lwd=lwd_size)  +
   

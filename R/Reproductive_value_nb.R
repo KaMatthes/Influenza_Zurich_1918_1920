@@ -1,10 +1,10 @@
-function_plot_re <- function() {
+function_reproductive_plot <- function(Plot_var) {
 
 load("../data/dataZH.RData")
 load("../data/data_meldungen.RData")
 
 
-begin <- ymd(19180615)
+begin <- ymd(19180629)
 end <- ymd(19200605)
 
 begin2 <- ymd(19180907)
@@ -87,7 +87,7 @@ for(i in 3:length(Re_canton$Date_week)) {
   set <- subset(data.wave, Date_week >= (Re_canton$Date_week[i] - before) & Date_week <= (Re_canton$Date_week[i] + after))
   fit <- MASS::glm.nb(CantonCases ~ Date_week, data = set)
   tryCatch(fit.ci <- suppressMessages(confint(fit)), error = function(e){})
-  Re_canton[i, 2:4] <- c((1 + coef(fit)[2]/rate)^shape, (1 + fit.ci[2, 2]/rate)^shape, (1 + fit.ci[2, 1]/rate)^shape)
+  Re_canton[i, 2:4] <-c((1 + coef(fit)[2]/rate)^shape, (1 + fit.ci[2, 1]/rate)^shape, (1 + fit.ci[2, 2]/rate)^shape)
 }
 
 
@@ -102,7 +102,7 @@ for(i in 3:length(Re_zh$Date_week)) {
   set <- subset(data.wave, Date_week >= (Re_zh$Date_week[i] - before) & Date_week <= (Re_zh$Date_week[i] + after))
   fit <- MASS::glm.nb(CityCases ~ Date_week, data = set)
   tryCatch(fit.ci <- suppressMessages(confint(fit)), error = function(e){})
-  Re_zh[i, 2:4] <- c((1 + coef(fit)[2]/rate)^shape, (1 + fit.ci[2, 2]/rate)^shape, (1 + fit.ci[2, 1]/rate)^shape)
+  Re_zh[i, 2:4] <- c((1 + coef(fit)[2]/rate)^shape, (1 + fit.ci[2, 1]/rate)^shape, (1 + fit.ci[2, 2]/rate)^shape)
 }
 
 
@@ -118,7 +118,7 @@ for(i in 3:length(Re_death$Date_week)) {
   set <- subset(data.wave, Date_week >= (Re_death$Date_week[i] - before) & Date_week <= (Re_death$Date_week[i] + after))
   fit <- MASS::glm.nb(CityDeathsTotal ~ Date_week, data = set)
   tryCatch(fit.ci <- suppressMessages(confint(fit)), error = function(e){})
-  Re_death[i, 2:4] <- c((1 + coef(fit)[2]/rate)^shape, (1 + fit.ci[2, 2]/rate)^shape, (1 + fit.ci[2, 1]/rate)^shape)
+  Re_death[i, 2:4] <- c((1 + coef(fit)[2]/rate)^shape, (1 + fit.ci[2, 1]/rate)^shape, (1 + fit.ci[2, 2]/rate)^shape)
 }
 
 
@@ -126,130 +126,39 @@ Re_hosp <- data.frame(Date_week = seq(begin, end, 7),
                        Re = NA,
                        Re_lower = NA,
                        Re_upper = NA,
-                       place = "City of Zurich",
+                       place = "Canton Zurich",
                        data="Hospitalisation Infection incl.Influenza")
 
 for(i in 3:length(Re_hosp$Date_week)) {
   set <- subset(data.wave, Date_week >= (Re_hosp$Date_week[i] - before) & Date_week <= (Re_hosp$Date_week[i] + after))
   fit <- MASS::glm.nb( Andere_Infekt ~ Date_week, data = set)
   tryCatch(fit.ci <- suppressMessages(confint(fit)), error = function(e){})
-  Re_hosp[i, 2:4] <- c((1 + coef(fit)[2]/rate)^shape, (1 + fit.ci[2, 2]/rate)^shape, (1 + fit.ci[2, 1]/rate)^shape)
+  Re_hosp[i, 2:4] <- c((1 + coef(fit)[2]/rate)^shape, (1 + fit.ci[2, 1]/rate)^shape, (1 + fit.ci[2, 2]/rate)^shape)
 }
 
 Data_plot <- rbind(Re_canton, Re_zh,Re_death, Re_hosp) %>%
   left_join(data.wave) %>%
-  filter(Date_week > ymd( 19180720))
-
-
-
-Re_cases_reports1 <- data.frame(Date_week = seq(begin2, end2, 7),
-                      Re = NA,
-                      Re_lower = NA,
-                      Re_upper = NA,
-                      place = "City of Zurich",
-                      data="Report cases")
-
-
-for(i in 3:20) {
-  set <- subset(data.reports, Date_week >= (Re_cases_reports1$Date_week[i] - before) & Date_week <= (Re_cases_reports1$Date_week[i] + after))
-  fit <- MASS::glm.nb(Faelle ~ Date_week, data = set)
-  tryCatch(fit.ci <- suppressMessages(confint(fit)), error = function(e){})
-  Re_cases_reports1[i, 2:4] <- c((1 + coef(fit)[2]/rate)^shape, (1 + fit.ci[2, 2]/rate)^shape, (1 + fit.ci[2, 1]/rate)^shape)
-}
-
-
-Re_cases_reports2 <- data.frame(Date_week = seq(begin2, end2, 7),
-                                Re = NA,
-                                Re_lower = NA,
-                                Re_upper = NA,
-                                place = "City of Zurich",
-                                data="Report cases")
-
-for(i in 32) {
-  set <- subset(data.reports, Date_week >= (Re_cases_reports2$Date_week[i] - before) & Date_week <= (Re_cases_reports2$Date_week[i] + after))
-  fit <- MASS::glm.nb(Faelle ~ Date_week, data = set)
-  tryCatch(fit.ci <- suppressMessages(confint(fit)), error = function(e){})
-  Re_cases_reports2[i, 2:4] <- c((1 + coef(fit)[2]/rate)^shape, (1 + fit.ci[2, 2]/rate)^shape, (1 + fit.ci[2, 1]/rate)^shape)
-}
-
-
-Re_cases_reports3  <-Re_cases_reports1 %>%
-  filter(is.na(Re)) %>%
-  replace(is.na(.), 1) %>%
-  filter(!Date_week < ymd(19190125)) %>%
-  filter(!Date_week == ymd(19190412))
-
-Re_cases_reports4  <-Re_cases_reports1 %>%
-  filter(!is.na(Re))
-
-Re_cases_reports5  <-Re_cases_reports2 %>%
-  filter(!is.na(Re))
-
-Re_cases_reports <- rbind(Re_cases_reports3, Re_cases_reports4, Re_cases_reports5) %>%
-  arrange(Date_week)
-
-Data_plot_reports <- Re_cases_reports %>%
-  left_join(data.wave) %>%
-  filter(Date_week > ymd( 19180720))
-
-
-
-Re_death_reports1 <- data.frame(Date_week = seq(begin2, end2, 7),
-                                Re = NA,
-                                Re_lower = NA,
-                                Re_upper = NA,
-                                place = "City of Zurich",
-                                data="Report death")
-
-
-for(i in 3:20) {
-  set <- subset(data.reports, Date_week >= (Re_death_reports1$Date_week[i] - before) & Date_week <= (Re_death_reports1$Date_week[i] + after))
-  fit <- MASS::glm.nb(Totesfaelle ~ Date_week, data = set)
-  tryCatch(fit.ci <- suppressMessages(confint(fit)), error = function(e){})
-  Re_death_reports1[i, 2:4] <- c((1 + coef(fit)[2]/rate)^shape, (1 + fit.ci[2, 2]/rate)^shape, (1 + fit.ci[2, 1]/rate)^shape)
-}
-
-
-Re_death_reports2 <- data.frame(Date_week = seq(begin2, end2, 7),
-                                Re = NA,
-                                Re_lower = NA,
-                                Re_upper = NA,
-                                place = "City of Zurich",
-                                data="Report death")
-
-for(i in 32) {
-  set <- subset(data.reports, Date_week >= (Re_death_reports2$Date_week[i] - before) & Date_week <= (Re_death_reports2$Date_week[i] + after))
-  fit <- MASS::glm.nb(Totesfaelle ~ Date_week, data = set)
-  tryCatch(fit.ci <- suppressMessages(confint(fit)), error = function(e){})
-  Re_death_reports2[i, 2:4] <- c((1 + coef(fit)[2]/rate)^shape, (1 + fit.ci[2, 2]/rate)^shape, (1 + fit.ci[2, 1]/rate)^shape)
-}
-
-
-Re_death_reports3  <-Re_death_reports1 %>%
-  filter(is.na(Re)) %>%
-  replace(is.na(.), 1) %>%
-  filter(!Date_week < ymd(19190125)) %>%
-  filter(!Date_week == ymd(19190412))
-
-Re_death_reports4  <-Re_death_reports1 %>%
-  filter(!is.na(Re))
-
-Re_death_reports5  <-Re_death_reports2 %>%
-  filter(!is.na(Re))
-
-Re_death_reports <- rbind(Re_death_reports3, Re_death_reports4, Re_death_reports5) %>%
-  arrange(Date_week)
-
-Data_plot_reports_d <- Re_death_reports %>%
-  left_join(data.wave) %>%
-  filter(Date_week > ymd( 19180720))
-
-
-
-FigureRe_cases <- ggplot(data=Data_plot[Data_plot$data=="Cases",]) +
+  filter(Date_week > ymd( 19180706)) %>%
+  mutate(var_line = Date_week,
+         var_line = ifelse(var_line > ymd("1919-03-29") &  var_line < ymd("1919-12-20"), "2", "1"))
+  
+if(Plot_var =="Incidence") {
+  
+Figure_Re <- ggplot() +
   geom_hline(yintercept=1, col="black", lwd=1.3)+
-  geom_line(aes(y=Re ,x= Reporting,col=place), lwd=lwd_size)+
-  geom_ribbon(aes(ymin=Re_lower, ymax=Re_upper,x=Reporting, y=Re, fill=place),linetype=2, alpha=0.3) +
+  geom_line(data=subset(Data_plot[Data_plot$data=="Cases",],Reporting <= ymd("1919-03-29")),aes(y=Re ,x= Reporting,col=place), 
+            linetype="solid",lwd=lwd_size)+
+  geom_line(data=subset(Data_plot[Data_plot$data=="Cases",],Reporting >= ymd("1919-03-29") & Reporting <= ymd("1919-12-20")),
+            aes(y=Re ,x= Reporting,col=place), lwd=lwd_size, linetype="dashed", alpha=0.5)+
+  geom_line(data=subset(Data_plot[Data_plot$data=="Cases",],Reporting >= ymd("1919-12-20")),aes(y=Re ,x= Reporting,col=place), 
+            linetype="solid",lwd=lwd_size)+
+  # geom_line(aes(y=Re ,x= Reporting,col=place, linetype=var_line), lwd=lwd_size)+
+  geom_ribbon(data=subset(Data_plot[Data_plot$data=="Cases",],Reporting <= ymd("1919-03-29")),aes(ymin=Re_lower, ymax=Re_upper,x=Reporting, y=Re, fill=place),
+              linetype=2, alpha=0.3) +
+  geom_ribbon(data=subset(Data_plot[Data_plot$data=="Cases",],Reporting >= ymd("1919-03-29") & Reporting <= ymd("1919-12-20")),aes(ymin=Re_lower, ymax=Re_upper,x=Reporting, y=Re, fill=place),
+              linetype=2, alpha=0.1) +
+  geom_ribbon(data=subset(Data_plot[Data_plot$data=="Cases",],Reporting >= ymd("1919-12-20")),aes(ymin=Re_lower, ymax=Re_upper,x=Reporting, y=Re, fill=place),
+              linetype=2, alpha=0.3) +
   scale_x_date( date_labels ='%W / %y', date_breaks="2 weeks",limits =c(min(lims5), max(lims6))) +
   scale_color_manual(name = "",
                      values = c(col_pal[4], col_pal[1])) +
@@ -272,12 +181,30 @@ FigureRe_cases <- ggplot(data=Data_plot[Data_plot$data=="Cases",]) +
         axis.title.x  = element_blank(),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
+}
 
+else if(Plot_var=="Mortality") {
 
-FigureRe_death <- ggplot(data=Data_plot[Data_plot$data=="Total death",]) +
+Figure_Re <- ggplot(data=Data_plot[Data_plot$data=="Total death",]) +
   geom_hline(yintercept=1, col="black", lwd=1.3)+
-  geom_line(aes(y=Re ,x= Reporting,col=place), lwd=lwd_size)+
-  geom_ribbon(aes(ymin=Re_lower, ymax=Re_upper,x=Reporting, y=Re, fill=place),linetype=2, alpha=0.3) +
+  
+  geom_line(data=subset(Data_plot[Data_plot$data=="Total death",],Reporting <= ymd("1919-03-29")),aes(y=Re ,x= Reporting,col=place), 
+            linetype="solid",lwd=lwd_size)+
+  geom_line(data=subset(Data_plot[Data_plot$data=="Total death",],Reporting >= ymd("1919-03-29") & Reporting <= ymd("1919-12-20")),
+            aes(y=Re ,x= Reporting,col=place), lwd=lwd_size, linetype="dashed", alpha=0.5)+
+  geom_line(data=subset(Data_plot[Data_plot$data=="Total death",],Reporting >= ymd("1919-12-20")),aes(y=Re ,x= Reporting,col=place), 
+            linetype="solid",lwd=lwd_size)+
+  # geom_line(aes(y=Re ,x= Reporting,col=place, linetype=var_line), lwd=lwd_size)+
+  geom_ribbon(data=subset(Data_plot[Data_plot$data=="Total death",],Reporting <= ymd("1919-03-29")),aes(ymin=Re_lower, ymax=Re_upper,x=Reporting, y=Re, fill=place),
+              linetype=2, alpha=0.3) +
+  geom_ribbon(data=subset(Data_plot[Data_plot$data=="Total death",],Reporting >= ymd("1919-03-29") & Reporting <= ymd("1919-12-20")),aes(ymin=Re_lower, ymax=Re_upper,x=Reporting, y=Re, fill=place),
+              linetype=2, alpha=0.1) +
+  geom_ribbon(data=subset(Data_plot[Data_plot$data=="Total death",],Reporting >= ymd("1919-12-20")),aes(ymin=Re_lower, ymax=Re_upper,x=Reporting, y=Re, fill=place),
+              linetype=2, alpha=0.3) +
+  
+  
+  # geom_line(aes(y=Re ,x= Reporting,col=place), lwd=lwd_size)+
+  # geom_ribbon(aes(ymin=Re_lower, ymax=Re_upper,x=Reporting, y=Re, fill=place),linetype=2, alpha=0.3) +
   
   scale_x_date( date_labels ='%W / %y', date_breaks="2 weeks",limits =c(min(lims5), max(lims6))) +
   scale_color_manual(name = "",
@@ -301,16 +228,34 @@ FigureRe_death <- ggplot(data=Data_plot[Data_plot$data=="Total death",]) +
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
 
-FigureRe_hosp <- ggplot(data=Data_plot[Data_plot$data=="Hospitalisation Infection incl.Influenza",]) +
+}
+
+else if(Plot_var=="Hospital") {
+Figure_Re<- ggplot(data=Data_plot[Data_plot$data=="Hospitalisation Infection incl.Influenza",]) +
   geom_hline(yintercept=1, col="black", lwd=1.3)+
-  geom_line(aes(y=Re ,x= Reporting,col=place), lwd=lwd_size)+
-  geom_ribbon(aes(ymin=Re_lower, ymax=Re_upper,x=Reporting, y=Re, fill=place),linetype=2, alpha=0.3) +
+  
+  geom_line(data=subset(Data_plot[Data_plot$data=="Hospitalisation Infection incl.Influenza",],Reporting <= ymd("1919-03-29")),aes(y=Re ,x= Reporting,col=place), 
+            linetype="solid",lwd=lwd_size)+
+  geom_line(data=subset(Data_plot[Data_plot$data=="Hospitalisation Infection incl.Influenza",],Reporting >= ymd("1919-03-29") & Reporting <= ymd("1919-12-20")),
+            aes(y=Re ,x= Reporting,col=place), lwd=lwd_size, linetype="dashed", alpha=0.5)+
+  geom_line(data=subset(Data_plot[Data_plot$data=="Hospitalisation Infection incl.Influenza",],Reporting >= ymd("1919-12-20")),aes(y=Re ,x= Reporting,col=place), 
+            linetype="solid",lwd=lwd_size)+
+  # geom_line(aes(y=Re ,x= Reporting,col=place, linetype=var_line), lwd=lwd_size)+
+  geom_ribbon(data=subset(Data_plot[Data_plot$data=="Hospitalisation Infection incl.Influenza",],Reporting <= ymd("1919-03-29")),aes(ymin=Re_lower, ymax=Re_upper,x=Reporting, y=Re, fill=place),
+              linetype=2, alpha=0.3) +
+  geom_ribbon(data=subset(Data_plot[Data_plot$data=="Hospitalisation Infection incl.Influenza",],Reporting >= ymd("1919-03-29") & Reporting <= ymd("1919-12-20")),aes(ymin=Re_lower, ymax=Re_upper,x=Reporting, y=Re, fill=place),
+              linetype=2, alpha=0.1) +
+  geom_ribbon(data=subset(Data_plot[Data_plot$data=="Hospitalisation Infection incl.Influenza",],Reporting >= ymd("1919-12-20")),aes(ymin=Re_lower, ymax=Re_upper,x=Reporting, y=Re, fill=place),
+              linetype=2, alpha=0.3) +
+  
+  # geom_line(aes(y=Re ,x= Reporting,col=place), lwd=lwd_size)+
+  # geom_ribbon(aes(ymin=Re_lower, ymax=Re_upper,x=Reporting, y=Re, fill=place),linetype=2, alpha=0.3) +
   
   scale_x_date( date_labels ='%W / %y', date_breaks="2 weeks",limits =c(min(lims5), max(lims6))) +
   scale_color_manual(name = "",
-                     values = c(col_pal[1])) +
+                     values = c(col_pal[4])) +
   scale_fill_manual(name = "",
-                    values = c(col_pal[1])) +
+                    values = c(col_pal[4])) +
   xlab("Calendar week/Year")+
   ylab("Reproduction value")+
   ggtitle("Reproduction values of hospitalisations -  infection incl.Influenza") +
@@ -327,71 +272,10 @@ FigureRe_hosp <- ggplot(data=Data_plot[Data_plot$data=="Hospitalisation Infectio
         axis.title.x  = element_blank(),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
+}
 
 
-FigureRe_cases_rep <- ggplot(data=Data_plot_reports) +
-  geom_hline(yintercept=1, col="black", lwd=1.3)+
-  geom_line(aes(y=Re ,x= Reporting,col=place), lwd=lwd_size)+
-  geom_ribbon(aes(ymin=Re_lower, ymax=Re_upper,x=Reporting, y=Re, fill=place),linetype=2, alpha=0.3) +
-  
-  scale_x_date( date_labels ='%W / %y', date_breaks="2 weeks",limits =c(min(lims5), max(lims6))) +
-  scale_color_manual(name = "",
-                     values = c(col_pal[1])) +
-  scale_fill_manual(name = "",
-                    values = c(col_pal[1])) +
-  xlab("Calendar week/Year")+
-  ylab("Reproduction value")+
-  ggtitle("Reproduction values of reported cases") +
-  theme_bw()+
-  #theme_light(base_size = 16)+
-  theme(axis.text.y = element_text(size=text_size),
-        panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank(),
-        legend.position = c(.1, .85),
-        legend.text=element_text(size=legend_size),
-        # legend.key.size = unit(1.5, 'cm'),
-        # legend.spacing.x = unit(1.5, 'cm'),
-        axis.text.x = element_text(size=size_axis_x,angle=45,hjust=1),
-        axis.title.x  = element_blank(),
-        axis.title.y  = element_text(size=axis_legend_size),
-        title =element_text(size=title_size))
-
-FigureRe_death_rep <- ggplot(data=Data_plot_reports_d) +
-  geom_hline(yintercept=1, col="black", lwd=1.3)+
-  geom_line(aes(y=Re ,x= Reporting,col=place), lwd=lwd_size)+
-  geom_ribbon(aes(ymin=Re_lower, ymax=Re_upper,x=Reporting, y=Re, fill=place),linetype=2, alpha=0.3) +
-  
-  scale_x_date( date_labels ='%W / %y', date_breaks="2 weeks",limits =c(min(lims5), max(lims6))) +
-  scale_color_manual(name = "",
-                     values = c(col_pal[1])) +
-  scale_fill_manual(name = "",
-                    values = c(col_pal[1])) +
-  xlab("Calendar week/Year")+
-  ylab("Reproduction value")+
-  ggtitle("Reproduction values of reported death") +
-  theme_bw()+
-  #theme_light(base_size = 16)+
-  theme(axis.text.y = element_text(size=text_size),
-        panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank(),
-        legend.position = c(.15, .85),
-        legend.text=element_text(size=legend_size),
-        # legend.key.size = unit(1.5, 'cm'),
-        # legend.spacing.x = unit(1.5, 'cm'),
-        axis.text.x = element_text(size=size_axis_x,angle=45,hjust=1),
-        axis.title.x  = element_blank(),
-        axis.title.y  = element_text(size=axis_legend_size),
-        title =element_text(size=title_size))
-
-
-
-plot_re <- cowplot::plot_grid(FigureRe_cases, FigureRe_death,
-                              FigureRe_hosp,FigureRe_cases_rep, FigureRe_death_rep,
-                                  ncol=1, nrow=5, align="hv",
-                                  rel_heights = c(1,1,1))
-
-
-return(plot_re)
+return(Figure_Re)
 # 
 
 }

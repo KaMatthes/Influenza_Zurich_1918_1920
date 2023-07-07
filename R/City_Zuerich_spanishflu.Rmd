@@ -32,14 +32,38 @@ options(width = 2000)
 
 <!-- ## Results -->
 
-```{r, echo=FALSE, warning=FALSE, fig.height =45 , fig.width = 25,message=FALSE}
-function_plot_weekly_spa()
+```{r, echo=FALSE, warning=FALSE, fig.height =10 , fig.width = 25,message=FALSE}
+function_plot_weekly_spa(Plot_var="Incidence")
 ```
 
-
-```{r, echo=FALSE, warning=FALSE, fig.height =6 , fig.width = 15,message=FALSE}
-function_plot_swiss_re_spa()
+```{r, echo=FALSE, warning=FALSE, fig.height =10 , fig.width = 25,message=FALSE}
+function_reproductive_plot(Plot_var="Incidence")
 ```
+
+```{r, echo=FALSE, warning=FALSE, fig.height =10 , fig.width = 25,message=FALSE}
+function_plot_weekly_spa(Plot_var="Mortality")
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.height =10 , fig.width = 25,message=FALSE}
+function_reproductive_plot(Plot_var="Mortality")
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.height =10 , fig.width = 25,message=FALSE}
+function_plot_weekly_spa(Plot_var="Excess")
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.height =10 , fig.width = 25,message=FALSE}
+function_plot_weekly_spa(Plot_var="Death")
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.height =10 , fig.width = 25,message=FALSE}
+function_plot_weekly_spa(Plot_var="Hospital")
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.height =10 , fig.width = 25,message=FALSE}
+function_reproductive_plot(Plot_var="Hospital")
+```
+
 
 # Interventions
 ```{r echo=FALSE, out.width = '100%'}
@@ -60,26 +84,15 @@ knitr::include_graphics("../data/Tabelle Interventionen.png")
 funtion_dis_delay()
 ```
 
-## Proportions of the reporting
-
-
-```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 8,message=FALSE}
-funtion_heatmap_delay("Faelle")
-```
-
-```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 8,message=FALSE}
-funtion_heatmap_delay("Totesfaelle")
-```
-
-
 # Reproductions numbers
+
 * negative binomial generalized linear model
 * time steps = 7 days (since weekly data)
 * mean serial interval = 3 days
 * sd of mean serial interval = 1 day
 * 3 prevoius weeks (i.e. 4 data points)
 
-<!-- * gamma distribution (mean=3, sd=1) for the generation time -  selected on the basis of previous studies estimating R0 of Spanish flu -->
+<!-- * gamma distribution (mean=3, sd=1) for the generation time -  selected on the basis of previous studies estimating R0 of Spanish flu 
 <!-- * exponential growth period: -->
 <!--   -  Wave 1: 4 weeks (28 days) -->
 <!--   -  Wave 2 CW 36-38: 2 weeks (14 days)  -->
@@ -93,8 +106,16 @@ funtion_heatmap_delay("Totesfaelle")
 <!--   kable_classic(full_width = F, html_font = "Cambria") -->
 <!-- ``` -->
 
-```{r, echo=FALSE, warning=FALSE, fig.height =45 , fig.width = 25,message=FALSE}
-function_plot_re()
+
+```{r ,echo=FALSE,message=FALSE, warning=FALSE}
+ function_reproductive_table() %>%
+  kbl() %>%
+  kable_classic_2() %>%
+  column_spec(3, width = "10em") %>%
+  column_spec(4, width = "10em") %>%
+  column_spec(5, width = "10em")  %>%
+  column_spec(6, width = "10em") %>%
+  column_spec(7, width = "10em")
 ```
 
 
@@ -115,9 +136,17 @@ An RIRR greater than 1 indicates an acceleration of epidemic growth, whereas an 
 knitr::include_graphics("../output/RRIR_Canton.png")
 ```
 
-
 ## City of Zurich
 ```{r echo=FALSE, out.width = '100%'}
 knitr::include_graphics("../output/RRIR_City.png")
 ```
 
+## Supplement
+
+```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 8,message=FALSE}
+funtion_heatmap_delay("Faelle")
+```
+
+```{r, echo=FALSE, warning=FALSE, fig.height =8 , fig.width = 8,message=FALSE}
+funtion_heatmap_delay("Totesfaelle")
+```
