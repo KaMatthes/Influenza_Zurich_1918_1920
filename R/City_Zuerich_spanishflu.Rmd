@@ -65,6 +65,11 @@ function_reproductive_plot(Plot_var="Hospital")
 ```
 
 
+```{r, echo=FALSE, warning=FALSE, fig.height =10 , fig.width = 25,message=FALSE}
+function_plot_swiss_re_spa()
+```
+
+
 # Interventions
 ```{r echo=FALSE, out.width = '100%'}
 knitr::include_graphics("../data/Tabelle Interventionen.png")

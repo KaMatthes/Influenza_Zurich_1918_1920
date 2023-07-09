@@ -90,12 +90,12 @@ Figure_curve <- ggplot() +
   theme(axis.text.y = element_text(size=text_size),
     panel.grid.major.x = element_blank(),
     panel.grid.minor.x = element_blank(),
-    legend.position = c(.7, .85),
+    legend.position = c(.07, .85),
     legend.text=element_text(size=legend_size),
     # legend.key.size = unit(1.5, 'cm'),
     # legend.spacing.x = unit(1.5, 'cm'),
     axis.text.x = element_text(size=size_axis_x,angle=45,hjust=1),
-    axis.title.x  = element_blank(),
+    axis.title.x  = element_text(size=axis_legend_size),
     axis.title.y  = element_text(size=axis_legend_size),
     title =element_text(size=title_size))
 }
@@ -117,12 +117,12 @@ Figure_curve <- ggplot() +
   theme(axis.text.y = element_text(size=text_size),
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
-        legend.position = c(.7, .85),
+        legend.position = c(.1, .85),
         legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
         axis.text.x = element_text(size=size_axis_x,angle=45,hjust=1),
-        axis.title.x  = element_blank(),
+        axis.title.x  = element_text(size=axis_legend_size),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
 }
@@ -130,7 +130,7 @@ Figure_curve <- ggplot() +
 else if(Plot_var=="Mortality") {
   
 Figure_curve <- ggplot() +
-  geom_line(data=dataZH ,aes(y=death_inc,x= Reporting,col="Death"), lwd=lwd_size )+
+  geom_line(data=dataZH ,aes(y=death_inc,x= Reporting,col="City of Zurich"), lwd=lwd_size )+
   # geom_vline(data=table_legend, aes(xintercept = date), linetype = "dashed",lwd=lwd_size_vline) + 
   scale_x_date( date_labels ='%W / %y', date_breaks="2 weeks",limits =c(min(lims5), max(lims6))) +
   scale_color_manual(name = "",
@@ -144,12 +144,12 @@ Figure_curve <- ggplot() +
   theme(axis.text.y = element_text(size=text_size),
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
-        legend.position = c(.7, .85),
+        legend.position = c(.1, .85),
         legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
         axis.text.x = element_text(size=size_axis_x,angle=45,hjust=1),
-        axis.title.x  = element_blank(),
+        axis.title.x  = element_text(size=axis_legend_size),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
 }
@@ -167,7 +167,7 @@ Figure_curve <- ggplot() +
   scale_fill_manual("",
                    breaks=c("Fewer than expected","More than expected","Significant more"),
                     values =c("#a6d96a",col_pal[2],"#ca0020")) +
-  xlab("Month/Year")+
+  xlab("Calendar week/Year")+
   ylab("Relatitve excess mortality in %")+
   ggtitle("Relative Excess Mortality") +
   theme_bw()+
@@ -175,19 +175,19 @@ Figure_curve <- ggplot() +
   theme(axis.text.y = element_text(size=text_size),
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
-        legend.position = c(.7, .85),
+        legend.position = c(.1, .85),
         legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
         axis.text.x = element_text(size=size_axis_x,angle=45,hjust=1),
-        axis.title.x  = element_blank(),
+        axis.title.x  = element_text(size=axis_legend_size),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
 }
 
 else if(Plot_var=="Hospital") {
 Figure_curve <- ggplot() +
-  geom_line(data=dataZH,aes(y=AndereInc,x=Reporting,colour="Infections incl. influenza"), lwd=lwd_size ) +
+  geom_line(data=dataZH,aes(y=AndereInc,x=Reporting,colour="Canton Zurich"), lwd=lwd_size ) +
   # geom_line(data=dataZH,aes(y= HospInc,x=as.POSIXct(Reporting),colour="Total"), lwd=lwd_size ) +
   # geom_vline(data=table_legend, aes(xintercept = date), linetype = "dashed",lwd=lwd_size_vline) + 
   scale_x_date( date_labels ='%W / %y', date_breaks="2 weeks",limits =c(min(lims5), max(lims6))) +
@@ -201,12 +201,12 @@ Figure_curve <- ggplot() +
   theme(axis.text.y = element_text(size=text_size),
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
-        legend.position = c(.7, .85),
+        legend.position = c(.1, .85),
         legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
         axis.text.x = element_text(size=size_axis_x,angle=45,hjust=1),
-        axis.title.x  = element_blank(),
+        axis.title.x  = element_text(size=axis_legend_size),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
 }

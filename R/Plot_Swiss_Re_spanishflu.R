@@ -215,7 +215,7 @@ plot_swiss_re <- ggplot() +
   geom_line(data=swiss_re ,aes(y=Krank_ratio_W,x= date,colour="Female"), lwd=lwd_size)  +
   geom_line(data=swiss_re ,aes(y=Krank_ratio_M,x= date,colour="Male"), lwd=lwd_size)  +
 
-  geom_vline(data=table_legend, aes(xintercept = date), linetype = "dashed") + 
+  # geom_vline(data=table_legend, aes(xintercept = date), linetype = "dashed") + 
   scale_x_date(labels = date_format("%m/%y"), breaks = date_breaks("1 month"),limits =c(min(lims5), max(lims6))) +
 
   scale_color_manual(name = "",
@@ -228,14 +228,14 @@ plot_swiss_re <- ggplot() +
   theme(axis.text.y = element_text(size=text_size),
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
-        legend.position = c(.7, .85),
-        legend.text=element_text(size=15),
+        legend.position = c(.07, .85),
+        legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
-        axis.text.x = element_text(size=10,angle=45,hjust=1),
+        axis.text.x = element_text(size=size_axis_x,angle=45,hjust=1),
+        axis.title.x  = element_text(size=axis_legend_size),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
-
 # 
 # Figure_Illness_w <- ggplot() +
 #   annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +

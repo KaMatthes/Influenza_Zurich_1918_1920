@@ -178,7 +178,7 @@ Figure_Re <- ggplot() +
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
         axis.text.x = element_text(size=size_axis_x,angle=45,hjust=1),
-        axis.title.x  = element_blank(),
+        axis.title.x  = element_text(size=axis_legend_size),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
 }
@@ -224,10 +224,9 @@ Figure_Re <- ggplot(data=Data_plot[Data_plot$data=="Total death",]) +
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
         axis.text.x = element_text(size=size_axis_x,angle=45,hjust=1),
-        axis.title.x  = element_blank(),
+        axis.title.x  = element_text(size=axis_legend_size),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
-
 }
 
 else if(Plot_var=="Hospital") {
@@ -269,7 +268,7 @@ Figure_Re<- ggplot(data=Data_plot[Data_plot$data=="Hospitalisation Infection inc
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
         axis.text.x = element_text(size=size_axis_x,angle=45,hjust=1),
-        axis.title.x  = element_blank(),
+        axis.title.x  = element_text(size=axis_legend_size),
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
 }
