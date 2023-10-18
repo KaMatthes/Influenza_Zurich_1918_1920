@@ -90,10 +90,10 @@ datlim2 <- as.Date(ymd("1918-08-17"))
 datlim3 <- as.Date(ymd("1918-09-07"))
 datlim4 <- as.Date(ymd("1919-01-11"))
 
-datlim5 <- as.POSIXct(ymd("1919-02-08"))
-datlim6 <- as.POSIXct(ymd("1919-05-10"))
+datlim5 <-  as.Date(ymd("1919-01-25"))
+datlim6 <-  as.Date(ymd("1919-04-05"))
 
-datlim7 <-as.Date(ymd("1920-01-24"))
+datlim7 <-as.Date(ymd("1919-12-20"))
 datlim8 <- as.Date(ymd("1920-03-20"))
 
 

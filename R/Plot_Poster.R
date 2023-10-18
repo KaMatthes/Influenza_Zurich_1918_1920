@@ -295,6 +295,7 @@ Figure_inc <- ggplot() +
   geom_label(data=table_legend, aes(y=Y_value, x=date,  label= key,colour = col_value), size=3,show.legend = FALSE) +
   annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
+  annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   # geom_textbox(data=text_plot,aes(x=x, y=y, label=label), width = grid::unit(0.45, "npc"),
   #              height = grid::unit(0.40, "npc"), size=4) +
@@ -309,7 +310,7 @@ Figure_inc <- ggplot() +
   theme(axis.text.y = element_text(size=text_size),
     panel.grid.major.x = element_blank(),
     panel.grid.minor.x = element_blank(),
-    legend.position = c(.65, .85),
+    legend.position = c(.62, .82),
     legend.text=element_text(size=legend_size),
     # legend.key.size = unit(1.5, 'cm'),
     # legend.spacing.x = unit(1.5, 'cm'),
@@ -349,6 +350,7 @@ Figure_mort <- ggplot() +
   scale_x_date(labels = date_format("%m/%y"), breaks = date_breaks("1 month"),limits =c(min(lims5), max(lims6))) +
   annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
+  annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   scale_color_manual(name = "",
                    values =col_pal[1])+
@@ -361,7 +363,7 @@ Figure_mort <- ggplot() +
   theme(axis.text.y = element_text(size=text_size),
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
-        legend.position = c(.65, .85),
+        legend.position = c(.62, .82),
         legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
@@ -382,7 +384,7 @@ Figure_excess <- ggplot() +
   scale_y_continuous(labels = scales::percent)+
   annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
+  annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   scale_fill_manual("",
                    breaks=c("Fewer than expected","More than expected","Significant more"),
@@ -395,7 +397,7 @@ Figure_excess <- ggplot() +
   theme(axis.text.y = element_text(size=text_size),
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
-        legend.position = c(.65, .85),
+        legend.position = c(.62, .82),
         legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
@@ -411,6 +413,7 @@ Figure_hosp <- ggplot() +
   scale_x_date(labels = date_format("%m/%y"), breaks = date_breaks("1 month"),limits =c(min(lims5), max(lims6))) +
   annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
+  annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   scale_color_manual(name = "",
                      values = c(col_pal[4]))+
@@ -422,7 +425,7 @@ Figure_hosp <- ggplot() +
   theme(axis.text.y = element_text(size=text_size),
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
-        legend.position = c(.65, .85),
+        legend.position = c(.62, .82),
         legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
@@ -436,6 +439,7 @@ plot_swiss_re <- ggplot() +
   geom_line(data=swiss_re ,aes(y=Krank_ratio_M/100,x= date,colour="Male"), lwd=lwd_size)  +
   annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
+  annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   # geom_vline(data=table_legend, aes(xintercept = date), linetype = "dashed") + 
   scale_x_date(labels = date_format("%m/%y"), breaks = date_breaks("1 month"),limits =c(min(lims5), max(lims6))) +
@@ -451,7 +455,7 @@ plot_swiss_re <- ggplot() +
   theme(axis.text.y = element_text(size=text_size),
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
-        legend.position = c(.65, .85),
+        legend.position = c(.62, .82),
         legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),
@@ -467,6 +471,7 @@ plot_delays_dis <- ggplot(data=data_delay, aes(x=as.Date(Meldung,format = "%Y-%m
   stat_summary(fun.y=mean, geom="point",position=pd, size=4) +
   annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
+  annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   scale_x_date(labels = date_format("%m/%y"), breaks = date_breaks("1 month"),limits =c(min(lims5), max(lims6))) +
   
@@ -478,7 +483,7 @@ plot_delays_dis <- ggplot(data=data_delay, aes(x=as.Date(Meldung,format = "%Y-%m
   theme(axis.text.y = element_text(size=text_size),
         panel.grid.major.x = element_blank(),
         panel.grid.minor.x = element_blank(),
-        legend.position = c(.65, .85),
+        legend.position = c(.62, .82),
         legend.text=element_text(size=legend_size),
         # legend.key.size = unit(1.5, 'cm'),
         # legend.spacing.x = unit(1.5, 'cm'),

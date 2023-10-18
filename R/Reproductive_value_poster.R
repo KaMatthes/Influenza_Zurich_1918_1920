@@ -158,6 +158,7 @@ plot_Reproductive <- ggplot() +
               linetype=2, alpha=0.3) +
   annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
+  annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   scale_x_date(labels = date_format("%m/%y"), breaks = date_breaks("1 month"),limits =c(min(lims5), max(lims6))) +
   scale_color_manual(name = "",
