@@ -84,20 +84,21 @@ lims_swiss_re1 <- as.POSIXct(ymd("1909-07-31"))
 lims_swiss_re2 <- as.POSIXct(ymd("1930-12-31"))    
 
 
-datlim1 <- as.POSIXct(ymd("1918-06-29"))
-datlim2 <- as.POSIXct(ymd("1919-06-07"))
+datlim1 <- as.Date(ymd("1918-06-29"))
+datlim2 <- as.Date(ymd("1918-08-17"))
 
-datlim3 <- as.POSIXct(ymd("1918-09-14"))
-datlim4 <- as.POSIXct(ymd("1918-12-21"))
+datlim3 <- as.Date(ymd("1918-09-07"))
+datlim4 <- as.Date(ymd("1919-01-11"))
 
 datlim5 <- as.POSIXct(ymd("1919-02-08"))
 datlim6 <- as.POSIXct(ymd("1919-05-10"))
 
-datlim7 <- as.POSIXct(ymd("1920-01-10"))
-datlim8 <- as.POSIXct(ymd("1920-05-22"))
+datlim7 <-as.Date(ymd("1920-01-24"))
+datlim8 <- as.Date(ymd("1920-03-20"))
 
 
-# 
+
+
 
 
 # create data
@@ -148,23 +149,44 @@ date_label <- tibble(
 
 
 
+# color_label <- tibble(
+#   "A" = "City of Zurich",
+#   "B" = "Federal state",
+#   "C" = "Canton Zurich",
+#   "D" = "City of Zurich",
+#   "E" = "Canton Zurich",
+#   "F" = "City of Zurich",
+#   "G" = "Canton Zurich",
+#   "H" = "City of Zurich",
+#   "I" = "Federal state",
+#   "J" = "Federal state",
+#   "K" = "Canton Zurich",
+#   "L" = "City of Zurich",
+#   "M" = "City of Zurich",
+#   "N" = "Canton Zurich",
+#   "O" = "Canton Zurich",
+#   "P" = "Federal state",
+#   "Q" = "Canton Zurich") %>%
+#   gather(.,key, col_value, A:Q, factor_key=TRUE)
+
+
 color_label <- tibble(
   "A" = "City of Zurich",
-  "B" = "Federal state",
+  "B" = "Canton Zurich",
   "C" = "Canton Zurich",
   "D" = "City of Zurich",
   "E" = "Canton Zurich",
   "F" = "City of Zurich",
   "G" = "Canton Zurich",
   "H" = "City of Zurich",
-  "I" = "Federal state",
-  "J" = "Federal state",
+  "I" = "Canton Zurich",
+  "J" = "Canton Zurich",
   "K" = "Canton Zurich",
   "L" = "City of Zurich",
   "M" = "City of Zurich",
   "N" = "Canton Zurich",
   "O" = "Canton Zurich",
-  "P" = "Federal state",
+  "P" = "Canton Zurich",
   "Q" = "Canton Zurich") %>%
   gather(.,key, col_value, A:Q, factor_key=TRUE)
 
