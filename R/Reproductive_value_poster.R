@@ -167,8 +167,8 @@ plot_Reproductive <- ggplot() +
                      values = c(col_pal[4], col_pal[1])) +
   # coord_cartesian(ylim=c(0, 2.5))+
   xlab("Month/Year")+
-  ylab("Reproduction value")+
-  ggtitle("Reproduction values of reported flu cases") +
+  ylab("Reproduction number")+
+  ggtitle("Reproduction numbers of reported flu cases") +
   theme_bw()+
   #theme_light(base_size = 16)+
   theme(axis.text.y = element_text(size=text_size),

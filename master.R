@@ -56,7 +56,7 @@ lwd_size <- 1.8
 lwd_size_vline <- 0.8
 text_size <- 25
 text_size_heat_map <- 15
-legend_size <- 25
+legend_size <- 15
 axis_legend_size <- 25
 axis_legend_size_heat_map <- 15
 title_size <- 20
@@ -97,6 +97,7 @@ datlim7 <-as.Date(ymd("1919-12-20"))
 datlim8 <- as.Date(ymd("1920-03-20"))
 
 
+datlim9 <- as.Date(ymd("1918-07-15"))
 
 
 
