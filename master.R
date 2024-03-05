@@ -18,6 +18,7 @@ library(spdep)
 library(rgdal)
 library(rgeos)
 # library(tmap)
+
 # library(tmaptools)
 library(spgwr)
 library(grid)
