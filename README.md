@@ -13,7 +13,7 @@ The data is public available via Zenodo:
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7986584.svg)](https://doi.org/10.5281/zenodo.7986584)
 <br >
 
-
+The data from Swiss Re (reinsurance company) not public available and belongs to the Swiss Re Ltd insurance Company.
 
 [![CC BY-NC-SA 4.0][cc-by-nc-sa-image]][cc-by-nc-sa]
 
