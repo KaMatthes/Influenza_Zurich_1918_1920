@@ -1,12 +1,9 @@
-.libPaths(c("H:/Documents/R/win-library/4.2", "C:/Program Files/R/R-4.2.2/library"))
-
 library(vcdExtra)
 library(tidyverse)
 library(readxl)
 library(openxlsx)
 library(lubridate)
 library(ggplot2)
-library(rgdal)
 library(zoo)
 library(foreach)
 library(arsenal)
@@ -15,8 +12,8 @@ library(kableExtra)
 library(sf)
 library(sp)
 library(spdep)
-library(rgdal)
-library(rgeos)
+# library(rgdal)
+# library(rgeos)
 # library(tmap)
 
 # library(tmaptools)
@@ -25,7 +22,6 @@ library(grid)
 library(gridExtra)
 library(ggpattern)
 library(INLA)
-library(maptools)
 library(colorspace)
 library(viridis)
 library(RColorBrewer)
@@ -238,41 +234,3 @@ text_plot <- data.frame(
   label = label_text
 )
 
-
-
-
-
-# load scripts
-
-source("R/Plot_weekly_tmp.R") 
-source("R/Plot_weekly_spanishflu.R") 
-source("R/Plot_monthly.R") 
-source("R/Plot_Swiss_Re.R") 
-source("R/Plot_Swiss_Re_spanishflu.R") 
-source("R/Plot_yearly.R") 
-source("R/Plot_Swiss_Re_yearly.R") 
-source("R/excess_mortality_weekly_check.R") 
-source("R/excess_mortality_monthly_check.R") 
-source("R/excess_mortality_year_check.R") 
-source("R/Meldungen_Erkrankungen.R") 
-source("R/delay.R") 
-source("R/delay_time.R") 
-source("R/delay_distribution.R") 
-source("R/Reproductive_value_nb.R") 
-source("R/Reproductive_value_table.R") 
-# source("R/Plot_Geburten.R")
-# source("R/Plot_Swiss_Re.R")
-# source("R/TS_Marriages.R")
-# source("R/TS_Birth.R")
-# source("R/TS_Marriage_Birth.R")
-# source("R/TS_stillborn.R")
-
-
-# render(paste0("R/City_Zuerich_influenza.Rmd"), output_file = paste0("../output/",today(),"_Report_City_Zurich_influenza.html"))
-
-
-
-render(paste0("R/City_Zuerich_spanishflu.Rmd"), output_file = paste0("../output/",today(),"_Report_City_Zurich_spanishflu.html"))
-
-# 
-# render(paste0("R/City_Zuerich.Rmd"), output_file = paste0("../output/",today(),"_Report_City_Zurich.html"))
