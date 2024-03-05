@@ -10,6 +10,7 @@ Ziegler E, Matthes KM, Middelkamp PW, Schünemann V, Althaus CL, Rühli F, Matth
 
 The data is public available via Zenodo:
 <br >
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7986584.svg)](https://doi.org/10.5281/zenodo.7986584)
 <br >
 
 
