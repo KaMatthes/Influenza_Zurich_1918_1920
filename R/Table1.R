@@ -1,7 +1,5 @@
-function_reproductive_table <- function() {
- 
-  load("../data/dataZH.RData")
-  load("../data/data_meldungen.RData")
+  load("data/dataZH.RData")
+  load("data/data_meldungen.RData")
   
   
   begin <- ymd(19180629)
@@ -241,7 +239,7 @@ function_reproductive_table <- function() {
     filter(Date_week == "1918-09-21" | Date_week == "1918-10-05")%>%
     select(Date_week, iso_cw, Year, Re, Re_lower, Re_upper, place, data)
 
-  Reproductive_table <- rbind(Re_canton, Re_zh,Re_death, Re_hosp) %>%
+Table1 <- rbind(Re_canton, Re_zh,Re_death, Re_hosp) %>%
     left_join(data.wave) %>%
     filter(Date_week == "1918-07-13" | Date_week == "1918-09-21" | Date_week == "1918-10-05"|
              Date_week == "1919-03-01" | Date_week == " 1920-01-31") %>%
@@ -256,10 +254,8 @@ function_reproductive_table <- function() {
     spread(., data, `R [95% CI]`) %>%
     mutate(`Report cases City` = ifelse(is.na(`Report cases City`), "-", `Report cases City`),
            `Report death` = ifelse(is.na(`Report death`), "-", `Report death`)) %>%
-    select(Year,Cw, `Cases Canton` = `Cases Canton`, `Cases City` = `Cases City`, `Total deaths City`,
+    select(Year,Cw, `Cases Canton` = `Cases Canton`, `Cases City` = `Cases City`,
            `Report cases City`, `Influenza death City` = `Report death`, `Hospitalisation Canton`)
-  
-  return(Reproductive_table )
-  
-  
-}
+
+write.xlsx(Table1,file="output/Table1.xlsx",rowNames=FALSE, overwrite = TRUE)
+ 

@@ -110,7 +110,7 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
            inc_UL = UL/pop.weekly*100000)
   
   plot_check <- ggplot()+
-    geom_line(data=data_cases, aes(x=timeID,, y=inc_cases, col="notified cases"),lwd= 1) +
+    geom_line(data=data_cases, aes(x=timeID,y=inc_cases, col="notified cases"),lwd= 1) +
     geom_line(data=data_cases, aes(x=timeID, y=inc_fit, col="fitting values"), lwd=1.5) +
     geom_ribbon(data=data_cases,aes(ymin=inc_LL, ymax=inc_UL,x=timeID,y=inc_fit), linetype=2, alpha=0.2) +
     # coord_cartesian(ylim=c(0, 100)) +

@@ -1,5 +1,3 @@
-
-
   load("data/dataZH.RData")
 
   load("data/expected_death_inla_weekly1918.RData")
@@ -34,7 +32,7 @@ dataZH <- dataZH %>%
 CityZH_pop <- dataZH %>%
   select(Year, iso_cw,pop.weekly )
 
-data_deaths_inf  <-  read_excel("data_raw/Delay_Meldungen.xlsx", sheet="Totesfaelle") %>%
+data_deaths_inf  <-  read_excel("data/Delay_Meldungen.xlsx", sheet="Totesfaelle") %>%
   mutate(Meldung = ymd(Meldung),
          Erkrankung = ymd(Erkrankung),
          days_delay = as.numeric(Meldung-Erkrankung),
@@ -59,7 +57,7 @@ data_deaths_inf  <-  read_excel("data_raw/Delay_Meldungen.xlsx", sheet="Totesfae
   mutate(death_inf_inc = Meldung_sum/pop.weekly*10000)
   
 
-data_delay_faelle <-  read_excel("data_raw/Delay_Meldungen.xlsx", sheet="Faelle") %>%
+data_delay_faelle <-  read_excel("data/Delay_Meldungen.xlsx", sheet="Faelle") %>%
   expand.dft(., freq="Number")  %>%
   mutate(Number= 1,
          Meldung = ymd(Meldung),
@@ -77,7 +75,7 @@ data_delay_faelle <-  read_excel("data_raw/Delay_Meldungen.xlsx", sheet="Faelle"
   filter(Year==1918) %>%
   mutate(Var="Cases")
 
-data_delay_deaths  <-  read_excel("data_raw/Delay_Meldungen.xlsx", sheet="Totesfaelle") %>%
+data_delay_deaths  <-  read_excel("data/Delay_Meldungen.xlsx", sheet="Totesfaelle") %>%
   expand.dft(., freq="Number")  %>%
   mutate(Number= 1,
          Meldung = ymd(Meldung),
@@ -98,7 +96,7 @@ data_delay_deaths  <-  read_excel("data_raw/Delay_Meldungen.xlsx", sheet="Totesf
 data_delay <- data_delay_faelle %>%
   rbind(data_delay_deaths)
 
-swiss_re <-  read_excel("data_raw/Master_SwissRE.xlsx") %>%
+swiss_re <-  read_excel("data/Data_SwissRE.xlsx") %>%
   rename(Datum =`...1`,
          Kassa_Wert_Ar_M = `Kassa & Wertschriften`,
          Kassa_Wert_Ar_W = `...3`,
@@ -282,7 +280,6 @@ swiss_re <-  read_excel("data_raw/Master_SwissRE.xlsx") %>%
 
 
 Figure_inc <- ggplot() +
-
   geom_line(data=dataZH ,aes(y=infl_inc ,x= Reporting,col="City of Zurich"), lwd=lwd_size)+
   geom_line(data=dataZH,aes(y=infl_inc_canton,x=Reporting,col="Canton Zurich"), lwd=lwd_size ) +
   scale_x_date(labels = date_format("%m/%y"), breaks = date_breaks("1 month"),limits =c(min(lims5), max(lims6))) +
@@ -437,13 +434,13 @@ plot_delays_dis <- ggplot(data=data_delay, aes(x=as.Date(Meldung,format = "%Y-%m
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
 
-plot_together <- cowplot::plot_grid(Figure_inc,NULL,Figure_hosp,NULL,Figure_mort,NULL, Figure_excess,NULL,plot_swiss_re,NULL,
+Figure1 <- cowplot::plot_grid(Figure_inc,NULL,Figure_hosp,NULL,Figure_mort,NULL, Figure_excess,NULL,plot_swiss_re,NULL,
                                     plot_delays_dis,
                                   ncol=1, nrow=11, align="hv",
                                   rel_heights = c(1,-0.1,1,-0.1,1,-0.1,1,-0.1,1,-0.1,1))
 
 
-cowplot::save_plot(paste0("output/plot_together.pdf"), plot_together,base_height=36,base_width=15)
+cowplot::save_plot(paste0("output/Figure1.pdf"), Figure1,base_height=36,base_width=15)
 
 
 

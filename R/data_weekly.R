@@ -1,5 +1,5 @@
-datacases <- read_excel("data_raw/Master_Zuerich.xlsx", sheet="WeeksMaster2") 
-datapop <-  read_excel("data_raw/Master_Zuerich.xlsx", sheet="Population") 
+datacases <- read_excel("data_raw/Data_Zuerich.xlsx", sheet="WeeksMaster2") 
+datapop <-  read_excel("data_raw/Data_Zuerich.xlsx", sheet="Population") 
 
 
 dataZH <- datacases %>%
@@ -36,24 +36,26 @@ dataZH <- dataZH %>%
   left_join(pop_weekly)
 
 
-dat.temp <- read.table("data_raw/order_108443_data.txt",header=TRUE,sep=";")
+# Temperatur
 
-dat.temp <- dat.temp %>%
-  mutate(datum = ymd(time),
-         Year = year(datum),
-         iso_cw =  isoweek(datum),
-         Cw_year= paste0(Year,"/W",iso_cw ),
-         days_maxium = ifelse(tre200dx>=30, 1, 0),
-         days_minimum = ifelse(tre200dn<=-10, 1, 0)) %>%
-  group_by(Cw_year) %>%
-  summarise(mean_maxium = mean(tre200dx ),
-            mean_minimum = mean(tre200dn),
-            mean_mean = mean(tre200d0),
-            days_max = sum(days_maxium),
-            days_min = sum(days_minimum))
-
-dataZH  <- dataZH %>%
-  full_join(dat.temp)
+# dat.temp <- read.table("data_raw/order_108443_data.txt",header=TRUE,sep=";")
+# 
+# dat.temp <- dat.temp %>%
+#   mutate(datum = ymd(time),
+#          Year = year(datum),
+#          iso_cw =  isoweek(datum),
+#          Cw_year= paste0(Year,"/W",iso_cw ),
+#          days_maxium = ifelse(tre200dx>=30, 1, 0),
+#          days_minimum = ifelse(tre200dn<=-10, 1, 0)) %>%
+#   group_by(Cw_year) %>%
+#   summarise(mean_maxium = mean(tre200dx ),
+#             mean_minimum = mean(tre200dn),
+#             mean_mean = mean(tre200d0),
+#             days_max = sum(days_maxium),
+#             days_min = sum(days_minimum))
+# 
+# dataZH  <- dataZH %>%
+#   full_join(dat.temp)
 
 write.xlsx(dataZH,"data/dataZH.xlsx", rowNames=FALSE, overwrite = TRUE)
 save(dataZH,file="data/dataZH.RData")

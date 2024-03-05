@@ -1,6 +1,6 @@
 function_plot_swiss_re <- function() {
 
-swiss_re <-  read_excel("../data_raw/Master_SwissRE.xlsx") %>%
+swiss_re <-  read_excel("data_raw/Master_SwissRE.xlsx") %>%
   rename(Datum =`...1`,
          Kassa_Wert_Ar_M = `Kassa & Wertschriften`,
          Kassa_Wert_Ar_W = `...3`,
@@ -132,10 +132,8 @@ swiss_re <-  read_excel("../data_raw/Master_SwissRE.xlsx") %>%
          Zahlungsverkehr_K_M = `...130`,
          Zahlungsverkehr_K_W = `...131`,
          Zahlungsverkehr_Ab_M = `...132`,
-         Zahlungsverkehr_Ab_W = `...133`,
-         
-         ) %>%
-  select(-`...8`,-`...15`,-`...22`,-`...29`,-`...36`,-`...43`,-`...50`,-`...57`,-`...64`, -`...71`,
+         Zahlungsverkehr_Ab_W = `...133`) %>%
+  dplyr::select(-`...8`,-`...15`,-`...22`,-`...29`,-`...36`,-`...43`,-`...50`,-`...57`,-`...64`, -`...71`,
          -`...78`,  -`...85`,  -`...92`,  -`...99`, -`...106`, -`...113`, -`...120`, -`...127`) %>%
   slice(-1) %>%
   mutate_if(is.character, as.numeric) %>%
@@ -179,8 +177,11 @@ swiss_re <-  read_excel("../data_raw/Master_SwissRE.xlsx") %>%
          Absenz_wo_ratio_M =  (Absenz_wo_Kr_M /Arbeit_M)*100,
          Absenz_wo_ratio_W =  (Absenz_wo_Kr_W /Arbeit_W)*100,
          Absenz_wo_ratio_t =  (Absenz_wo_Kr_t/Arbeit_t)*100,
-         date = as.Date(Datum, origin = "1900-01-01"))
-         
+         date = as.Date(Datum, origin = "1900-01-01")) %>%
+  dplyr::select(date,Krank_ratio_W,Krank_ratio_M)
+
+write.xlsx(swiss_re,paste0("data/swiss_re.xlsx"), rowNames=FALSE, overwrite = TRUE)
+
 plot_swiss_re <- ggplot() +
   annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +
   # annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.2,fill="grey40") +

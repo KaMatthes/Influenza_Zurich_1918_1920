@@ -9,18 +9,8 @@ dat.excess <- dataZH %>%
   select(Year, Month,iso_cw, CityDeathsTotal,pop.weekly ) %>%
   rename(death=CityDeathsTotal) %>%
   mutate(death = as.integer(round(death,0))) %>%
-  # mutate(Year = as.factor(Year),
-  #        Month = as.factor(Month)) %>%
   filter(!Year==1909) %>%
   filter(!Year==1961) %>%
-  # arrange(Year, Month,iso_cw) %>%
-  # group_by(Year,Month,iso_cw) %>%
-  # mutate(timeID = cur_group_id()) %>%
-  # arrange(timeID) %>%
-  # ungroup() %>%
-  # mutate(MonthID = Month,
-  #        YearID = Year,
-  #        WeekID =iso_cw) %>%
   filter(Year >=Year_min & Year <=Year_max )
 
 
@@ -33,18 +23,9 @@ control.family <- inla.set.control.family.default()
 
 hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
 
-  # formula <- death ~ 1 + offset(log(pop.weekly))  +  as.factor(Month) +
-  #   f(YearID, model='iid',hyper=hyper.iid) +
-  #   # f(MonthID, model='iid',hyper=hyper.iid) +
-  #   f(timeID, model='rw1',scale.model = T,cyclic = TRUE, hyper=hyper.iid)
-  # # f(timeID, model='seasonal',season.length=12)
-  
-  
-  formula <- death ~ 1 + offset(log(pop.weekly))  +
-    f(WeekID, model='iid',hyper=hyper.iid) +
+formula <- death ~ -1 + offset(log(pop.weekly))  +
     f(seasID, model='seasonal', season.length =12) +
-    f(timeID, model='rw1',scale.model = T,cyclic = TRUE, hyper=hyper.iid)
-  # f(timeID, model='seasonal',season.length=12)
+    f(timeID, model='rw1',constr = FALSE)
 
   expected_deaths <- list()
   
@@ -63,7 +44,7 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
         arrange(timeID) %>%
         ungroup() %>%
         mutate(
-               MonthID = Month,
+               # MonthID = Month,
                seasID = Month,
                YearID = Year,
                WeekID =iso_cw) 
@@ -102,18 +83,14 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
                       # num.threads = round(parallel::detectCores() * .2),
                      control.predictor = list(compute = TRUE, link = 1))
   
-    
-    # inla.mod$summary.random$WeekID %>%
-    #   ggplot() +
-    #   geom_line(aes(ID, mean)) +
-    #   geom_ribbon(aes(ID, ymin = `0.025quant`, ymax = `0.975quant`), alpha = 0.3)
-    # 
+  
   post.samples <- inla.posterior.sample(n = 1000, result = inla.mod, seed=20220421)
   predlist <- do.call(cbind, lapply(post.samples, function(X)
     exp(X$latent[startsWith(rownames(X$latent), "Pred")])))
   
   rate.drawsMed<-array(unlist( predlist), dim=c(dim(reg_data)[1], 1000)); dim(rate.drawsMed) 
   dM = as.data.frame(rate.drawsMed)
+  
   # Add to the data and save
   Data= cbind(reg_data,dM)
   
@@ -144,20 +121,14 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
   write.xlsx(expected_deaths,paste0("data/expected_death_inla_weekly",Year_Pan,".xlsx"), rowNames=FALSE, overwrite = TRUE)
   save(expected_deaths,file=paste0("data/expected_death_inla_weekly",Year_Pan,".RData"))
 
-  # write.xlsx(expected_deaths,paste0("data/expected_death_inla_all_years.xlsx"), row.names=FALSE, overwrite = TRUE)
-  # save(expected_deaths,file=paste0("data/expected_death_inla_all_years.RData"))
-  
-  # write.xlsx(  mean.samples,paste0("data/mean.samples.xlsx"), rowNames=FALSE, overwrite = TRUE)
-  # save(  mean.samples,file=paste0("data/mean.samples.RData"))
   }
 
 
 function_inla_total(Year_Pan=1918, Year_max=1919, Year_min=1910)
-
 function_inla_total(Year_Pan=1920, Year_max=1921, Year_min=1915)
 
-function_inla_total(Year_Pan=1929, Year_max=1943, Year_min=1924)
-function_inla_total(Year_Pan=1944, Year_max=1960, Year_min=1936)
+# function_inla_total(Year_Pan=1929, Year_max=1943, Year_min=1924)
+# function_inla_total(Year_Pan=1944, Year_max=1960, Year_min=1936)
 
 
 

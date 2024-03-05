@@ -1,6 +1,6 @@
-datacases <- read_excel("data_raw/Master_Zuerich.xlsx", sheet="WeeksMaster2")
-datacases1962 <-  read_excel("data_raw/Master_Zuerich.xlsx", sheet="DeathsCityMonths6169") 
-datapop <-  read_excel("data_raw/Master_Zuerich.xlsx", sheet="Population") 
+datacases <- read_excel("data_raw/Data_Zuerich.xlsx", sheet="WeeksMaster2")
+datacases1962 <-  read_excel("data_raw/Data_Zuerich.xlsx", sheet="DeathsCityMonths6169") 
+datapop <-  read_excel("data_raw/Data_Zuerich.xlsx", sheet="Population") 
 
            
          
@@ -50,23 +50,24 @@ pop_month <- dataZH_m %>%
 dataZH_m <- dataZH_m %>%
   left_join(pop_month)
 
+# Temperatur 
 
-dat.temp <- read.table("data_raw/order_108443_data.txt",header=TRUE,sep=";")
-
-dat.temp <- dat.temp %>%
-  mutate(datum = ymd(time),
-         Year = year(datum),
-         Month = month(datum),
-         days_maxium = ifelse(tre200dx>=30, 1, 0),
-         days_minimum = ifelse(tre200dn<=-10, 1, 0)) %>%
-  group_by(Year, Month) %>%
-  summarise(mean_maxium = mean(tre200dx ),
-            mean_minimum = mean(tre200dn),
-            mean_mean = mean(tre200d0),
-            days_max = sum(days_maxium),
-            days_min = sum(days_minimum)) %>%
-  filter(!Year==1909) %>%
-  droplevels
+# dat.temp <- read.table("data_raw/order_108443_data.txt",header=TRUE,sep=";")
+# 
+# dat.temp <- dat.temp %>%
+#   mutate(datum = ymd(time),
+#          Year = year(datum),
+#          Month = month(datum),
+#          days_maxium = ifelse(tre200dx>=30, 1, 0),
+#          days_minimum = ifelse(tre200dn<=-10, 1, 0)) %>%
+#   group_by(Year, Month) %>%
+#   summarise(mean_maxium = mean(tre200dx ),
+#             mean_minimum = mean(tre200dn),
+#             mean_mean = mean(tre200d0),
+#             days_max = sum(days_maxium),
+#             days_min = sum(days_minimum)) %>%
+#   filter(!Year==1909) %>%
+#   droplevels
 
 dataZH_month  <- dataZH_m %>%
   full_join(dat.temp) %>%
