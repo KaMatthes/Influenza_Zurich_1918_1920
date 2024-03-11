@@ -26,8 +26,8 @@ dataZH <- dataZH %>%
          significant_dummy = ifelse(death > LL & death < UL,0,1),
          significant_dummy = as.factor( significant_dummy),
          Reporting = Reporting +2,
-         Difference_sig =  ifelse( excess_death > 0, "More than expected", "Fewer than expected"),
-         Difference_sig= replace( Difference_sig, significant_dummy==1 & Difference_sig=="More than expected", "Significant more")) 
+         Difference_sig =  ifelse( excess_death > 0, "More than expected", "Fewer than expected"))
+         # Difference_sig= replace( Difference_sig, significant_dummy==1 & Difference_sig=="More than expected", "Significant more")) 
 
 CityZH_pop <- dataZH %>%
   select(Year, iso_cw,pop.weekly )
@@ -332,7 +332,6 @@ Figure_mort <- ggplot() +
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
 
-  
 Figure_excess <- ggplot() +
  geom_col(data= dataZH,aes(x= Reporting,y = rel_excess_death/100, fill= Difference_sig)) +
   scale_x_date(labels = date_format("%m/%y"), breaks = date_breaks("1 month"),limits =c(min(lims5), max(lims6))) +
@@ -342,8 +341,8 @@ Figure_excess <- ggplot() +
   annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   scale_fill_manual("",
-                   breaks=c("Fewer than expected","More than expected","Significant more"),
-                    values =c("#a6d96a",col_pal[2],"#ca0020")) +
+                   breaks=c("Fewer than expected","More than expected"),
+                    values =c(col_pal[2],col_pal[4])) +
   xlab("Month/Year")+
   ylab("Relatitve excess mortality in %")+
   ggtitle("D) Relative excess mortality - City of Zurich (all cause mortality)") +
@@ -419,7 +418,7 @@ plot_delays_dis <- ggplot(data=data_delay, aes(x=as.Date(Meldung,format = "%Y-%m
   annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   scale_x_date(labels = date_format("%m/%y"), breaks = date_breaks("1 month"),limits =c(min(lims5), max(lims6))) +
   
-  scale_color_manual("",values=c("#a6d96a", col_pal[8])) +
+  scale_color_manual("",values=c(col_pal[2], col_pal[8])) +
   xlab("Month/Year")+
   ylab("Mean and 95% CI reporting delay in weeks") +
   ggtitle("F) Reporting delays of reported flu cases and deaths") +
