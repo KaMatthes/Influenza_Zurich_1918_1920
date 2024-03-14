@@ -3,7 +3,7 @@
 ## Paper
 
 <br >
-Ziegler E, Matthes KM, Middelkamp PW, Schünemann V, Althaus CL, Rühli F, Matthes KL, Staub K
+Ziegler E, Matthes KM, Middelkamp PW, Schünemann V, Althaus CL, Rühli F, Staub K
 <br >
 
 ## Data
