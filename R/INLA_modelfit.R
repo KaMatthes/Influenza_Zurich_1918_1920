@@ -31,9 +31,9 @@ ggplot() +
         panel.grid.minor.x = element_blank(),
         legend.position = c(.62, .82),
         legend.text=element_text(size=25),
-        axis.text.x = element_text(size=20),
-        axis.title.x  =element_text(size=20),
-        axis.title.y  = element_text(size=axis_legend_size),
+        axis.text.x = element_text(size=18),
+        axis.title.x  =element_text(size=18),
+        axis.title.y  = element_text(size=18),
         title =element_text(size=title_size))
 
 
