@@ -25,7 +25,8 @@ hyper.iid <- list(theta = list(prior="pc.prec", param=c(1, 0.01)))
 
 formula <- death ~ -1 + offset(log(pop.weekly))  +
     f(seasID, model='seasonal', season.length =12) +
-    f(timeID, model='rw1',constr = FALSE)
+    f(timeID, model='rw1',constr = FALSE) +
+    f(factor(timeID), model = "iid",hyper= hyper.iid)
 
   expected_deaths <- list()
   
@@ -124,11 +125,8 @@ formula <- death ~ -1 + offset(log(pop.weekly))  +
   }
 
 
-function_inla_total(Year_Pan=1918, Year_max=1919, Year_min=1910)
-function_inla_total(Year_Pan=1920, Year_max=1921, Year_min=1915)
+function_inla_total(Year_Pan=1918, Year_max=1920, Year_min=1913)
 
-# function_inla_total(Year_Pan=1929, Year_max=1943, Year_min=1924)
-# function_inla_total(Year_Pan=1944, Year_max=1960, Year_min=1936)
 
 
 

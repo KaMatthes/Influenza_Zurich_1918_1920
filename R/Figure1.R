@@ -1,15 +1,13 @@
   load("data/dataZH.RData")
-
   load("data/expected_death_inla_weekly1918.RData")
-  excess1918 <-   expected_deaths
-  load("data/expected_death_inla_weekly1920.RData")
-  excess1920 <-   expected_deaths
 
-
-data_excess <- rbind( excess1918,  excess1920) %>%
-  tibble() %>%
-  mutate(Cw_year= paste0(Year,"/W",iso_cw ))
-
+  
+  
+  data_excess <-  expected_deaths%>%
+    tibble() %>%
+    mutate(Cw_year= paste0(Year,"/W",iso_cw )) %>%
+    left_join(dataZH) 
+  
 dataZH <- dataZH %>%
   left_join(data_excess) %>%
   mutate(death_inc = CityDeathsTotal/pop.weekly*10000,
@@ -439,7 +437,7 @@ Figure1 <- cowplot::plot_grid(Figure_inc,NULL,Figure_hosp,NULL,Figure_mort,NULL,
                                   rel_heights = c(1,-0.1,1,-0.1,1,-0.1,1,-0.1,1,-0.1,1))
 
 
-cowplot::save_plot(paste0("output/Figure1.pdf"), Figure1,base_height=36,base_width=15)
+cowplot::save_plot(paste0("output/Figure1t.pdf"), Figure1,base_height=36,base_width=15)
 
 
 
