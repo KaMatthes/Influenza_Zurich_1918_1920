@@ -3,9 +3,13 @@
 
   
   
-  data_excess <-  expected_deaths%>%
+  data_excess <-  expected_deaths %>%
     tibble() %>%
-    mutate(Cw_year= paste0(Year,"/W",iso_cw )) %>%
+    mutate(Cw_year= paste0(Year,"/W",iso_cw ),
+           fit_m = fit/pop.weekly*10000,
+           LL_m =LL/pop.weekly*10000,
+           UL_m =UL/pop.weekly*10000,
+           mort=death/pop.weekly*10000)%>%
     left_join(dataZH) 
   
 dataZH <- dataZH %>%
@@ -308,17 +312,22 @@ Figure_inc <- ggplot() +
 
   
 Figure_mort <- ggplot() +
-  geom_line(data=dataZH ,aes(y=death_inc,x= Reporting,col="City of Zurich"), lwd=lwd_size )+
-  scale_x_date(labels = date_format("%m/%y"), breaks = date_breaks("1 month"),limits =c(min(lims5), max(lims6))) +
+  geom_line(data=data_excess ,aes(y=fit_m ,x= Reporting,col="Expected deaths (95% CrI)"), lwd=lwd_size) +
+  geom_line(data=data_excess ,aes(y= mort ,x=Reporting,col="Observed deaths"), lwd=lwd_size) +
+  geom_ribbon(data=data_excess,aes(ymin=LL_m, ymax=UL_m,x=Reporting), fill=col_pal[7],linetype=2, alpha=0.3) +
+  scale_x_date(labels = date_format("%m/%y"), breaks = date_breaks("1 month"),
+               limits =c(min(lims5), max(lims6))) +
+  # geom_vline(data=table_legend, aes(xintercept = as.Date("02.12.1918", "%d.%m.%Y")),col="green", linetype = "dashed", lwd=1) + 
   annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
   scale_color_manual(name = "",
-                   values =col_pal[1])+
+                     limits =c("Observed deaths","Expected deaths (95% CrI)"),
+                     values = c(col_pal[1],  col_pal[2])) +
   xlab("Month/Year")+
   ylab("per 10'000 inhab.")+
-  ggtitle("C) All cause mortality") +
+  ggtitle("C) All cause mortality and excess mortality - City of Zurich") +
   theme_bw()+
   theme(axis.text.y = element_text(size=text_size),
         panel.grid.major.x = element_blank(),
@@ -330,30 +339,30 @@ Figure_mort <- ggplot() +
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
 
-Figure_excess <- ggplot() +
- geom_col(data= dataZH,aes(x= Reporting,y = rel_excess_death/100, fill= Difference_sig)) +
-  scale_x_date(labels = date_format("%m/%y"), breaks = date_breaks("1 month"),limits =c(min(lims5), max(lims6))) +
-  scale_y_continuous(labels = scales::percent)+
-  annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
-  scale_fill_manual("",
-                   breaks=c("Fewer than expected","More than expected"),
-                    values =c(col_pal[2],col_pal[4])) +
-  xlab("Month/Year")+
-  ylab("Relatitve excess mortality in %")+
-  ggtitle("D) Relative excess mortality - City of Zurich (all cause mortality)") +
-  theme_bw()+
-  theme(axis.text.y = element_text(size=text_size),
-        panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank(),
-        legend.position = c(.62, .82),
-        legend.text=element_text(size=legend_size),
-        axis.text.x = element_blank(),
-        axis.title.x  =element_blank(),
-        axis.title.y  = element_text(size=axis_legend_size),
-        title =element_text(size=title_size))
+# Figure_excess <- ggplot() +
+#  geom_col(data= dataZH,aes(x= Reporting,y = rel_excess_death/100, fill= Difference_sig)) +
+#   scale_x_date(labels = date_format("%m/%y"), breaks = date_breaks("1 month"),limits =c(min(lims5), max(lims6))) +
+#   scale_y_continuous(labels = scales::percent)+
+#   annotate("rect",xmin=datlim1,xmax=datlim2,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
+#   annotate("rect",xmin=datlim3,xmax=datlim4,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
+#   annotate("rect",xmin=datlim5,xmax=datlim6,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
+#   annotate("rect",xmin=datlim7,xmax=datlim8,ymin=-Inf,ymax=Inf,alpha=0.1,fill="black") +
+#   scale_fill_manual("",
+#                    breaks=c("Fewer than expected","More than expected"),
+#                     values =c(col_pal[2],col_pal[4])) +
+#   xlab("Month/Year")+
+#   ylab("Relatitve excess mortality in %")+
+#   ggtitle("D) Relative excess mortality - City of Zurich (all cause mortality)") +
+#   theme_bw()+
+#   theme(axis.text.y = element_text(size=text_size),
+#         panel.grid.major.x = element_blank(),
+#         panel.grid.minor.x = element_blank(),
+#         legend.position = c(.62, .82),
+#         legend.text=element_text(size=legend_size),
+#         axis.text.x = element_blank(),
+#         axis.title.x  =element_blank(),
+#         axis.title.y  = element_text(size=axis_legend_size),
+#         title =element_text(size=title_size))
 
 Figure_hosp <- ggplot() +
   geom_line(data=dataZH,aes(y=AndereInc,x=Reporting,colour="Canton Zurich"), lwd=lwd_size ) +
@@ -392,7 +401,7 @@ plot_swiss_re <- ggplot() +
   scale_y_continuous(labels = scales::percent)+
   xlab("Month/Year")+
   ylab("Percentages")+
-  ggtitle("E) Swiss Re - Absence from work due to illness in relation to total working days") +
+  ggtitle("D) Swiss Re - Absence from work due to illness in relation to total working days") +
   theme_bw()+
   #theme_light(base_size = 16)+
   theme(axis.text.y = element_text(size=text_size),
@@ -419,7 +428,7 @@ plot_delays_dis <- ggplot(data=data_delay, aes(x=as.Date(Meldung,format = "%Y-%m
   scale_color_manual("",values=c(col_pal[2], col_pal[8])) +
   xlab("Month/Year")+
   ylab("Mean and 95% CI reporting delay in weeks") +
-  ggtitle("F) Reporting delays of reported flu cases and deaths") +
+  ggtitle("E) Reporting delays of reported flu cases and deaths") +
   theme_bw()+
   theme(axis.text.y = element_text(size=text_size),
         panel.grid.major.x = element_blank(),
@@ -431,14 +440,14 @@ plot_delays_dis <- ggplot(data=data_delay, aes(x=as.Date(Meldung,format = "%Y-%m
         axis.title.y  = element_text(size=axis_legend_size),
         title =element_text(size=title_size))
 
-Figure1 <- cowplot::plot_grid(Figure_inc,NULL,Figure_hosp,NULL,Figure_mort,NULL, Figure_excess,NULL,plot_swiss_re,NULL,
+Figure1 <- cowplot::plot_grid(Figure_inc,NULL,Figure_hosp,NULL,Figure_mort,NULL,plot_swiss_re,NULL,
                                     plot_delays_dis,
-                                  ncol=1, nrow=11, align="hv",
-                                  rel_heights = c(1,-0.1,1,-0.1,1,-0.1,1,-0.1,1,-0.1,1))
+                                  ncol=1, nrow=9, align="hv",
+                                  rel_heights = c(1,-0.1,1,-0.1,1,-0.1,1,-0.1,1))
 
 
-cowplot::save_plot(paste0("output/Figure1t.pdf"), Figure1,base_height=36,base_width=15)
-
+cowplot::save_plot(paste0("output/Figure1.pdf"), Figure1,base_height=30,base_width=20)
+ggsave(paste0("output/Figure1.png"), Figure1,h=30,w=20)
 
 
 
