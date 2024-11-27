@@ -1,4 +1,4 @@
-function_inla_total <- function(Year_Pan,Year_max, Year_min) {
+function_inla_total <- function(Year_Pan,Year_Pan2,Year_max, Year_min) {
   
 load("data/dataZH.RData")
 
@@ -50,7 +50,7 @@ formula <- death ~ -1 + offset(log(pop.weekly))  +
                YearID = Year,
                WeekID =iso_cw) 
     }
-    
+
     else {
       reg_data <-  dat.excess %>% 
         filter(Year >= YEAR+1 - year_smooth & Year < YEAR+1)%>%

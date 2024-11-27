@@ -53,7 +53,7 @@ lwd_size <- 1.8
 lwd_size_vline <- 0.8
 text_size <- 25
 text_size_heat_map <- 15
-legend_size <- 15
+legend_size <- 20
 axis_legend_size <- 25
 axis_legend_size_heat_map <- 15
 title_size <- 20
