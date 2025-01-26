@@ -3,7 +3,7 @@
 ## Paper
 
 <br >
-Ziegler E, Matthes KM, Middelkamp PW, Schünemann V, Althaus CL, Rühli F, Staub K
+Ziegler E, Matthes KL, Middelkamp PW, Schünemann V, Althaus CL, Rühli F, Staub K
 <br >
  <i> Epidemics </i> 
 https://doi.org/10.1016/j.epidem.2025.100813
