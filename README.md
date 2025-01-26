@@ -1,12 +1,12 @@
-# (Re-)modelling of the disease and mortality burden of the 1918-1920 influenza pandemic in Zurich, Switzerland
+# 	Retrospective modelling of the disease and mortality burden of the 1918-1920 influenza pandemic in Zurich, Switzerland
 
-## Paper (preprint)
+## Paper
 
 <br >
 Ziegler E, Matthes KM, Middelkamp PW, Schünemann V, Althaus CL, Rühli F, Staub K
 <br >
  <i> medRxiv </i> 
- https://doi.org/10.1101/2024.03.14.24304276
+https://doi.org/10.1016/j.epidem.2025.100813
  
 ## Data
 
